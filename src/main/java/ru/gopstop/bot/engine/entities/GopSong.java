@@ -28,4 +28,8 @@ public class GopSong {
     public String getAuthor() {
         return author;
     }
+
+    public String toString() {
+        return "GopSong{" + name + "," + author + "," + lyrics.size() + " lines}";
+    }
 }

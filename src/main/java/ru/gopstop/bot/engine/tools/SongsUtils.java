@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,12 +16,24 @@ import java.util.stream.Collectors;
  */
 public class SongsUtils {
 
-    public static List<File> listSongsByDir(final String dir) throws IOException {
+
+    public static List<GopSong> listSongsByDir(final String dir) throws IOException {
+
+        final List<GopSong> songs = new ArrayList<>();
+
+        for  (final File songFile : listSongFilesByDir(dir) ) {
+            songs.add(readSongFromFile(songFile));
+        }
+
+        return songs;
+    }
+
+    static List<File> listSongFilesByDir(final String dir) throws IOException {
 
         return java.nio.file.Files
                 .walk(java.nio.file.Paths.get(dir))
                 .filter(java.nio.file.Files::isRegularFile)
-                .filter(f -> f.getFileName().endsWith("README.txt"))
+                .filter(f ->  !f.getFileName().endsWith("README.txt"))
                 .map(Path::toFile)
                 .collect(Collectors.toList());
     }
