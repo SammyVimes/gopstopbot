@@ -1,5 +1,5 @@
 Не добавляем всявкие секьюрные данные
-/ru/gopstop/bot/Secret.java
+src/main/resources/secret.properties
 
 # Created by .ignore support plugin (hsz.mobi)
 ### Java template
