@@ -5,8 +5,12 @@ package ru.gopstop.bot.muzis.entity;
  */
 public class Performer {
 
+    public static final int TYPE = 3;
+
+    private Long id;
+
     //	тип обьекта (для performer всегда 3)
-    private String type;
+    private Long type;
 
     //	название исполнителя
     private String title;
@@ -17,11 +21,11 @@ public class Performer {
     public Performer() {
     }
 
-    public String getType() {
+    public Long getType() {
         return type;
     }
 
-    public void setType(final String type) {
+    public void setType(final Long type) {
         this.type = type;
     }
 
@@ -39,5 +43,13 @@ public class Performer {
 
     public void setPoster(final String poster) {
         this.poster = poster;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(final Long id) {
+        this.id = id;
     }
 }

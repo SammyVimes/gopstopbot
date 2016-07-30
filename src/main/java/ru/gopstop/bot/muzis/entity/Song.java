@@ -10,6 +10,8 @@ import java.util.List;
  */
 public class Song {
 
+    public static final int TYPE = 2;
+
     private Long id;
 
     // тип обьекта (для song всегда 2)

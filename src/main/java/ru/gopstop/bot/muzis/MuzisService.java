@@ -26,18 +26,18 @@ public interface MuzisService {
 
     @FormUrlEncoded
     @POST("stream_from_obj.api")
-    List<Song> relevantSearch(@Field("type") final int type,
+    SearchResult relevantSearch(@Field("type") final int type,
                               @Field("id") final long id,
                               @Field("size") final long size);
 
     @FormUrlEncoded
     @POST("stream_from_lyrics.api")
-    List<Song> relevantSearchByText(@Field("lyrics") final String lyrics,
+    SearchResult relevantSearchByText(@Field("lyrics") final String lyrics,
                               @Field("size") final int size,
                               @Field("operator") final String operator);
 
     @FormUrlEncoded
     @POST("get_songs_by_performer.api")
-    List<Song> relevantSearch(@Field("performer_id") final long performerId);
+    SearchResult songsByPerformer(@Field("performer_id") final long performerId);
 
 }

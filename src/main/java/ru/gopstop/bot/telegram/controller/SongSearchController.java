@@ -1,5 +1,6 @@
 package ru.gopstop.bot.telegram.controller;
 
+import org.apache.http.util.TextUtils;
 import org.telegram.telegrambots.TelegramApiException;
 import org.telegram.telegrambots.api.methods.send.SendAudio;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
@@ -10,6 +11,7 @@ import ru.gopstop.bot.FileUtils;
 import ru.gopstop.bot.muzis.MuzisService;
 import ru.gopstop.bot.muzis.MuzisServiceBuilder;
 import ru.gopstop.bot.muzis.ResourcesService;
+import ru.gopstop.bot.muzis.entity.Performer;
 import ru.gopstop.bot.muzis.entity.SearchResult;
 import ru.gopstop.bot.muzis.entity.Song;
 import ru.gopstop.bot.telegram.Constants;
@@ -85,6 +87,17 @@ public class SongSearchController extends Controller {
         // берём 6 найденных песен и шлём
         final List<Song> songsResult = res.getSongs().stream().limit(6).collect(Collectors.toList());
 
+        if (songsResult.isEmpty()) {
+            // ничего не нашли, пробуем исполнителя и ищем по его id 6 треков
+            final SearchResult byAuthor = muzisService.search(null, text, null, null, null, null, null);
+            final Optional<Performer> first = byAuthor.getPerformers().stream().findFirst();
+            first.map(performer ->
+                    muzisService.songsByPerformer(performer.getId())).map(byAuthorRes ->
+                            songsResult.addAll(byAuthorRes.getSongs().stream()
+                                    .limit(6)
+                                    .collect(Collectors.toList())));
+        }
+
         // к названию приклеиваем "Слушать ", чтобы потом было понятно, что это запрос на прослушивание
         final List<String> keyboard = songsResult.stream()
                 .map(song -> "Слушать " + song.getTitle())
@@ -118,20 +131,22 @@ public class SongSearchController extends Controller {
      * @throws TelegramApiException
      */
     private void sendSongAndCover(final Message request, final Song song) throws TelegramApiException {
-        sendMessage(request.getChatId().toString(), "Вот картиночка");
-        // скачиваем картинку и отправляем
-        final File file = FileUtils.writeResponseBodyToDisk(resourcesService.downloadFile(song.getPoster()), song.getPoster());
-        SendPhoto sendPhoto = new SendPhoto();
-        sendPhoto.setChatId(request.getChatId().toString());
-        if (file == null) {
-            sendMessage(request.getChatId().toString(), "Что-то пошло не так со скачиванием катинки");
-            return;
+        if (!TextUtils.isEmpty(song.getPoster())) {
+            sendMessage(request.getChatId().toString(), "Вот картиночка");
+            // скачиваем картинку и отправляем
+            final File file = FileUtils.writeResponseBodyToDisk(resourcesService.downloadFile(song.getPoster()), song.getPoster());
+            SendPhoto sendPhoto = new SendPhoto();
+            sendPhoto.setChatId(request.getChatId().toString());
+            if (file == null) {
+                sendMessage(request.getChatId().toString(), "Что-то пошло не так со скачиванием картинки");
+                return;
+            }
+            sendPhoto.setNewPhoto(file);
+            bot.sendPhoto(sendPhoto);
+            sendMessage(request.getChatId().toString(), "Сейчас и песню пришлю");
+        } else {
+            sendMessage(request.getChatId().toString(), "Сейчас пришлю");
         }
-        sendPhoto.setNewPhoto(file);
-        bot.sendPhoto(sendPhoto);
-
-        sendMessage(request.getChatId().toString(), "Сейчас и песню пришлю");
-
 
         // скачиваем музло и отправляем
         final File music = FileUtils.writeResponseBodyToDisk(resourcesService.downloadFile(song.getFileMp3()), song.getFileMp3());
