@@ -46,7 +46,6 @@ public class RhymesHypothesisTest extends TestCase {
 
         List<String> testLines =
                 SongsUtils.listSongsByDir("data_test/songs/")
-                        .stream()
                         .flatMap(s -> s.getLyrics().stream())
                         .collect(Collectors.toList());
 
