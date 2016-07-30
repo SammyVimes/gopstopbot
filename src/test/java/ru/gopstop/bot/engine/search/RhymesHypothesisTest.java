@@ -79,18 +79,19 @@ public class RhymesHypothesisTest extends TestCase {
 
         System.out.println();
 
-        final TopDocs docs = is.search(q, 10);
+        int pageSize = 10;
+
+        final TopDocs docs = is.search(q, pageSize);
 
         System.out.println("REQUEST: [" + postfix(request) + "]");
 
-        for (int i = 0; i < docs.totalHits; i++) {
+        for (int i = 0; i < Math.min(pageSize, docs.totalHits); i++) {
             System.out.println();
             System.out.println(is.doc(docs.scoreDocs[i].doc).get("fulltext"));
             System.out.println(is.doc(docs.scoreDocs[i].doc).get("text"));
             System.out.println(docs.scoreDocs[i].score);
         }
 
-        Assert.assertTrue(56 == 56);
 
     }
 }
