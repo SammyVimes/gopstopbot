@@ -112,4 +112,11 @@ public abstract class Controller {
         bot.showMainMenu(request, session);
     }
 
+    protected void sendMessage(final String chatId, final String reply) throws TelegramApiException {
+        SendMessage msg = new SendMessage();
+        msg.setChatId(chatId);
+        msg.setText(reply);
+        bot.sendMessage(msg);
+    }
+
 }

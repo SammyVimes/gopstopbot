@@ -9,6 +9,8 @@ public class Constants {
 
     public static final String RHYMES = "Рифмы";
 
+    public static final String SONGS = "Песни";
+
     public static final String RHYMES_PLS = "Рифмуй!";
 
     public static final String ABOUT = "О боте";

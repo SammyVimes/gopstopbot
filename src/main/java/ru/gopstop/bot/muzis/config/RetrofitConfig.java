@@ -19,4 +19,14 @@ public class RetrofitConfig {
         return retrofit;
     }
 
+    public static Retrofit createResourceRetrofit() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://f.muzis.ru/")
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addCallAdapterFactory(SynchronousCallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        return retrofit;
+    }
+
 }

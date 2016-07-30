@@ -14,6 +14,7 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import ru.gopstop.bot.telegram.controller.Controller;
 import ru.gopstop.bot.telegram.controller.RhymingController;
 import ru.gopstop.bot.telegram.controller.SettingsController;
+import ru.gopstop.bot.telegram.controller.SongSearchController;
 import ru.gopstop.bot.telegram.user.TGSession;
 import ru.gopstop.bot.telegram.user.TGSessionKey;
 
@@ -42,6 +43,9 @@ public class TGBot extends TelegramLongPollingBot {
         final RhymingController rhymingController = new RhymingController(this);
         controllerMap.put(rhymingController.getKey(), rhymingController);
         mainControllers.add(rhymingController);
+        final SongSearchController songSearchController = new SongSearchController(this);
+        controllerMap.put(songSearchController.getKey(), songSearchController);
+        mainControllers.add(songSearchController);
         final SettingsController settingsController = new SettingsController(this);
         controllerMap.put(settingsController.getKey(), settingsController);
         mainControllers.add(settingsController);
