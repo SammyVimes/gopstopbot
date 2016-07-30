@@ -10,6 +10,7 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.RAMDirectory;
 import org.junit.Ignore;
 import org.junit.Test;
+import ru.gopstop.bot.engine.search.preprocessing.BasicPreprocessor;
 import ru.gopstop.bot.engine.tools.SongsUtils;
 
 import java.io.IOException;
@@ -20,17 +21,6 @@ import java.util.stream.Collectors;
  * Created by aam on 30.07.16.
  */
 public class RhymesHypothesisTest extends TestCase {
-
-
-    private static String postfix(Object line) {
-
-        String normalLine = line.toString().trim();
-
-        String processedLine =
-                new StringBuilder(
-                        normalLine.toLowerCase()).reverse().toString();
-        return processedLine;
-    }
 
     @Test
     @Ignore
@@ -45,7 +35,8 @@ public class RhymesHypothesisTest extends TestCase {
         int num = 0;
 
         List<String> testLines =
-                SongsUtils.listSongsByDir("data_test/songs/")
+                SongsUtils.listSongsByDir("data/songs/")
+                        .limit(1000)
                         .flatMap(s -> s.getLyrics().stream())
                         .collect(Collectors.toList());
 
@@ -53,12 +44,12 @@ public class RhymesHypothesisTest extends TestCase {
 
         for (String line : testLines) {
 
-            String processedLine = postfix(line);
+            String processedLine = BasicPreprocessor.postfix(line);
 
             System.out.println(processedLine);
 
             final Document doc = new Document();
-            doc.add(new TextField("text", processedLine.substring(0, 5), Field.Store.YES));
+            doc.add(new TextField("text", processedLine.substring(0, Math.min(6, processedLine.length())), Field.Store.YES));
             doc.add(new StringField("fulltext", line, Field.Store.YES));
             doc.add(new IntField("id", num, Field.Store.YES));
             writer.addDocument(doc);
@@ -70,7 +61,7 @@ public class RhymesHypothesisTest extends TestCase {
         final IndexSearcher is = new IndexSearcher(ir);
 
         final BooleanQuery q = new BooleanQuery();
-        final String request = postfix("мы подошли из-за угла");
+        final String request = BasicPreprocessor.postfix("мы подошли из-за угла");
 
         for (String token : customAnalyzer.handle(request)) {
             System.out.print(token + " ");
@@ -83,12 +74,14 @@ public class RhymesHypothesisTest extends TestCase {
 
         final TopDocs docs = is.search(q, pageSize);
 
-        System.out.println("REQUEST: [" + postfix(request) + "]");
+        System.out.println("REQUEST: [" + BasicPreprocessor.postfix(request) + "]");
 
         for (int i = 0; i < Math.min(pageSize, docs.totalHits); i++) {
             System.out.println();
             System.out.println(is.doc(docs.scoreDocs[i].doc).get("fulltext"));
             System.out.println(is.doc(docs.scoreDocs[i].doc).get("text"));
+            System.out.println(is.doc(docs.scoreDocs[i].doc).get("author"));
+            System.out.println(is.doc(docs.scoreDocs[i].doc).get("title"));
             System.out.println(docs.scoreDocs[i].score);
         }
 

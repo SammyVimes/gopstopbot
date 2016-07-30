@@ -25,8 +25,7 @@ public class LinesIndexSearcher {
 
     private final static Logger LOGGER = LogManager.getLogger(LinesIndexSearcher.class);
 
-
-    private final static int COUNT_RETURNED = 50;
+    private final static int COUNT_RETURNED = 20;
 
     public LinesIndexSearcher(final Directory dir, final CustomAnalyzer analyzer) throws IOException {
 
@@ -54,7 +53,9 @@ public class LinesIndexSearcher {
             LOGGER.info(doc.toString());
             foundSongs.add(
                     new FoundGopSong(
-                            new GopSong(doc.get("title"), doc.get("author"), null),
+                            new GopSong(
+                                    doc.get("title"),
+                                    doc.get("author"), null),
                             doc.get("fulltext"),
                             docs.scoreDocs[i].score));
         }

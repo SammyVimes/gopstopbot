@@ -47,8 +47,8 @@ public class SongsUtils {
     public static GopSong readSongFromFile(final File file) throws IOException {
         final List<String> lines = Files.readLines(file, Charset.forName("utf-8"));
         return new GopSong(
-                lines.get(0).trim(),
                 lines.get(1).trim(),
+                lines.get(0).trim(),
                 lines.subList(2, lines.size()));
     }
 }
