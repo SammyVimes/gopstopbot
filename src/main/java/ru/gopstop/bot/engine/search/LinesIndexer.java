@@ -62,6 +62,9 @@ public class LinesIndexer {
             dataPath = songsPath;
             final IndexWriterConfig conf = rebuildConfig();
             writer = new IndexWriter(directory, conf);
+            //todo remove
+            writer.deleteAll();
+            rebuild();
             searcher = new LinesIndexSearcher(directory, analyzer);
 
         } catch (final IOException ioe) {
