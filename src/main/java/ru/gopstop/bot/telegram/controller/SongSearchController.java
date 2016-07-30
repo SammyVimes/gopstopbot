@@ -16,6 +16,7 @@ import ru.gopstop.bot.telegram.Constants;
 import ru.gopstop.bot.telegram.TGBot;
 import ru.gopstop.bot.telegram.internal.Emoji;
 import ru.gopstop.bot.telegram.user.TGSession;
+import ru.gopstop.bot.util.Translit;
 
 import java.io.File;
 import java.util.Arrays;
@@ -81,18 +82,26 @@ public class SongSearchController extends Controller {
         }
 
         final SearchResult res = muzisService.search(text, null, null, null, null, null, null);
+        // берём 6 найденных песен и шлём
         final List<Song> songsResult = res.getSongs().stream().limit(6).collect(Collectors.toList());
 
-
+        // к названию приклеиваем "Слушать ", чтобы потом было понятно, что это запрос на прослушивание
         final List<String> keyboard = songsResult.stream()
                 .map(song -> "Слушать " + song.getTitle())
                 .collect(Collectors.toList());
+
+        String reply = "";
+        if (keyboard.isEmpty()) {
+            reply = "Ничего не найдено :(";
+        } else {
+            reply = "Найденные песни";
+        }
         keyboard.add(BACK);
         final ReplyKeyboardMarkup replyKeyboardMarkup = buildKeyboard(keyboard);
 
         session.put("results", songsResult);
 
-        final SendMessage msg = createMessageWithKeyboard(request.getChatId().toString(), request.getMessageId(), "Найденные песни", replyKeyboardMarkup);
+        final SendMessage msg = createMessageWithKeyboard(request.getChatId().toString(), request.getMessageId(), reply, replyKeyboardMarkup);
         bot.sendMessage(msg);
     }
 
@@ -102,7 +111,15 @@ public class SongSearchController extends Controller {
         bot.sendMessage(msg);
     }
 
+    /**
+     * Отправляем песню и картинку песни
+     * @param request
+     * @param song
+     * @throws TelegramApiException
+     */
     private void sendSongAndCover(final Message request, final Song song) throws TelegramApiException {
+        sendMessage(request.getChatId().toString(), "Вот картиночка");
+        // скачиваем картинку и отправляем
         final File file = FileUtils.writeResponseBodyToDisk(resourcesService.downloadFile(song.getPoster()), song.getPoster());
         SendPhoto sendPhoto = new SendPhoto();
         sendPhoto.setChatId(request.getChatId().toString());
@@ -113,6 +130,10 @@ public class SongSearchController extends Controller {
         sendPhoto.setNewPhoto(file);
         bot.sendPhoto(sendPhoto);
 
+        sendMessage(request.getChatId().toString(), "Сейчас и песню пришлю");
+
+
+        // скачиваем музло и отправляем
         final File music = FileUtils.writeResponseBodyToDisk(resourcesService.downloadFile(song.getFileMp3()), song.getFileMp3());
         SendAudio audio = new SendAudio();
         if (music == null) {
@@ -120,8 +141,12 @@ public class SongSearchController extends Controller {
             return;
         }
         audio.setNewAudio(music);
+        // телеграм не ест кириллицу, транслитим транслитом
+        audio.setPerformer(Translit.cyr2lat(song.getPerformer()));
+        audio.setTitle(Translit.cyr2lat(song.getTrackName()));
         audio.setChatId(request.getChatId().toString());
         bot.sendAudio(audio);
+        sendMessage(request.getChatId().toString(), "Послушай, а потом можешь искать новые песни");
     }
 
 }
