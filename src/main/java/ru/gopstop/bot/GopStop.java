@@ -4,6 +4,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.telegram.telegrambots.TelegramApiException;
 import org.telegram.telegrambots.TelegramBotsApi;
+import ru.gopstop.bot.muzis.MuzisService;
+import ru.gopstop.bot.muzis.MuzisServiceBuilder;
+import ru.gopstop.bot.muzis.entity.SearchResult;
 import ru.gopstop.bot.telegram.TGBot;
 
 /**
@@ -20,6 +23,10 @@ public class GopStop {
         } catch (TelegramApiException e) {
             LOGGER.error("Error while registering bot: " + e.getMessage(), e);
         }
+
+//        final MuzisService muzisService = MuzisServiceBuilder.getMuzisService();
+//        final SearchResult what = muzisService.search("What", null, null, null, null, null, null);
+//        what.getSongs();
     }
 
     private void start() {
