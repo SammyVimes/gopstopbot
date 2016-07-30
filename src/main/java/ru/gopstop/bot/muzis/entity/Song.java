@@ -138,7 +138,7 @@ public class Song {
     }
 
     public String getTitle() {
-        return performer + " " + trackName;
+        return performer + " - " + trackName;
     }
 
 }
