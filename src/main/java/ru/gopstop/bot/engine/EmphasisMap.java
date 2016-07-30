@@ -15,7 +15,8 @@ public class EmphasisMap {
     }
 
     public static String path = "./data/emphasis.txt";
-    public static HashMap<String, ArrayList<int[]>> emphasisDict = new HashMap<String, ArrayList<int[]>>(1540873);
+    public static HashMap<String, ArrayList<int[]>> emphasisDict =
+            new HashMap<String, ArrayList<int[]>>(1540873);
 
     private int countVowels(String word) {
         return word.length() - word.replaceAll("а|ы|е|ё|и|у|о|э|я|ю", "").length();

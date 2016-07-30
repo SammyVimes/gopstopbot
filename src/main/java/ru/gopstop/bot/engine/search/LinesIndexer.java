@@ -115,8 +115,6 @@ public class LinesIndexer {
                                         doc.add(new StringField("title", song.getName(), Field.Store.YES));
                                         doc.add(new StringField("author", song.getAuthor(), Field.Store.YES));
 
-                                        System.out.println("INDEXING " + doc);
-
                                         try {
                                             wr.addDocument(doc);
                                         } catch (IOException e) {

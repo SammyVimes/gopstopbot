@@ -38,7 +38,7 @@ public class LinesIndexSearcher {
     public List<FoundGopSong> search(final String request) throws IOException {
 
         final BooleanQuery q = new BooleanQuery();
-        final String processedRequest = BasicPreprocessor.postfix("мы подошли из-за угла");
+        final String processedRequest = BasicPreprocessor.postfix(request);
 
         for (final String token : analyzer.handle(processedRequest)) {
             q.add(new TermQuery(new Term("text", token)), BooleanClause.Occur.SHOULD);
