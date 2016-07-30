@@ -37,29 +37,37 @@ public abstract class BaseMuzisController extends Controller {
     protected void sendSongAndCover(final Message request, final Song song) throws TelegramApiException {
         if (!TextUtils.isEmpty(song.getPoster())) {
             sendMessage(request.getChatId().toString(), "Вот картиночка");
-            // скачиваем картинку и отправляем
-            final File file = FileUtils.writeResponseBodyToDisk(resourcesService.downloadFile(song.getPoster()), song.getPoster());
+            // скачиваем (или берём с диска) картинку и отправляем
+            File cachedFile = FileUtils.getCachedFile(song.getPoster());
+            if (cachedFile == null) {
+                cachedFile = FileUtils.writeResponseBodyToDisk(resourcesService.downloadFile(song.getPoster()), song.getPoster());
+            }
+
             SendPhoto sendPhoto = new SendPhoto();
             sendPhoto.setChatId(request.getChatId().toString());
-            if (file == null) {
+            if (cachedFile == null) {
                 sendMessage(request.getChatId().toString(), "Что-то пошло не так со скачиванием картинки");
                 return;
             }
-            sendPhoto.setNewPhoto(file);
+            sendPhoto.setNewPhoto(cachedFile);
             bot.sendPhoto(sendPhoto);
             sendMessage(request.getChatId().toString(), "Сейчас и песню пришлю");
         } else {
             sendMessage(request.getChatId().toString(), "Сейчас пришлю");
         }
 
-        // скачиваем музло и отправляем
-        final File music = FileUtils.writeResponseBodyToDisk(resourcesService.downloadFile(song.getFileMp3()), song.getFileMp3());
+        // скачиваем музло (или берём с диска) и отправляем
+        File cachedMusicFile = FileUtils.getCachedFile(song.getFileMp3());
+        if (cachedMusicFile == null) {
+            cachedMusicFile = FileUtils.writeResponseBodyToDisk(resourcesService.downloadFile(song.getFileMp3()), song.getFileMp3());
+        }
+
         SendAudio audio = new SendAudio();
-        if (music == null) {
+        if (cachedMusicFile == null) {
             sendMessage(request.getChatId().toString(), "Что-то пошло не так со скачиванием музыки");
             return;
         }
-        audio.setNewAudio(music);
+        audio.setNewAudio(cachedMusicFile);
         // телеграм не ест кириллицу, транслитим транслитом
         audio.setPerformer(Translit.cyr2lat(song.getPerformer()));
         audio.setTitle(Translit.cyr2lat(song.getTrackName()));

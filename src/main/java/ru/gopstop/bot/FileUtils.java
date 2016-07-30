@@ -23,10 +23,17 @@ public class FileUtils {
         FILE_PATH = properties.getProperty("filespath");
     }
 
+    public static File getCachedFile(final String fileName) {
+        File file = new File(FILE_PATH + fileName);
+        if (file.exists()) {
+            return file;
+        }
+        return null;
+    }
+
     public static File writeResponseBodyToDisk(final ResponseBody body, final String fileName) {
         try {
-            // todo change the file location/name according to your needs
-            File futureStudioIconFile = new File(FILE_PATH + fileName);
+            File loadingFile = new File(FILE_PATH + fileName);
 
             InputStream inputStream = null;
             OutputStream outputStream = null;
@@ -38,7 +45,7 @@ public class FileUtils {
                 long fileSizeDownloaded = 0;
 
                 inputStream = body.byteStream();
-                outputStream = new FileOutputStream(futureStudioIconFile);
+                outputStream = new FileOutputStream(loadingFile);
 
                 while (true) {
                     int read = inputStream.read(fileReader);
@@ -54,7 +61,7 @@ public class FileUtils {
 
                 outputStream.flush();
 
-                return futureStudioIconFile;
+                return loadingFile;
             } catch (IOException e) {
                 return null;
             } finally {
@@ -70,5 +77,7 @@ public class FileUtils {
             return null;
         }
     }
+
+
 
 }
