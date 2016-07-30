@@ -18,7 +18,7 @@ public class TestEmphasis {
 
     @Test
     public void testEmphasisDict() throws IOException {
-        EmphasisMap.setPath("/Users/n.pritykovskaya/hackaton/gopstopbot/src/main/resources/emphasis.txt");
+        EmphasisMap.setPath("./data/emphasis.txt");
         EmphasisMap emphasisMap = new EmphasisMap();
 
 //

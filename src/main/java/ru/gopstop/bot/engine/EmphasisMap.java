@@ -14,7 +14,7 @@ public class EmphasisMap {
         EmphasisMap.path = path;
     }
 
-    public static String path = "./../../../../../resources/emphasis.txt";
+    public static String path = "./data/emphasis.txt";
     public static HashMap<String, ArrayList<int[]>> emphasisDict = new HashMap<String, ArrayList<int[]>>(1540873);
 
     private int countVowels(String word) {
