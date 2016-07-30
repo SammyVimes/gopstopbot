@@ -8,7 +8,7 @@ import org.apache.lucene.index.*;
 import org.apache.lucene.search.*;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.RAMDirectory;
-import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import ru.gopstop.bot.engine.tools.SongsUtils;
 
@@ -33,6 +33,7 @@ public class RhymesHypothesisTest extends TestCase {
     }
 
     @Test
+    @Ignore
     public void testSelfContainedHypo() throws IOException {
 
         final Directory directory = new RAMDirectory();

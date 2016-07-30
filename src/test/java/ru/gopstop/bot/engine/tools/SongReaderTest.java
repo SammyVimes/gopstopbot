@@ -2,6 +2,7 @@ package ru.gopstop.bot.engine.tools;
 
 import junit.framework.TestCase;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import ru.gopstop.bot.engine.entities.GopSong;
 
@@ -15,6 +16,7 @@ import java.nio.file.Paths;
 public class SongReaderTest extends TestCase {
 
     @Test
+    @Ignore
     public void testReading() throws IOException {
 
         Assert.assertTrue(SongsUtils
