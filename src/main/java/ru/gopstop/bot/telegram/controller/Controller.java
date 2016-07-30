@@ -14,6 +14,10 @@ import java.util.List;
 
 /**
  * Created by Semyon on 30.07.2016.
+ *
+ *
+ * Базовый класс контроллера пользовательских запросов
+ *
  */
 public abstract class Controller {
 
@@ -25,6 +29,10 @@ public abstract class Controller {
         this.bot = bot;
     }
 
+    /**
+     * Ключ контроллера в мапе (кладётся в сессию как lastController)
+     * @return
+     */
     public abstract String getKey();
 
     /**
@@ -40,6 +48,12 @@ public abstract class Controller {
      */
     public abstract void handleMessage(final Message request, final TGSession session) throws TelegramApiException;
 
+    /**
+     * Создание клавиатуры
+     * клавиатура группируется по два сообщения в строке
+     * @param messages
+     * @return
+     */
     public ReplyKeyboardMarkup buildKeyboard(final List<String> messages) {
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
         replyKeyboardMarkup.setSelective(true);
@@ -62,6 +76,15 @@ public abstract class Controller {
         return replyKeyboardMarkup;
     }
 
+    /**
+     * Отправка сообщения с клавиатурой и текстом
+     * сообщение отправляется с прикреплённым запросом пользователя
+     * @param chatId
+     * @param messageId
+     * @param text
+     * @param replyKeyboardMarkup
+     * @return
+     */
     public SendMessage createMessageWithKeyboard(final String chatId,
                                                   final Integer messageId,
                                                   final String text,
@@ -77,6 +100,13 @@ public abstract class Controller {
         return sendMessage;
     }
 
+    /**
+     * Обработка нажатия на кнопку "назад"
+     * Возвращение в главное меню
+     * @param request
+     * @param session
+     * @throws TelegramApiException
+     */
     protected void back(final Message request, final TGSession session) throws TelegramApiException {
         session.setLastController(null);
         bot.showMainMenu(request, session);

@@ -9,21 +9,16 @@ import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.api.objects.User;
 import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardMarkup;
-import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import ru.gopstop.bot.Secret;
 import ru.gopstop.bot.telegram.controller.Controller;
 import ru.gopstop.bot.telegram.controller.RhymingController;
 import ru.gopstop.bot.telegram.controller.SettingsController;
-import ru.gopstop.bot.telegram.internal.Emoji;
 import ru.gopstop.bot.telegram.user.TGSession;
 import ru.gopstop.bot.telegram.user.TGSessionKey;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * Created by Semyon on 30.07.2016.
@@ -37,6 +32,8 @@ public class TGBot extends TelegramLongPollingBot {
     private Map<String, Controller> controllerMap = new HashMap<>();
 
     private List<Controller> mainControllers = new ArrayList<>();
+
+    private String token = "";
 
     public TGBot() {
         final RhymingController rhymingController = new RhymingController(this);
@@ -61,7 +58,9 @@ public class TGBot extends TelegramLongPollingBot {
         final User fromUser = message.getFrom();
         TGSessionKey key = new TGSessionKey(fromUser, chatId);
         TGSession session = sessionMap.get(key);
+
         if (session == null) {
+            // новый пользователь (или старый, но пишет из группового чата, неважно)
             session = new TGSession(chatId, fromUser);
             session.setNew(true);
             sessionMap.put(key, session);
@@ -70,6 +69,7 @@ public class TGBot extends TelegramLongPollingBot {
         try {
             final String lastController = session.getLastController();
             if (TextUtils.isEmpty(lastController)) {
+                // у юзера не проставлен контроллер, выберем из меню
                 for (Controller controller : mainControllers) {
                     if (controller.getEntry().equals(message.getText())) {
                         controller.handleMessage(message, session);
@@ -77,10 +77,12 @@ public class TGBot extends TelegramLongPollingBot {
                         return;
                     }
                 }
+                // это непонятное сообщение или например /start, просто покажем меню
                 showMainMenu(message, session);
                 return;
             }
             final Controller controller = controllerMap.get(lastController);
+            // обработаем сообщение в последнем контроллере
             controller.handleMessage(message, session);
         } catch (TelegramApiException e) {
             LOGGER.error("Error while handling incoming message: " + e.getMessage(), e);
@@ -139,7 +141,20 @@ public class TGBot extends TelegramLongPollingBot {
 
     @Override
     public String getBotToken() {
-        return Secret.TELEGRAM_TOKEN;
+        if (TextUtils.isEmpty(token)) {
+            Properties properties = new Properties();
+            try {
+                properties.load(properties.getClass().getResourceAsStream("/secret.properties"));
+            } catch (IOException e) {
+                throw new RuntimeException("No secret.properties with telegram token found in resources/");
+            }
+            token = properties.getProperty("token");
+            if (TextUtils.isEmpty(token)) {
+                throw new RuntimeException("No telegram token found in resources/secret.properties");
+            }
+            return token;
+        }
+        return token;
     }
 
 }
