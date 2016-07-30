@@ -1,10 +1,12 @@
 package ru.gopstop.bot.engine;
 
 import ru.gopstop.bot.engine.entities.Rhyme;
+import ru.gopstop.bot.engine.filters.SameLineFilter;
 import ru.gopstop.bot.engine.search.FoundGopSong;
 import ru.gopstop.bot.engine.search.LinesIndexer;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by aam on 31.07.16.
@@ -14,7 +16,12 @@ public class CleverEngine {
     public static Rhyme getRhyme(final String userInput) {
 
         //  тупой поиск без учёта ударения
-        final List<FoundGopSong> foundGopSongList = LinesIndexer.getInstance().search(userInput);
+        final List<FoundGopSong> foundGopSongList =
+                LinesIndexer.getInstance()
+                        .search(userInput)
+                .stream()
+                .filter(g -> SameLineFilter.filter(userInput, g))
+                .collect(Collectors.toList());
 
         //todo: фильтрация и хаки по скорингу!
 

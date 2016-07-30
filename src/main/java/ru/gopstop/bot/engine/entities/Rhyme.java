@@ -30,4 +30,8 @@ public class Rhyme {
         this.rhyme = rhyme;
     }
 
+    public String toString() {
+        return "Rhyme{rh=" + rhyme + ", " + gopSong + "}";
+    }
+
 }

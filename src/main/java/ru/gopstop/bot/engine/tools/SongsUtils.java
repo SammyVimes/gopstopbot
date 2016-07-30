@@ -18,7 +18,6 @@ import java.util.stream.Stream;
  */
 public class SongsUtils {
 
-
     private final static Logger LOGGER = LogManager.getLogger(LinesIndexer.class);
 
     public static Stream<GopSong> listSongsByDir(final String dir) throws IOException {
@@ -34,7 +33,7 @@ public class SongsUtils {
                 });
     }
 
-    static Stream<File> listSongFilesByDir(final String dir) throws IOException {
+    public static Stream<File> listSongFilesByDir(final String dir) throws IOException {
 
         return java.nio.file.Files
                 .walk(java.nio.file.Paths.get(dir))
