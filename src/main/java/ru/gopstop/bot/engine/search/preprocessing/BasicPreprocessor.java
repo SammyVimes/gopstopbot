@@ -7,8 +7,10 @@ public class BasicPreprocessor {
 
     public static String postfix(String line) {
 
-        String normalLine = line.trim();
-        String processedLine = new StringBuilder(normalLine.toLowerCase()).reverse().toString();
+        String normalLine = line.trim().replaceAll("[^a-zA-Zа-яА-я ]", "").toLowerCase();
+        String processedLine =
+                new StringBuilder(
+                        normalLine.toLowerCase()).reverse().toString();
         //todo augmentation
         return processedLine;
     }
