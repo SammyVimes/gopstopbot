@@ -19,14 +19,14 @@ public class SongReaderTest extends TestCase {
     @Ignore
     public void testReading() throws IOException {
 
-        Assert.assertTrue(SongsUtils
-                .listSongFilesByDir("data/songs/").size()  != 0);
-
-        System.out.println(SongsUtils
-                .listSongsByDir("data_test/songs/"));
+//        Assert.assertTrue(SongsUtils
+//                .listSongFilesByDir("data/songs/").size()  != 0);
+//
+//        System.out.println(SongsUtils
+//                .listSongsByDir("data_test/songs/"));
 
         SongsUtils
-                .listSongFilesByDir("data/").stream()
+                .listSongFilesByDir("data/")
                 .limit(15)
                 .forEach(f -> {
                     try {
