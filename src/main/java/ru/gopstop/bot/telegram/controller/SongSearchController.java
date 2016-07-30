@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 /**
  * Created by Semyon on 30.07.2016.
  */
-public class SongSearchController extends Controller {
+public class SongSearchController extends BaseMuzisController {
 
     private MuzisService muzisService = MuzisServiceBuilder.getMuzisService();
 
@@ -122,46 +122,6 @@ public class SongSearchController extends Controller {
         final ReplyKeyboardMarkup replyKeyboardMarkup = buildKeyboard(Arrays.asList(BACK));
         final SendMessage msg = createMessageWithKeyboard(request.getChatId().toString(), request.getMessageId(), "Введи название песни", replyKeyboardMarkup);
         bot.sendMessage(msg);
-    }
-
-    /**
-     * Отправляем песню и картинку песни
-     * @param request
-     * @param song
-     * @throws TelegramApiException
-     */
-    private void sendSongAndCover(final Message request, final Song song) throws TelegramApiException {
-        if (!TextUtils.isEmpty(song.getPoster())) {
-            sendMessage(request.getChatId().toString(), "Вот картиночка");
-            // скачиваем картинку и отправляем
-            final File file = FileUtils.writeResponseBodyToDisk(resourcesService.downloadFile(song.getPoster()), song.getPoster());
-            SendPhoto sendPhoto = new SendPhoto();
-            sendPhoto.setChatId(request.getChatId().toString());
-            if (file == null) {
-                sendMessage(request.getChatId().toString(), "Что-то пошло не так со скачиванием картинки");
-                return;
-            }
-            sendPhoto.setNewPhoto(file);
-            bot.sendPhoto(sendPhoto);
-            sendMessage(request.getChatId().toString(), "Сейчас и песню пришлю");
-        } else {
-            sendMessage(request.getChatId().toString(), "Сейчас пришлю");
-        }
-
-        // скачиваем музло и отправляем
-        final File music = FileUtils.writeResponseBodyToDisk(resourcesService.downloadFile(song.getFileMp3()), song.getFileMp3());
-        SendAudio audio = new SendAudio();
-        if (music == null) {
-            sendMessage(request.getChatId().toString(), "Что-то пошло не так со скачиванием музыки");
-            return;
-        }
-        audio.setNewAudio(music);
-        // телеграм не ест кириллицу, транслитим транслитом
-        audio.setPerformer(Translit.cyr2lat(song.getPerformer()));
-        audio.setTitle(Translit.cyr2lat(song.getTrackName()));
-        audio.setChatId(request.getChatId().toString());
-        bot.sendAudio(audio);
-        sendMessage(request.getChatId().toString(), "Послушай, а потом можешь искать новые песни");
     }
 
 }
