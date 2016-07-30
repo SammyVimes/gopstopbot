@@ -21,7 +21,7 @@ public class SongsUtils {
 
         final List<GopSong> songs = new ArrayList<>();
 
-        for  (final File songFile : listSongFilesByDir(dir) ) {
+        for (final File songFile : listSongFilesByDir(dir)) {
             songs.add(readSongFromFile(songFile));
         }
 
@@ -33,15 +33,17 @@ public class SongsUtils {
         return java.nio.file.Files
                 .walk(java.nio.file.Paths.get(dir))
                 .filter(java.nio.file.Files::isRegularFile)
-                .filter(f ->  !f.getFileName().endsWith("README.txt"))
+                .filter(f -> !f.getFileName().endsWith("README.txt"))
                 .map(Path::toFile)
                 .collect(Collectors.toList());
     }
 
 
     public static GopSong readSongFromFile(final File file) throws IOException {
-
         final List<String> lines = Files.readLines(file, Charset.forName("utf-8"));
-        return new GopSong(lines.get(0), lines.get(1), lines.subList(2, lines.size()));
+        return new GopSong(
+                lines.get(0).trim(),
+                lines.get(1).trim(),
+                lines.subList(2, lines.size()));
     }
 }

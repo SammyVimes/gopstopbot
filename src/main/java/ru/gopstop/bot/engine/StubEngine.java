@@ -15,5 +15,4 @@ public class StubEngine {
         final GopSong gopSong = new GopSong(split[0], split[1], Collections.emptyList());
         return new Rhyme("Fake Rhyme", gopSong);
     }
-
 }

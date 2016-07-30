@@ -4,6 +4,7 @@ import org.telegram.telegrambots.TelegramApiException;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import ru.gopstop.bot.engine.CleverEngine;
 import ru.gopstop.bot.engine.StubEngine;
 import ru.gopstop.bot.engine.entities.GopSong;
 import ru.gopstop.bot.engine.entities.Rhyme;
@@ -56,7 +57,8 @@ public class RhymingController extends BaseMuzisController {
             return;
         }
 
-        final Rhyme rhyme = StubEngine.getRhyme(text);
+        final Rhyme rhyme = CleverEngine.getRhyme(text);
+
         if (rhyme != null) {
             onRhymeFound(request, session, rhyme);
         } else {
@@ -65,9 +67,14 @@ public class RhymingController extends BaseMuzisController {
     }
 
     private void onRhymeFound(final Message request, final TGSession session, final Rhyme rhyme) throws TelegramApiException {
+
         final GopSong gopSong = rhyme.getGopSong();
-        sendMessage(request.getChatId().toString(), String.format("Рифмы подъехали (%s - %s)", gopSong.getAuthor(), gopSong.getName()));
-        sendMessage(request.getChatId().toString(), rhyme.getRhyme());
+        sendMessage(
+                request.getChatId().toString(),
+                String.format("Рифмы подъехали (%s - %s)", gopSong.getAuthor(), gopSong.getName()));
+        sendMessage(
+                request.getChatId().toString(),
+                rhyme.getRhyme());
 
 
         String gopSongName = gopSong.getName().replace("-", " "); // иначе не ищет!
