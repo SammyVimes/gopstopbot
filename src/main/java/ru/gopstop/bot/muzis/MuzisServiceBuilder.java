@@ -14,4 +14,11 @@ public class MuzisServiceBuilder {
         return muzisService;
     }
 
+    public static ResourcesService getResourcesService() {
+        final Retrofit retrofit = RetrofitConfig.createResourceRetrofit();
+        final ResourcesService resourcesService = retrofit.create(ResourcesService.class);
+        return resourcesService;
+    }
+
+
 }

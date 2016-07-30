@@ -137,4 +137,8 @@ public class Song {
         this.valuesAll = valuesAll;
     }
 
+    public String getTitle() {
+        return performer + " " + trackName;
+    }
+
 }
