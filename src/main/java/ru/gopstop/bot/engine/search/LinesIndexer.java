@@ -11,7 +11,6 @@ import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.SimpleFSDirectory;
-import ru.gopstop.bot.engine.entities.GopSong;
 import ru.gopstop.bot.engine.search.preprocessing.BasicPreprocessor;
 import ru.gopstop.bot.engine.tools.SongsUtils;
 
@@ -98,32 +97,36 @@ public class LinesIndexer {
 
     private void rebuild() throws IOException {
 
-        final List<GopSong> songs = SongsUtils.listSongsByDir(dataPath);
+        SongsUtils.listSongsByDir(dataPath)
+                .forEach(song -> {
+                            try {
+                                withWriter(wr -> {
 
-        for (final GopSong song : songs) {
+                                    for (final String line : song.getLyrics()) {
 
-            withWriter(wr -> {
+                                        final String processedLine = BasicPreprocessor.postfix(line);
 
-                for (final String line : song.getLyrics()) {
+                                        final Document doc = new Document();
+                                        doc.add(new TextField("text", processedLine.substring(0, 5), Field.Store.YES));
+                                        doc.add(new StringField("fulltext", line, Field.Store.YES));
+                                        doc.add(new StringField("title", song.getName(), Field.Store.YES));
+                                        doc.add(new StringField("author", song.getAuthor(), Field.Store.YES));
 
-                    final String processedLine = BasicPreprocessor.postfix(line);
-//                    System.out.println(processedLine);
-
-                    final Document doc = new Document();
-                    doc.add(new TextField("text", processedLine.substring(0, 5), Field.Store.YES));
-                    doc.add(new StringField("fulltext", line, Field.Store.YES));
-                    doc.add(new StringField("title", song.getName(), Field.Store.YES));
-                    doc.add(new StringField("author", song.getAuthor(), Field.Store.YES));
-
-                    try {
-                        wr.addDocument(doc);
-                    } catch (IOException e) {
-                        LOGGER.warn("Bullshit while adding docs to index");
-                        e.printStackTrace();
-                        throw new RuntimeException("ppc", e);
-                    }
-                }
-            });
-        }
+                                        try {
+                                            wr.addDocument(doc);
+                                        } catch (IOException e) {
+                                            LOGGER.error("Bullshit while adding docs to index", e);
+                                            e.printStackTrace();
+                                            throw new RuntimeException("ppc", e);
+                                        }
+                                    }
+                                });
+                            } catch (IOException ioe) {
+                                LOGGER.error("Bullshit while adding docs to index", ioe);
+                                ioe.printStackTrace();
+                                throw new RuntimeException("ppc", ioe);
+                            }
+                        }
+                );
     }
 }

@@ -1,5 +1,7 @@
 package ru.gopstop.bot.engine.search;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
@@ -20,6 +22,9 @@ public class LinesIndexSearcher {
 
     private final IndexSearcher is;
     private final CustomAnalyzer analyzer;
+
+    private final static Logger LOGGER = LogManager.getLogger(LinesIndexSearcher.class);
+
 
     private final static int COUNT_RETURNED = 50;
 
@@ -46,6 +51,7 @@ public class LinesIndexSearcher {
 
         for (int i = 0; i < Math.min(COUNT_RETURNED, docs.totalHits); i++) {
             final Document doc = is.doc(docs.scoreDocs[i].doc);
+            LOGGER.info(doc.toString());
             foundSongs.add(
                     new FoundGopSong(
                             new GopSong(doc.get("title"), doc.get("author"), null),
