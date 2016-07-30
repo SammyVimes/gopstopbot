@@ -104,7 +104,8 @@ public class EmphasisMap {
     }
 
     private String[] processPoemLine(String poemLine) {
-        return poemLine.toLowerCase().replaceAll("[\\-\\+\\.\\^\\?:,!]","").split(" ");
+        return poemLine.trim().replaceAll("[^a-zA-Zа-яА-я ]", "").toLowerCase().split(" ");
+
     }
 
     private String formRhythmicPattern(int[] rhythmicPattern) {
