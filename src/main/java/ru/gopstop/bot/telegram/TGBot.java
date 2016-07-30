@@ -22,6 +22,9 @@ import java.util.*;
 
 /**
  * Created by Semyon on 30.07.2016.
+ *
+ * Телеграм бот
+ *
  */
 public class TGBot extends TelegramLongPollingBot {
 
@@ -56,6 +59,13 @@ public class TGBot extends TelegramLongPollingBot {
     private void handleIncomingMessage(final Message message) {
         final Long chatId = message.getChatId();
         final User fromUser = message.getFrom();
+
+        LOGGER.trace("Message from "
+                + fromUser.getLastName()
+                + fromUser.getFirstName()
+                + "(" + fromUser.getUserName() + ")"
+                + " : " + message.getText());
+
         TGSessionKey key = new TGSessionKey(fromUser, chatId);
         TGSession session = sessionMap.get(key);
 
