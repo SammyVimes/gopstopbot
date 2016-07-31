@@ -164,9 +164,15 @@ public class EmphasisMap {
     }
 
     private String formRhythmicPattern(int[] rhythmicPattern) {
+        // комменты расставил как догадался
+        // rhythmicPatter[0] -- кол-во слогов
         char[] str = new char[rhythmicPattern[0]];
         Arrays.fill(str, '0');
-        str[rhythmicPattern[1]] = '1';
+        // rhythmicPatter[1] -- на каком слоге ударение
+        final int emphasisIndex = rhythmicPattern[1];
+        if (emphasisIndex != -1) {
+            str[emphasisIndex] = '1';
+        }
         return new String(str);
     }
 
@@ -179,10 +185,11 @@ public class EmphasisMap {
             if (emphasisDict.get(words[i]) != null) {
                 curWordRhythmicPattern = emphasisDict.get(words[i]).get(0);
             } else {
-                //todo???
-//                curWordRhythmicPattern = new int[countVowels(words[i])];
-//                Arrays.fill(curWordRhythmicPattern, 2);
-                curWordRhythmicPattern = new int[0];
+                // нет такого слова в словаре
+                // забиваем нулями
+                curWordRhythmicPattern = new int[2];
+                curWordRhythmicPattern[0] = countVowels(words[i]);
+                curWordRhythmicPattern[1] = -1; // это значит, что не знаем ударение
             }
             rhythmicPattern = rhythmicPattern + formRhythmicPattern(curWordRhythmicPattern);
 

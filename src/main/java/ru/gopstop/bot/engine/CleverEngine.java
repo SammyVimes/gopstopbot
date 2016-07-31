@@ -23,7 +23,7 @@ public class CleverEngine {
                         .search(userInput)
                         .stream()
                         .filter(g -> SameLineFilter.filter(userInput, g))
-//                        .filter(g -> WordStressFilter.filter(userInput, g))
+                        .filter(g -> WordStressFilter.filter(userInput, g))
                         .filter(g -> SameLastWordFilter.filter(userInput, g))
                         .collect(Collectors.toList());
 

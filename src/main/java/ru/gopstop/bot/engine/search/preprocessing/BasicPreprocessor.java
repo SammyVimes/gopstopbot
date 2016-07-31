@@ -16,18 +16,22 @@ public class BasicPreprocessor {
 
         String normalLine = line.trim().replaceAll("[^a-zA-Zа-яА-я ]", " ").toLowerCase();
 
-//        String[] splitted = normalLine.replaceAll("\\s+", " ").split(" ");
+        String[] splitted = normalLine.replaceAll("\\s+", " ").split(" ");
 
-//        String lastStressed = ExtraWordStressTool.upperCaseStress(splitted[splitted.length - 1]);
-//
-//        final List<String> res = new ArrayList<>(Arrays.asList(splitted));
-//        res.remove(splitted.length - 1);
-//
-//        res.add(lastStressed);
-//
-//        String fixedline = Joiner.on(" ").join(res);
+        final int len = splitted.length - 1;
+        if (len == -1) {
+            return null;
+        }
+        String lastStressed = ExtraWordStressTool.upperCaseStress(splitted[len]);
 
-        String fixedline = normalLine;
+        final List<String> res = new ArrayList<>(Arrays.asList(splitted));
+        res.remove(len);
+
+        res.add(lastStressed);
+
+        String fixedline = Joiner.on(" ").join(res);
+
+//        String fixedline = normalLine;
 
         String processedLine =
                 new StringBuilder(fixedline).reverse().toString();

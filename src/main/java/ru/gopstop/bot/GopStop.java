@@ -21,7 +21,7 @@ public class GopStop {
     private GopStop() {
         TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
         LinesIndexer.getInstance();
-//        EmphasisMap.getInstance();
+        EmphasisMap.getInstance();
         try {
             telegramBotsApi.registerBot(new TGBot());
         } catch (TelegramApiException e) {

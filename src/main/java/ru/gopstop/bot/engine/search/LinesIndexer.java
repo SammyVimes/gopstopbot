@@ -131,6 +131,11 @@ public class LinesIndexer {
 
                     final String processedLine = BasicPreprocessor.postfix(line);
 
+                    if (processedLine == null) {
+                        // в строке какая-нибудь ерунда, например * * * (как в стихах без названия)
+                        continue;
+                    }
+
                     final Document doc = new Document();
                     doc.add(new TextField("text",
                             processedLine
