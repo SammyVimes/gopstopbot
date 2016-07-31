@@ -125,7 +125,6 @@ public class RhymingController extends BaseMuzisController {
             return;
         }
 
-        sendMessage(request.getChatId().toString(), "А вот и сама песня:");
         final Song song = foundSong.get();
         sendSongAndCover(request, song);
     }
