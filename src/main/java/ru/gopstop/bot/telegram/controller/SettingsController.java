@@ -26,48 +26,26 @@ public class SettingsController extends Controller {
 
     @Override
     public String getKey() {
-        return Constants.SETTINGS;
+        return Constants.ABOUT;
+    }
+
+    @Override
+    public boolean rememberMe() {
+        return false;
     }
 
     @Override
     public String getEntry() {
-        return Constants.SETTINGS + Emoji.WRENCH.toString();
+        return ABOUT;
     }
 
     @Override
     public void handleMessage(final Message request, final TGSession session) throws TelegramApiException {
         final String text = request.getText();
         if (getEntry().equals(text)) {
-            onMain(request, session);
+            sendMessage(request.getChatId().toString(), Constants.BOT_SELF_DESCRIPTION);
             return;
         }
-
-        if (text.equals(ABOUT)) {
-            about(request, session);
-            return;
-        } else if (text.equals(BACK)) {
-            back(request, session);
-            return;
-        } else if (text.equals(TEST)) {
-            SendMessage msg = new SendMessage();
-            msg.setChatId(request.getChatId().toString());
-            msg.setText("Yawwww");
-            bot.sendMessage(msg);
-            return;
-        }
-    }
-
-    private void onMain(final Message request, final TGSession session) throws TelegramApiException {
-        final ReplyKeyboardMarkup replyKeyboardMarkup = buildKeyboard(Arrays.asList(ABOUT, TEST, BACK));
-        final SendMessage msg = createMessageWithKeyboard(request.getChatId().toString(), request.getMessageId(), "Настройки", replyKeyboardMarkup);
-        bot.sendMessage(msg);
-    }
-
-    private void about(final Message request, final TGSession session) throws TelegramApiException {
-        final ReplyKeyboardMarkup replyKeyboardMarkup = buildKeyboard(Arrays.asList(TEST, BACK));
-        final SendMessage msg = createMessageWithKeyboard(request.getChatId().toString(), request.getMessageId(),
-                Constants.BOT_SELF_DESCRIPTION, replyKeyboardMarkup);
-        bot.sendMessage(msg);
     }
 
 }

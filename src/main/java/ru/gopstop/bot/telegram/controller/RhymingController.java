@@ -14,6 +14,7 @@ import ru.gopstop.bot.telegram.Constants;
 import ru.gopstop.bot.telegram.TGBot;
 import ru.gopstop.bot.telegram.internal.Emoji;
 import ru.gopstop.bot.telegram.user.TGSession;
+import ru.gopstop.bot.util.TwitGen;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -71,6 +72,9 @@ public class RhymingController extends BaseMuzisController {
         sendMessage(
                 request.getChatId().toString(),
                 rhyme.getRhyme());
+        sendMessage(
+                request.getChatId().toString(),
+                "[Рассказать пацанам из твиттера](" + TwitGen.generate(request.getText(), rhyme.getRhyme(), rhyme.getGopSong().getName()) + ")");
 
 
         String gopSongName = gopSong.getName().replace("-", " "); // иначе не ищет!
@@ -84,8 +88,14 @@ public class RhymingController extends BaseMuzisController {
 
         if (!foundSong.isPresent()) {
             // ничего не нашли, пробуем исполнителя и ищем по его id 6 треков
-            final SearchResult byAuthor = muzisService.search(null, gopSong.getAuthor(), null, null, null, null, null);
-            final Optional<Performer> first = byAuthor.getPerformers().stream().findFirst();
+            final List<Performer> performers = muzisSearchHelper.searchByPerformer(gopSong.getAuthor());
+            final Optional<Performer> first = performers
+                    .stream()
+                    // возможно это надо убрать
+                    // проверка, что это точно тот автор, который нам нужен
+                    .filter(performer -> muzisSearchHelper.checkPerformer(performer, gopSong.getAuthor()))
+                    .findFirst();
+
             final List<Song> songs = first.map(performer ->
                     muzisService.songsByPerformer(performer.getId())).map(byAuthorRes ->
                     byAuthorRes.getSongs().stream()
@@ -99,9 +109,11 @@ public class RhymingController extends BaseMuzisController {
 
             String reply = "";
             if (keyboard.isEmpty()) {
-                reply = String.format("Но мы не нашли репертуар автора (%s) на Muzis", gopSong.getAuthor());
+                reply = String.format("Но мы не нашли репертуар автора (%s) на Muzis. Можешь искать рифмы дальше.", gopSong.getAuthor());
             } else {
                 reply = "Эту песню мы не нашли, но вот другие песни автора";
+                // перекидываем на поиск по песням
+                session.setLastController(Constants.SONGS);
             }
             keyboard.add(BACK);
             final ReplyKeyboardMarkup replyKeyboardMarkup = buildKeyboard(keyboard);
@@ -110,8 +122,6 @@ public class RhymingController extends BaseMuzisController {
 
             final SendMessage msg = createMessageWithKeyboard(request.getChatId().toString(), request.getMessageId(), reply, replyKeyboardMarkup);
             bot.sendMessage(msg);
-            // перекидываем на поиск по песням
-            session.setLastController(Constants.SONGS);
             return;
         }
 

@@ -6,6 +6,7 @@ import org.telegram.telegrambots.api.methods.send.SendAudio;
 import org.telegram.telegrambots.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.api.objects.Message;
 import ru.gopstop.bot.FileUtils;
+import ru.gopstop.bot.muzis.MuzisSearchHelper;
 import ru.gopstop.bot.muzis.MuzisService;
 import ru.gopstop.bot.muzis.MuzisServiceBuilder;
 import ru.gopstop.bot.muzis.ResourcesService;
@@ -19,6 +20,8 @@ import java.io.File;
  * Created by Semyon on 30.07.2016.
  */
 public abstract class BaseMuzisController extends Controller {
+
+    protected MuzisSearchHelper muzisSearchHelper = new MuzisSearchHelper();
 
     protected MuzisService muzisService = MuzisServiceBuilder.getMuzisService();
 
