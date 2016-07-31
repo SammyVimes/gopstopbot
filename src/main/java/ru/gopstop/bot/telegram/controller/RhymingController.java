@@ -1,6 +1,8 @@
 package ru.gopstop.bot.telegram.controller;
 
 import org.telegram.telegrambots.TelegramApiException;
+import org.telegram.telegrambots.api.methods.ActionType;
+import org.telegram.telegrambots.api.methods.send.SendChatAction;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardMarkup;
@@ -54,6 +56,8 @@ public class RhymingController extends BaseMuzisController {
             return;
         }
 
+        sendAction(request.getChatId().toString(), ActionType.TYPING);
+
         final Rhyme rhyme = CleverEngine.getRhyme(text);
 
         if (rhyme != null) {
@@ -66,16 +70,9 @@ public class RhymingController extends BaseMuzisController {
     private void onRhymeFound(final Message request, final TGSession session, final Rhyme rhyme) throws TelegramApiException {
 
         final GopSong gopSong = rhyme.getGopSong();
-        sendMessage(
+        sendHtmlMessage(
                 request.getChatId().toString(),
-                String.format("Рифмы подъехали\n(%s - %s)", gopSong.getAuthor(), gopSong.getName()));
-        sendMessage(
-                request.getChatId().toString(),
-                rhyme.getRhyme());
-        sendMessage(
-                request.getChatId().toString(),
-                "[Рассказать пацанам из твиттера](" + TwitGen.generate(request.getText(), rhyme.getRhyme(), rhyme.getGopSong().getName()) + ")");
-
+                String.format("Рифмы подъехали\n<b>%s</b>\n(%s - %s)", rhyme.getRhyme(), gopSong.getAuthor(), gopSong.getName()));
 
         String gopSongName = gopSong.getName().replace("-", " "); // иначе не ищет!
 
@@ -122,11 +119,21 @@ public class RhymingController extends BaseMuzisController {
 
             final SendMessage msg = createMessageWithKeyboard(request.getChatId().toString(), request.getMessageId(), reply, replyKeyboardMarkup);
             bot.sendMessage(msg);
+
+            sendMessage(
+                    request.getChatId().toString(),
+                    "[Рассказать пацанам из твиттера](" + TwitGen.generate(request.getText(), rhyme.getRhyme(), rhyme.getGopSong().getName()) + ")");
+
             return;
         }
 
         final Song song = foundSong.get();
         sendSongAndCover(request, song);
+
+        sendMessage(
+                request.getChatId().toString(),
+                "[Рассказать пацанам из твиттера](" + TwitGen.generate(request.getText(), rhyme.getRhyme(), rhyme.getGopSong().getName()) + ")");
+        sendMessage(request.getChatId().toString(), "Послушай, а потом можешь искать новые рифмы и песни");
     }
 
     private void onMain(final Message request, final TGSession session) throws TelegramApiException {
