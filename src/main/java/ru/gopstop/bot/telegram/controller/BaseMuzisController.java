@@ -2,6 +2,7 @@ package ru.gopstop.bot.telegram.controller;
 
 import org.apache.http.util.TextUtils;
 import org.telegram.telegrambots.TelegramApiException;
+import org.telegram.telegrambots.api.methods.ActionType;
 import org.telegram.telegrambots.api.methods.send.SendAudio;
 import org.telegram.telegrambots.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.api.objects.Message;
@@ -46,6 +47,7 @@ public abstract class BaseMuzisController extends Controller {
                 cachedFile = FileUtils.writeResponseBodyToDisk(resourcesService.downloadFile(song.getPoster()), song.getPoster());
             }
 
+            sendAction(request.getChatId().toString(), ActionType.UPLOADPHOTO);
             SendPhoto sendPhoto = new SendPhoto();
             sendPhoto.setChatId(request.getChatId().toString());
             if (cachedFile == null) {
@@ -65,6 +67,7 @@ public abstract class BaseMuzisController extends Controller {
             cachedMusicFile = FileUtils.writeResponseBodyToDisk(resourcesService.downloadFile(song.getFileMp3()), song.getFileMp3());
         }
 
+        sendAction(request.getChatId().toString(), ActionType.UPLOADAUDIO);
         SendAudio audio = new SendAudio();
         if (cachedMusicFile == null) {
             sendMessage(request.getChatId().toString(), "Что-то пошло не так со скачиванием музыки");

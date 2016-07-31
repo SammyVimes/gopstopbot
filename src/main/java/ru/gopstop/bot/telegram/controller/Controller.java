@@ -1,6 +1,8 @@
 package ru.gopstop.bot.telegram.controller;
 
 import org.telegram.telegrambots.TelegramApiException;
+import org.telegram.telegrambots.api.methods.ActionType;
+import org.telegram.telegrambots.api.methods.send.SendChatAction;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardMarkup;
@@ -122,6 +124,21 @@ public abstract class Controller {
         msg.setText(reply);
         msg.enableMarkdown(true);
         bot.sendMessage(msg);
+    }
+
+    protected void sendHtmlMessage(final String chatId, final String reply) throws TelegramApiException {
+        SendMessage msg = new SendMessage();
+        msg.setChatId(chatId);
+        msg.setText(reply);
+        msg.enableHtml(true);
+        bot.sendMessage(msg);
+    }
+
+    protected void sendAction(final String chatId, final ActionType actionType) throws TelegramApiException {
+        SendChatAction action = new SendChatAction();
+        action.setChatId(chatId);
+        action.setAction(actionType);
+        bot.sendChatAction(action);
     }
 
 }
