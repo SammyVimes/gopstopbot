@@ -109,7 +109,6 @@ public class LinesIndexer {
 
         int size = SongsUtils.listSongFilesByDir(DATA_PATH).collect(Collectors.toList()).size();
 
-
         final Iterator<GopSong> gopSongIterator = SongsUtils.listSongsByDir(dataPath).iterator();
 
         withWriter(wr -> {
@@ -131,7 +130,10 @@ public class LinesIndexer {
 
                     final Document doc = new Document();
                     doc.add(new TextField("text",
-                            processedLine.substring(0, Math.min(ANALYZED_POSTFIX_SIZE, processedLine.length())), Field.Store.YES));
+                            processedLine
+                                    .substring(0,
+                                            Math.min(ANALYZED_POSTFIX_SIZE, processedLine.length())),
+                            Field.Store.YES));
                     doc.add(new StringField("fulltext", line, Field.Store.YES));
                     doc.add(new StringField("title", song.getName(), Field.Store.YES));
                     doc.add(new StringField("author", song.getAuthor(), Field.Store.YES));

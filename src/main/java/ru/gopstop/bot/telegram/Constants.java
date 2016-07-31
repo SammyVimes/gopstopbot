@@ -15,6 +15,8 @@ public class Constants {
 
     public static final String ABOUT = "О боте";
 
-    public static final String BOT_SELF_DESCRIPTION = "Это бот для того-то";
-
+    public static final String BOT_SELF_DESCRIPTION =
+            "\"Мне говорят, что Окна ТАСС моих стихов полезнее...\"\n" +
+                    "Like, share, re-post - and stay with us -\n" +
+                    "Ведь и шансон - поэзия.";
 }
