@@ -140,7 +140,7 @@ public class LinesIndexer {
                                     .substring(0,
                                             Math.min(ANALYZED_POSTFIX_SIZE, processedLine.length())),
                             Field.Store.YES));
-                    doc.add(new StringField("fulltext", line.trim().replaceAll(",$", ""), Field.Store.YES));
+                    doc.add(new StringField("fulltext", line.trim().replaceAll("[,-:;]$", ""), Field.Store.YES));
                     doc.add(new StringField("title", song.getName(), Field.Store.YES));
                     doc.add(new StringField("author", song.getAuthor(), Field.Store.YES));
 
