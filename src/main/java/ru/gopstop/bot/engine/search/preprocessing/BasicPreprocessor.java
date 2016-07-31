@@ -45,7 +45,7 @@ public class BasicPreprocessor {
         res.remove(len);
         res.add(lastStressed);
 
-        final String fixedline = Joiner.on(" ").join(res);
+        final String fixedline = Joiner.on("").join(res);
 
         return new StringBuilder(fixedline).reverse().toString();
     }
