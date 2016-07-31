@@ -25,8 +25,6 @@ public class SameLineFilter  {
         int size1 = b.size();
         int sizeInter = Sets.intersection(a, b).size();
 
-        System.out.println(a +" " + b + " " + sizeInter + " " + (sizeInter + 0.0) / size0);
-
         return (sizeInter + 0.0) / size0 < 0.8 && (sizeInter + 0.0) / size1 < 0.8;
     }
 }

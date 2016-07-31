@@ -62,7 +62,7 @@ public class LinesIndexSearcher {
 
         for (int i = 0; i < Math.min(COUNT_RETURNED, docs.totalHits); i++) {
             final Document doc = is.doc(docs.scoreDocs[i].doc);
-            LOGGER.info(docs.scoreDocs[i].score + "\t| " + doc.get("fulltext") + " | " + doc.get("text"));
+            LOGGER.info(docs.scoreDocs[i].score + "\t|\t" + doc.get("text") + "\t|\t" + doc.get("fulltext"));
             foundSongs.add(
                     new FoundGopSong(
                             new GopSong(
