@@ -13,7 +13,6 @@ import java.util.stream.StreamSupport;
  */
 public class ConsonantHack implements LastWordProcessor {
 
-
     private Map<Character, Character> CONSONANTS_PAIRS =
             Arrays.stream("кг,шж,сз,фв,пб,тд".split(","))
 //                    .flatMap(pair -> Stream.of(pair, pair.substring(1) + pair.substring(0, 1)))

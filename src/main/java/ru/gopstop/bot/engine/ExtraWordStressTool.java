@@ -5,6 +5,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
+ * Получение ударений в слове по паттерну, полученному с помощью словаря
  * Created by aam on 31.07.16.
  */
 public class ExtraWordStressTool {

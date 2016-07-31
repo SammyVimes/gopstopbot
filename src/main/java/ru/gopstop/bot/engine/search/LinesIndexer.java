@@ -8,7 +8,6 @@ import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.StringField;
-import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.Directory;
@@ -26,6 +25,7 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
+ * Индексатор строчек песен
  * Created by aam on 30.07.16.
  */
 public class LinesIndexer {
@@ -72,7 +72,7 @@ public class LinesIndexer {
             analyzer = new StandardAnalyzer();
             final IndexWriterConfig conf = rebuildConfig();
             writer = new IndexWriter(directory, conf);
-            //todo remove
+            // ребилдим каждый раз, всё равно сейчас это быстро
             writer.deleteAll();
             rebuild();
             searcher = new LinesIndexSearcher(directory, analyzer);
@@ -124,7 +124,6 @@ public class LinesIndexer {
                 }
                 counter += 1;
 
-//                try {
                 for (final String line : song.getLyrics()) {
 
                     final String processedLine = BasicPreprocessor.postfix(line);
@@ -153,12 +152,6 @@ public class LinesIndexer {
                         throw new RuntimeException("ppc", e);
                     }
                 }
-
-//                } catch (IOException ioe) {
-//                    LOGGER.error("Bullshit while adding docs to index", ioe);
-//                    ioe.printStackTrace();
-//                    throw new RuntimeException("ppc", ioe);
-//                }
             }
         });
 

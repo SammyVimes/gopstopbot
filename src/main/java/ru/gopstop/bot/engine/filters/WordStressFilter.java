@@ -19,7 +19,8 @@ public class WordStressFilter {
         final String songPattern = EmphasisMap.getInstance().findRhythmicPattern(gopSong.getRhyme());
 
         for (int i = 1; i < 3; i++) {
-            if (reqPattern.charAt(reqPattern.length() - i) != songPattern.charAt(songPattern.length() - i))
+            if (reqPattern.length() < 3 || songPattern.length() < 3 ||
+                    reqPattern.charAt(reqPattern.length() - i) != songPattern.charAt(songPattern.length() - i))
                 return false;
         }
         return true;
