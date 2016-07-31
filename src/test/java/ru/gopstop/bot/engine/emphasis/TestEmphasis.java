@@ -1,6 +1,7 @@
-package engine;
+package ru.gopstop.bot.engine.emphasis;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import ru.gopstop.bot.engine.EmphasisMap;
 
@@ -17,9 +18,12 @@ public class TestEmphasis {
 
 
     @Test
+    @Ignore
     public void testEmphasisDict() throws IOException {
-        EmphasisMap.setPath("./data/emphasis.txt");
-        EmphasisMap emphasisMap = new EmphasisMap();
+//        EmphasisMap.setPath("./data/emphasis.txt");
+//        EmphasisMap emphasisMap = new EmphasisMap();
+
+        EmphasisMap.getInstance();
 
 //
 //        ArrayList<String> rhythmicPatterns = emphasisMap.findRhythmicPattern("Буря мглою небо кроет,");
@@ -27,7 +31,7 @@ public class TestEmphasis {
 //            System.out.println(rhythmicPatterns.get(i));
 //        }
 
-        String rhythmicPattern = emphasisMap.findRhythmicPattern("Буря мглою небо кроет,");
+        String rhythmicPattern = EmphasisMap.getInstance().findRhythmicPattern("Буря мглою небо кроет,");
         System.out.println(rhythmicPattern);
     }
 }

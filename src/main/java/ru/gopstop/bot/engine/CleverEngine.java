@@ -1,7 +1,9 @@
 package ru.gopstop.bot.engine;
 
 import ru.gopstop.bot.engine.entities.Rhyme;
+import ru.gopstop.bot.engine.filters.SameLastWordFilter;
 import ru.gopstop.bot.engine.filters.SameLineFilter;
+import ru.gopstop.bot.engine.filters.WordStressFilter;
 import ru.gopstop.bot.engine.search.FoundGopSong;
 import ru.gopstop.bot.engine.search.LinesIndexer;
 
@@ -19,9 +21,11 @@ public class CleverEngine {
         final List<FoundGopSong> foundGopSongList =
                 LinesIndexer.getInstance()
                         .search(userInput)
-                .stream()
-                .filter(g -> SameLineFilter.filter(userInput, g))
-                .collect(Collectors.toList());
+                        .stream()
+                        .filter(g -> SameLineFilter.filter(userInput, g))
+//                        .filter(g -> WordStressFilter.filter(userInput, g))
+                        .filter(g -> SameLastWordFilter.filter(userInput, g))
+                        .collect(Collectors.toList());
 
         //todo: фильтрация и хаки по скорингу!
 

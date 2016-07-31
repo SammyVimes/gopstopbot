@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.telegram.telegrambots.TelegramApiException;
 import org.telegram.telegrambots.TelegramBotsApi;
+import ru.gopstop.bot.engine.EmphasisMap;
 import ru.gopstop.bot.engine.search.LinesIndexer;
 import ru.gopstop.bot.muzis.MuzisService;
 import ru.gopstop.bot.muzis.MuzisServiceBuilder;
@@ -20,6 +21,7 @@ public class GopStop {
     private GopStop() {
         TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
         LinesIndexer.getInstance();
+//        EmphasisMap.getInstance();
         try {
             telegramBotsApi.registerBot(new TGBot());
         } catch (TelegramApiException e) {
