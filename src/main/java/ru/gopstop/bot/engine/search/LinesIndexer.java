@@ -136,7 +136,7 @@ public class LinesIndexer {
 
                     final Document doc = new Document();
 
-                    doc.add(new TextField("text",
+                    doc.add(new StringField("text",
                             processedLine
                                     .substring(0,
                                             Math.min(ANALYZED_POSTFIX_SIZE, processedLine.length())),

@@ -55,10 +55,10 @@ public class LinesIndexSearcher {
                     BooleanClause.Occur.SHOULD);
         }
         final TopDocs docs = is.search(q, COUNT_RETURNED);
-
         final List<FoundGopSong> foundSongs = new ArrayList<>();
 
         LOGGER.info("REQUEST: [" + request + "] hits " + docs.totalHits);
+        LOGGER.info("QUERY: [" + q.toString() + "]");
 
         for (int i = 0; i < Math.min(COUNT_RETURNED, docs.totalHits); i++) {
             final Document doc = is.doc(docs.scoreDocs[i].doc);
