@@ -12,6 +12,13 @@ import java.util.List;
  */
 public class BasicPreprocessor {
 
+    private static List<LastWordProcessor> processors = new ArrayList<>();
+
+    static {
+        processors.add(new SubstringCollapsingReducer());
+        processors.add(new ConsonantHack());
+    }
+
     public static String postfix(String line) {
 
         String normalLine = line.trim().replaceAll("[^a-zA-Zа-яА-я ]", " ").toLowerCase();
@@ -22,10 +29,13 @@ public class BasicPreprocessor {
         if (len == -1) {
             return null;
         }
+
         String lastStressed =
-                ExtraWordStressTool.upperCaseStress(
-                        SubstringCollapsingReducer.applyReplacements(
-                                splitted[len]));
+                ExtraWordStressTool.upperCaseStress(splitted[len]);
+
+        for (LastWordProcessor processor : processors) {
+            lastStressed = processor.process(lastStressed);
+        }
 
         final List<String> res = new ArrayList<>(Arrays.asList(splitted));
         res.remove(len);
