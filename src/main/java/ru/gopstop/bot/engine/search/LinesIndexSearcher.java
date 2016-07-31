@@ -14,6 +14,7 @@ import ru.gopstop.bot.engine.search.preprocessing.BasicPreprocessor;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -39,33 +40,38 @@ public class LinesIndexSearcher {
 
     public List<FoundGopSong> search(final String request) throws IOException {
 
-        final BooleanQuery q = new BooleanQuery();
-        final String processedRequest = BasicPreprocessor.postfix(request);
+        try {
+            final BooleanQuery q = new BooleanQuery();
+            final String processedRequest = BasicPreprocessor.postfix(request);
 
-        // тупая комбинация префиксных запросов
-        for (int i = 5; i > 0; i--) {
-            q.add(new PrefixQuery(
-                            new Term("text", processedRequest.substring(0, Math.min(i, processedRequest.length())))),
-                    BooleanClause.Occur.SHOULD);
+            // тупая комбинация префиксных запросов
+            for (int i = 5; i > 0; i--) {
+                q.add(new PrefixQuery(
+                                new Term("text", processedRequest.substring(0, Math.min(i, processedRequest.length())))),
+                        BooleanClause.Occur.SHOULD);
+            }
+            final TopDocs docs = is.search(q, COUNT_RETURNED);
+            final List<FoundGopSong> foundSongs = new ArrayList<>();
+
+            LOGGER.info("REQUEST: [" + request + "] hits " + docs.totalHits);
+            LOGGER.info("QUERY: [" + q.toString() + "]");
+
+            for (int i = 0; i < Math.min(COUNT_RETURNED, docs.totalHits); i++) {
+                final Document doc = is.doc(docs.scoreDocs[i].doc);
+                LOGGER.info(docs.scoreDocs[i].score + "\t|\t" + doc.get("text") + "\t|\t" + doc.get("fulltext"));
+                foundSongs.add(
+                        new FoundGopSong(
+                                new GopSong(
+                                        doc.get("title"),
+                                        doc.get("author"), null),
+                                doc.get("fulltext"),
+                                docs.scoreDocs[i].score));
+
+            }
+            return foundSongs;
+        } catch (Exception e) {
+            LOGGER.error("Weird search error", e);
+            return Collections.emptyList();
         }
-        final TopDocs docs = is.search(q, COUNT_RETURNED);
-        final List<FoundGopSong> foundSongs = new ArrayList<>();
-
-        LOGGER.info("REQUEST: [" + request + "] hits " + docs.totalHits);
-        LOGGER.info("QUERY: [" + q.toString() + "]");
-
-        for (int i = 0; i < Math.min(COUNT_RETURNED, docs.totalHits); i++) {
-            final Document doc = is.doc(docs.scoreDocs[i].doc);
-            LOGGER.info(docs.scoreDocs[i].score + "\t|\t" + doc.get("text") + "\t|\t" + doc.get("fulltext"));
-            foundSongs.add(
-                    new FoundGopSong(
-                            new GopSong(
-                                    doc.get("title"),
-                                    doc.get("author"), null),
-                            doc.get("fulltext"),
-                            docs.scoreDocs[i].score));
-
-        }
-        return foundSongs;
     }
 }
