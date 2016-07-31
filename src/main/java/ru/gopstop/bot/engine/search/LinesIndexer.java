@@ -2,7 +2,9 @@ package ru.gopstop.bot.engine.search;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.core.LetterTokenizer;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.StringField;
@@ -48,7 +50,7 @@ public class LinesIndexer {
 
     private Directory directory;
 
-    private CustomAnalyzer analyzer;
+    private Analyzer analyzer;
 
     private LetterTokenizer tokenizer;
 
@@ -65,8 +67,9 @@ public class LinesIndexer {
         try {
             directory = new SimpleFSDirectory(Paths.get(indexPath));
             tokenizer = new LetterTokenizer();
-            analyzer = new CustomAnalyzer(tokenizer, 2, 3);
+//            analyzer = new CustomAnalyzer(tokenizer, 2, 3);
             dataPath = songsPath;
+            analyzer = new StandardAnalyzer();
             final IndexWriterConfig conf = rebuildConfig();
             writer = new IndexWriter(directory, conf);
             //todo remove
@@ -117,7 +120,7 @@ public class LinesIndexer {
 
                 final GopSong song = gopSongIterator.next();
 
-                if (counter % 10 == 0) {
+                if (counter % 100 == 0) {
                     LOGGER.info("Indexed songs: " + counter + " / " + size);
                     System.out.println("Indexed songs: " + counter + " / " + size);
                 }

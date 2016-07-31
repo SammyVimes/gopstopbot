@@ -2,6 +2,7 @@ package ru.gopstop.bot.engine.search;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
@@ -21,13 +22,15 @@ import java.util.List;
 public class LinesIndexSearcher {
 
     private final IndexSearcher is;
-    private final CustomAnalyzer analyzer;
+//    private final CustomAnalyzer analyzer;
+
+    private final Analyzer analyzer;
 
     private final static Logger LOGGER = LogManager.getLogger(LinesIndexSearcher.class);
 
     private final static int COUNT_RETURNED = 20;
 
-    public LinesIndexSearcher(final Directory dir, final CustomAnalyzer analyzer) throws IOException {
+    public LinesIndexSearcher(final Directory dir, final Analyzer analyzer) throws IOException {
 
         final IndexReader ir = DirectoryReader.open(dir);
         is = new IndexSearcher(ir);
@@ -40,10 +43,17 @@ public class LinesIndexSearcher {
         final BooleanQuery q = new BooleanQuery();
         final String processedRequest = BasicPreprocessor.postfix(request);
 
-        for (final String token : analyzer.handle(processedRequest)) {
-            q.add(new TermQuery(new Term("text", token)), BooleanClause.Occur.SHOULD);
-        }
+//        for (final String token : analyzer.handle(processedRequest)) {
+//            q.add(new TermQuery(new Term("text", token)), BooleanClause.Occur.SHOULD);
+//        }
 
+        // тупой префиксный запрос
+
+        for (int i = 5; i > 0; i--) {
+            q.add(new PrefixQuery(
+                            new Term("text", processedRequest.substring(0, Math.min(i, processedRequest.length())))),
+                    BooleanClause.Occur.SHOULD);
+        }
         final TopDocs docs = is.search(q, COUNT_RETURNED);
 
         final List<FoundGopSong> foundSongs = new ArrayList<>();
