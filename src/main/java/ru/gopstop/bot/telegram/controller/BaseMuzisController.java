@@ -79,7 +79,6 @@ public abstract class BaseMuzisController extends Controller {
         audio.setTitle(Translit.cyr2lat(song.getTrackName()));
         audio.setChatId(request.getChatId().toString());
         bot.sendAudio(audio);
-        sendMessage(request.getChatId().toString(), "Послушай, а потом можешь искать новые рифмы и песни");
     }
 
 }

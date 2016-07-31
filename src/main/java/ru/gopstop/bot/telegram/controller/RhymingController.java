@@ -133,6 +133,7 @@ public class RhymingController extends BaseMuzisController {
         sendMessage(
                 request.getChatId().toString(),
                 "[Рассказать пацанам из твиттера](" + TwitGen.generate(request.getText(), rhyme.getRhyme(), rhyme.getGopSong().getName()) + ")");
+        sendMessage(request.getChatId().toString(), "Послушай, а потом можешь искать новые рифмы и песни");
     }
 
     private void onMain(final Message request, final TGSession session) throws TelegramApiException {
