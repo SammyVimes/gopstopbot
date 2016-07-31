@@ -8,6 +8,7 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 /**
+ * Заменяем парные согласные, когда можно
  * Created by Semyon on 31.07.2016.
  */
 public class ConsonantHack implements LastWordProcessor {

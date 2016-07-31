@@ -3,6 +3,8 @@ package ru.gopstop.bot.engine.entities;
 import java.util.List;
 
 /**
+ * Песня из корпуса шансона
+ *
  * Created by aam on 30.07.16.
  */
 public class GopSong {

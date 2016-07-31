@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
  */
 public class ExtraWordStressTool {
 
-
     public static String[] VOWELS = new String[]{"а", "ы", "о", "э", "е", "я", "и", "ю", "ё", "у"};
 
     private final static

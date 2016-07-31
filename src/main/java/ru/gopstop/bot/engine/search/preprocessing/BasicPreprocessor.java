@@ -26,27 +26,27 @@ public class BasicPreprocessor {
         String[] splitted = normalLine.replaceAll("\\s+", " ").split(" ");
 
         final int len = splitted.length - 1;
+
         if (len == -1) {
             return null;
         }
 
+        // проставляем последнему слову ударения
         String lastStressed =
                 ExtraWordStressTool.upperCaseStress(splitted[len]);
 
+        // применяем всякие эвристики
         for (LastWordProcessor processor : processors) {
             lastStressed = processor.process(lastStressed);
         }
 
+        // приклеиваем последнее слово
         final List<String> res = new ArrayList<>(Arrays.asList(splitted));
         res.remove(len);
-
         res.add(lastStressed);
 
-        String fixedline = Joiner.on(" ").join(res);
+        final String fixedline = Joiner.on(" ").join(res);
 
-        String processedLine =
-                new StringBuilder(fixedline).reverse().toString();
-        //todo augmentation
-        return processedLine;
+        return new StringBuilder(fixedline).reverse().toString();
     }
 }
