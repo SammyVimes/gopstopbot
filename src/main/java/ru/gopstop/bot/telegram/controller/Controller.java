@@ -35,6 +35,10 @@ public abstract class Controller {
      */
     public abstract String getKey();
 
+    public boolean rememberMe() {
+        return true;
+    }
+
     /**
      * Сообщение для входа в этот контроллер (e.g. "Настройки")
      * @return
@@ -116,6 +120,7 @@ public abstract class Controller {
         SendMessage msg = new SendMessage();
         msg.setChatId(chatId);
         msg.setText(reply);
+        msg.enableMarkdown(true);
         bot.sendMessage(msg);
     }
 

@@ -87,7 +87,9 @@ public class TGBot extends TelegramLongPollingBot {
                 for (Controller controller : mainControllers) {
                     if (controller.getEntry().equals(message.getText())) {
                         controller.handleMessage(message, session);
-                        session.setLastController(controller.getKey());
+                        if (controller.rememberMe()) {
+                            session.setLastController(controller.getKey());
+                        }
                         return;
                     }
                 }
@@ -108,7 +110,7 @@ public class TGBot extends TelegramLongPollingBot {
         final SendMessage msg = createMessageWithKeyboard(request.getChatId().toString(), request.getMessageId(), replyKeyboardMarkup);
         if (session.isNew()) {
             session.setNew(false);
-            msg.setText("Привет, бла-бла");
+            msg.setText("Привет, ты здесь первый раз, но не последний");
         } else {
             msg.setText("Меню");
         }
