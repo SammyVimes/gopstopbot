@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
+ * Поиск и отбор рифм перед итоговой отправкой в мессенджер
  * Created by aam on 31.07.16.
  */
 public class CleverEngine {

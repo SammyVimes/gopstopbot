@@ -197,35 +197,4 @@ public class EmphasisMap {
         }
         return rhythmicPattern;
     }
-
-//    public ArrayList<String> findRhythmicPattern(String poemLine) {
-//        String[] words = processPoemLine(poemLine);
-//        ArrayList<String> rhythmicPatterns = new ArrayList<String>(1);
-//
-//        for (int i = 0; i < words.length; i++) {
-//            int curLengthRhythmicPatterns = rhythmicPatterns.size();
-//
-//            if (emphasisDict.get(words[i]) != null) {
-//
-//                ArrayList<int[]> curWordRhythmicPatterns = emphasisDict.get(words[i]);
-//                for (int j = 0; j < curLengthRhythmicPatterns; j++) {
-//                    rhythmicPatterns.set(j, rhythmicPatterns.get(j) + formRhythmicPattern(curWordRhythmicPatterns.get(0)));
-//                    if (curWordRhythmicPatterns.size() >= 1) {
-//                        for (int k = 1; k < curWordRhythmicPatterns.size(); k++) {
-//                            rhythmicPatterns.add(rhythmicPatterns.get(j) + formRhythmicPattern(curWordRhythmicPatterns.get(k)));
-//                        }
-//                    }
-//                }
-//            } else {
-//                char[] str = new char[countVowels(words[i])];
-//                Arrays.fill(str, '?');
-//                for (int j = 0; j < curLengthRhythmicPatterns; j++) {
-//                    rhythmicPatterns.set(j, rhythmicPatterns.get(j) + new String(str));
-//                }
-//            }
-//        }
-//
-//        return rhythmicPatterns;
-//
-//    }
 }

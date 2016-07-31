@@ -7,7 +7,7 @@ import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import java.io.IOException;
 
 /**
- * Токенизатор для индексации малых символьных нграмм
+ * Токенизатор для обеспечения индексации малых символьных нграмм
  * Created by aam on 30.07.16.
  */
 public class SymNGramWrappingTokenFilter extends TokenFilter {
