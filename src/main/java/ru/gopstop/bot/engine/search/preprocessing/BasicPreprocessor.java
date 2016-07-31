@@ -23,8 +23,8 @@ public class BasicPreprocessor {
             return null;
         }
         String lastStressed =
-                ExtraWordStressTool.upperCaseStress(
-                        SubstringCollapsingReducer.applyReplacements(
+                SubstringCollapsingReducer.applyReplacements(
+                        ExtraWordStressTool.upperCaseStress(
                                 splitted[len]));
 
         final List<String> res = new ArrayList<>(Arrays.asList(splitted));

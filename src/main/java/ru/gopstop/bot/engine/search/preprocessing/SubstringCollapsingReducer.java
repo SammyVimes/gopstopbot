@@ -1,6 +1,7 @@
 package ru.gopstop.bot.engine.search.preprocessing;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -9,11 +10,18 @@ import java.util.Map;
 public class SubstringCollapsingReducer {
 
     private final static Map<String, String> replacements =
-            new HashMap<>();
+            new LinkedHashMap<>();
 
     static {
         replacements.put("сс", "с");
         replacements.put("цк", "ск");
+        replacements.put("тся", "ца");
+        replacements.put("ться", "ца");
+        replacements.put("цц", "ц");
+        replacements.put("кк", "к");
+        replacements.put("тт", "т");
+        replacements.put("е", "и");
+        replacements.put("о", "а");
     }
 
     public static String applyReplacements(String word) {
