@@ -79,10 +79,11 @@ public class RhymingController extends BaseMuzisController {
 
         String gopSongName = gopSong.getName().replace("-", " "); // иначе не ищет!
 
-        final SearchResult res = muzisService.search(gopSongName, gopSong.getAuthor(), null, null, null, null, null);
+        final SearchResult res = muzisService.search(gopSongName + " " + gopSong.getAuthor(), null, null, null, null, null, null);
 
         final Optional<Song> foundSong = res.getSongs()
                 .stream()
+                .filter(song -> song.getPerformer().contains(gopSong.getAuthor()) || gopSong.getAuthor().contains(song.getPerformer()))
                 .findFirst();
 
         if (!foundSong.isPresent()) {
