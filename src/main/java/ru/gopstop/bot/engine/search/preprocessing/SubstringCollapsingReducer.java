@@ -1,6 +1,7 @@
 package ru.gopstop.bot.engine.search.preprocessing;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
