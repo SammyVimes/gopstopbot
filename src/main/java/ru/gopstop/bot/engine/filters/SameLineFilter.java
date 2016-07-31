@@ -14,7 +14,7 @@ public class SameLineFilter  {
 
     private static Set<String> buildSet(String request) {
 
-        return new HashSet<String>(Arrays.asList(request.replaceAll("[A-Za-zА-Яа-я ]", " ").split("\\s+")));
+        return new HashSet<String>(Arrays.asList(request.replaceAll("[^A-Za-zА-Яа-я ]", " ").split("\\s+")));
     }
 
     public static boolean filter(String request, FoundGopSong gopSong) {
@@ -24,6 +24,8 @@ public class SameLineFilter  {
         int size0 = a.size();
         int size1 = b.size();
         int sizeInter = Sets.intersection(a, b).size();
+
+        System.out.println(a +" " + b + " " + sizeInter + " " + (sizeInter + 0.0) / size0);
 
         return (sizeInter + 0.0) / size0 < 0.8 && (sizeInter + 0.0) / size1 < 0.8;
     }
