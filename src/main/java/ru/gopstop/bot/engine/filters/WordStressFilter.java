@@ -7,12 +7,11 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
+ * Отбрасываем сильно отличающиеся по ударениям на хвосте строки
+ *
  * Created by aam on 31.07.16.
  */
 public class WordStressFilter {
-
-
-
 
     public static boolean filter(String request, FoundGopSong gopSong) {
 

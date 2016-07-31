@@ -17,25 +17,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Поиск рифм
  * Created by aam on 31.07.16.
  */
 public class LinesIndexSearcher {
 
-    private final IndexSearcher is;
-//    private final CustomAnalyzer analyzer;
-
-    private final Analyzer analyzer;
-
     private final static Logger LOGGER = LogManager.getLogger(LinesIndexSearcher.class);
 
-    private final static int COUNT_RETURNED = 20;
+    private final static int COUNT_RETURNED = 70;
+
+    private final IndexSearcher is;
+
+    private final Analyzer analyzer;
 
     public LinesIndexSearcher(final Directory dir, final Analyzer analyzer) throws IOException {
 
         final IndexReader ir = DirectoryReader.open(dir);
         is = new IndexSearcher(ir);
         this.analyzer = analyzer;
-
     }
 
     public List<FoundGopSong> search(final String request) throws IOException {
@@ -43,12 +42,7 @@ public class LinesIndexSearcher {
         final BooleanQuery q = new BooleanQuery();
         final String processedRequest = BasicPreprocessor.postfix(request);
 
-//        for (final String token : analyzer.handle(processedRequest)) {
-//            q.add(new TermQuery(new Term("text", token)), BooleanClause.Occur.SHOULD);
-//        }
-
-        // тупой префиксный запрос
-
+        // тупая комбинация префиксных запросов
         for (int i = 5; i > 0; i--) {
             q.add(new PrefixQuery(
                             new Term("text", processedRequest.substring(0, Math.min(i, processedRequest.length())))),

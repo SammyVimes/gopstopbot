@@ -3,6 +3,7 @@ package ru.gopstop.bot.engine.search;
 import ru.gopstop.bot.engine.entities.GopSong;
 
 /**
+ * Рифма и песня, обёртка для элемента выдачи
  * Created by aam on 31.07.16.
  */
 public class FoundGopSong {

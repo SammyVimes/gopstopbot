@@ -5,6 +5,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
+ * Заменяем удвоенные согласные, созвучия
+ * Можно дополнять до бесконечности
+ *
  * Created by aam on 31.07.16.
  */
 public class SubstringCollapsingReducer implements LastWordProcessor {
@@ -30,5 +33,4 @@ public class SubstringCollapsingReducer implements LastWordProcessor {
         }
         return result;
     }
-
 }

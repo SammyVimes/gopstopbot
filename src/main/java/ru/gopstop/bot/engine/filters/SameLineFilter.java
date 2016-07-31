@@ -8,6 +8,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
+ * Отбрасываем слишком похожие по составу строки
+ *
  * Created by aam on 31.07.16.
  */
 public class SameLineFilter  {
