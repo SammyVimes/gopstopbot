@@ -19,6 +19,7 @@ public class GopStop {
     private final Logger LOGGER = LogManager.getLogger(GopStop.class);
 
     private GopStop() {
+        LOGGER.info("Стартуем!");
         TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
         LinesIndexer.getInstance();
         EmphasisMap.getInstance();
