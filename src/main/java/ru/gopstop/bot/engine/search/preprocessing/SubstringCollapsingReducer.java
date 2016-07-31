@@ -20,8 +20,6 @@ public class SubstringCollapsingReducer {
         replacements.put("цц", "ц");
         replacements.put("кк", "к");
         replacements.put("тт", "т");
-        replacements.put("е", "и");
-        replacements.put("о", "а");
     }
 
     public static String applyReplacements(String word) {
