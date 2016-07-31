@@ -22,7 +22,10 @@ public class BasicPreprocessor {
         if (len == -1) {
             return null;
         }
-        String lastStressed = ExtraWordStressTool.upperCaseStress(splitted[len]);
+        String lastStressed =
+                ExtraWordStressTool.upperCaseStress(
+                        SubstringCollapsingReducer.applyReplacements(
+                                splitted[len]));
 
         final List<String> res = new ArrayList<>(Arrays.asList(splitted));
         res.remove(len);
@@ -30,8 +33,6 @@ public class BasicPreprocessor {
         res.add(lastStressed);
 
         String fixedline = Joiner.on(" ").join(res);
-
-//        String fixedline = normalLine;
 
         String processedLine =
                 new StringBuilder(fixedline).reverse().toString();

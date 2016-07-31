@@ -108,6 +108,7 @@ public class EmphasisMap {
     private EmphasisMap() throws IOException {
 
         HashMap<String, ArrayList<int[]>> map = null;
+
         try {
             FileInputStream fis = new FileInputStream(SER_PATH);
             ObjectInputStream ois = new ObjectInputStream(fis);

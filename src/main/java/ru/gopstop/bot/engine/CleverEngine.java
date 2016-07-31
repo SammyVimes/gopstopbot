@@ -27,8 +27,6 @@ public class CleverEngine {
                         .filter(g -> SameLastWordFilter.filter(userInput, g))
                         .collect(Collectors.toList());
 
-        //todo: фильтрация и хаки по скорингу!
-
         if (!foundGopSongList.isEmpty()) {
             final FoundGopSong foundGopSong = foundGopSongList.get(0);
             return new Rhyme(foundGopSong.getRhyme(), foundGopSong.getGopSong());

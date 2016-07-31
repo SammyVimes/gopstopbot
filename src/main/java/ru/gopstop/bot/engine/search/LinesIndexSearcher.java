@@ -58,9 +58,11 @@ public class LinesIndexSearcher {
 
         final List<FoundGopSong> foundSongs = new ArrayList<>();
 
+        LOGGER.info("REQUEST: [" + request + "] hits " + docs.totalHits);
+
         for (int i = 0; i < Math.min(COUNT_RETURNED, docs.totalHits); i++) {
             final Document doc = is.doc(docs.scoreDocs[i].doc);
-            LOGGER.info(doc.toString());
+            LOGGER.info(docs.scoreDocs[i].score + "\t| " + doc.get("fulltext") + " | " + doc.get("text"));
             foundSongs.add(
                     new FoundGopSong(
                             new GopSong(
@@ -68,6 +70,7 @@ public class LinesIndexSearcher {
                                     doc.get("author"), null),
                             doc.get("fulltext"),
                             docs.scoreDocs[i].score));
+
         }
         return foundSongs;
     }

@@ -13,7 +13,7 @@ public class IndexTester extends TestCase {
     @Ignore
     public void testCleverEngine() {
         final Rhyme rhyme =
-                CleverEngine.getRhyme("ты больше не любишь слушать сказки");
+                CleverEngine.getRhyme("Грянул хор и качнулся храм");
         System.out.println("" + rhyme);
     }
 }

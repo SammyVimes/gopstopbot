@@ -111,7 +111,6 @@ public class LinesIndexer {
     private void rebuild() throws IOException {
 
         int size = SongsUtils.listSongFilesByDir(DATA_PATH).collect(Collectors.toList()).size();
-
         final Iterator<GopSong> gopSongIterator = SongsUtils.listSongsByDir(dataPath).iterator();
 
         withWriter(wr -> {
@@ -122,7 +121,6 @@ public class LinesIndexer {
 
                 if (counter % 100 == 0) {
                     LOGGER.info("Indexed songs: " + counter + " / " + size);
-                    System.out.println("Indexed songs: " + counter + " / " + size);
                 }
                 counter += 1;
 
@@ -137,6 +135,7 @@ public class LinesIndexer {
                     }
 
                     final Document doc = new Document();
+
                     doc.add(new TextField("text",
                             processedLine
                                     .substring(0,
