@@ -67,7 +67,7 @@ public class RhymingController extends BaseMuzisController {
         final GopSong gopSong = rhyme.getGopSong();
         sendMessage(
                 request.getChatId().toString(),
-                String.format("Рифмы подъехали (%s - %s)", gopSong.getAuthor(), gopSong.getName()));
+                String.format("Рифмы подъехали\n(%s - %s)", gopSong.getAuthor(), gopSong.getName()));
         sendMessage(
                 request.getChatId().toString(),
                 rhyme.getRhyme());

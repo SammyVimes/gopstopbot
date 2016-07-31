@@ -24,7 +24,7 @@ public class LinesIndexSearcher {
 
     private final static Logger LOGGER = LogManager.getLogger(LinesIndexSearcher.class);
 
-    private final static int COUNT_RETURNED = 70;
+    private final static int COUNT_RETURNED = 200;
 
     private final IndexSearcher is;
 
