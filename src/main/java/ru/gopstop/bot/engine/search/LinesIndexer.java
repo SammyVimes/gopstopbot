@@ -108,6 +108,8 @@ public final class LinesIndexer {
         final int size = SongsUtils.listSongFilesByDir(DATA_PATH).collect(Collectors.toList()).size();
         final Iterator<GopSong> gopSongIterator = SongsUtils.listSongsByDir(dataPath).iterator();
 
+        LOGGER.info("Starting indexing!");
+
         withWriter(wr -> {
 
             int counter = 1;
@@ -115,6 +117,8 @@ public final class LinesIndexer {
             while (gopSongIterator.hasNext()) {
 
                 final GopSong song = gopSongIterator.next();
+
+                LOGGER.info(song.getAuthor());
 
                 if (counter % INDEXING_REPORT_STEP == 0) {
                     LOGGER.info("Indexed songs: " + counter + " / " + size);
