@@ -28,6 +28,8 @@ class LinesIndexSearcher {
 
     private static final int ANALYZED_POSTFIX_LENGTH = 6;
 
+    private static final int LOGGED_TOP = 10;
+
     private final IndexSearcher is;
 
     LinesIndexSearcher(final Directory dir) throws IOException {
@@ -58,7 +60,10 @@ class LinesIndexSearcher {
             for (int i = 0; i < Math.min(COUNT_RETURNED, docs.totalHits); i++) {
 
                 final Document doc = is.doc(docs.scoreDocs[i].doc);
-                LOGGER.info(docs.scoreDocs[i].score + "\t|\t" + doc.get("text") + "\t|\t" + doc.get("fulltext"));
+
+                if (i <= LOGGED_TOP) {
+                    LOGGER.trace(docs.scoreDocs[i].score + "\t|\t" + doc.get("text") + "\t|\t" + doc.get("fulltext"));
+                }
 
                 foundSongs.add(
                         new FoundGopSong(
