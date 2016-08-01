@@ -1,12 +1,13 @@
 package ru.gopstop.bot.telegram.controller;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.telegram.telegrambots.TelegramApiException;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import ru.gopstop.bot.muzis.MuzisService;
 import ru.gopstop.bot.muzis.MuzisServiceBuilder;
-import ru.gopstop.bot.muzis.ResourcesService;
 import ru.gopstop.bot.muzis.entity.Performer;
 import ru.gopstop.bot.muzis.entity.SearchResult;
 import ru.gopstop.bot.muzis.entity.Song;
@@ -14,6 +15,7 @@ import ru.gopstop.bot.telegram.Constants;
 import ru.gopstop.bot.telegram.TGBot;
 import ru.gopstop.bot.telegram.user.TGSession;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +27,8 @@ import java.util.stream.Collectors;
 public class SongSearchController extends BaseMuzisController {
 
     private static final int TOP_SONGS_COUNT = 6;
+
+    private static final Logger LOGGER = LogManager.getLogger(SongSearchController.class);
 
     private MuzisService muzisService = MuzisServiceBuilder.getMuzisService();
 
@@ -89,11 +93,19 @@ public class SongSearchController extends BaseMuzisController {
         final SearchResult res = muzisService.search(text, null, null, null, null, null, null);
 
         // берём 6 найденных песен и шлём
-        final List<Song> songsResult =
-                res.getSongs()
-                        .stream()
-                        .limit(TOP_SONGS_COUNT)
-                        .collect(Collectors.toList());
+        List<Song> songsResults;
+
+        try {
+            songsResults = res.getSongs()
+                    .stream()
+                    .limit(TOP_SONGS_COUNT)
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            LOGGER.error(e);
+            songsResults = new ArrayList<>();
+        }
+
+        final List<Song> songsResult = new ArrayList<>(songsResults);
 
         if (songsResult.isEmpty()) {
             // ничего не нашли, пробуем исполнителя и ищем по его id 6 треков
