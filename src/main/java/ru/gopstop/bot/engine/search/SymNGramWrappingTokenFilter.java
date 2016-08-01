@@ -20,6 +20,7 @@ public class SymNGramWrappingTokenFilter extends TokenFilter {
 
     @Override
     public final boolean incrementToken() throws IOException {
+
         if (input.incrementToken()) {
                 final String term = " " + new String(termAtt.buffer(), 0, termAtt.length()) + " ";
                 termAtt.copyBuffer(term.toCharArray(), 0, term.length());

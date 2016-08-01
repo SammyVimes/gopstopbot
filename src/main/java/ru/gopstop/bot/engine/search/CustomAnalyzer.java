@@ -13,13 +13,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class CustomAnalyzer extends Analyzer {
+class CustomAnalyzer extends Analyzer {
 
     final private Tokenizer wordTokenizer;
     final private int from;
     final private int to;
 
-    public CustomAnalyzer(final Tokenizer tokenizer, final int from, final int to) {
+    CustomAnalyzer(final Tokenizer tokenizer, final int from, final int to) {
         this.wordTokenizer = tokenizer;
         this.from = from;
         this.to = to;

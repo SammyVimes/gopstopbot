@@ -45,7 +45,9 @@ public class RhymingController extends BaseMuzisController {
 
     @Override
     public void handleMessage(final Message request, final TGSession session) throws TelegramApiException {
+
         final String text = request.getText();
+
         if (getEntry().equals(text)) {
             onMain(request, session);
             return;

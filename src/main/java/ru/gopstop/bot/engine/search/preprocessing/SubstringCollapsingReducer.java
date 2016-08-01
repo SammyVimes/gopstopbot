@@ -1,21 +1,19 @@
 package ru.gopstop.bot.engine.search.preprocessing;
 
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
  * Заменяем удвоенные согласные, созвучия
  * Можно дополнять до бесконечности
- *
+ * <p>
  * Created by aam on 31.07.16.
  */
-public class SubstringCollapsingReducer implements LastWordProcessor {
+class SubstringCollapsingReducer implements LastWordProcessor {
 
-    private final Map<String, String> replacements =
-            new HashMap<>();
+    private final Map<String, String> replacements = new HashMap<>();
 
-    public SubstringCollapsingReducer() {
+    SubstringCollapsingReducer() {
         replacements.put("сс", "с");
         replacements.put("цк", "ск");
         replacements.put("тся", "ца");
@@ -27,10 +25,13 @@ public class SubstringCollapsingReducer implements LastWordProcessor {
 
     @Override
     public String process(final String lastWord) {
+
         String result = lastWord;
+
         for (Map.Entry<String, String> substring : replacements.entrySet()) {
             result = result.replaceAll(substring.getKey(), substring.getValue());
         }
+
         return result;
     }
 }

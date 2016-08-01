@@ -20,29 +20,29 @@ import java.io.File;
 /**
  * Created by Semyon on 30.07.2016.
  */
-public abstract class BaseMuzisController extends Controller {
+abstract class BaseMuzisController extends Controller {
 
-    protected MuzisSearchHelper muzisSearchHelper = new MuzisSearchHelper();
+    MuzisSearchHelper muzisSearchHelper = new MuzisSearchHelper();
 
-    protected MuzisService muzisService = MuzisServiceBuilder.getMuzisService();
+    MuzisService muzisService = MuzisServiceBuilder.getMuzisService();
 
-    protected ResourcesService resourcesService = MuzisServiceBuilder.getResourcesService();
+    private ResourcesService resourcesService = MuzisServiceBuilder.getResourcesService();
 
-    public BaseMuzisController(final TGBot bot) {
+    BaseMuzisController(final TGBot bot) {
         super(bot);
     }
 
     /**
      * Отправляем песню и картинку песни
-     * @param request
-     * @param song
-     * @throws TelegramApiException
      */
-    protected void sendSongAndCover(final Message request, final Song song) throws TelegramApiException {
+    void sendSongAndCover(final Message request, final Song song) throws TelegramApiException {
+
         if (!TextUtils.isEmpty(song.getPoster())) {
-            sendMessage(request.getChatId().toString(), "Вот картиночка");
+            sendMessage(request.getChatId().toString(), "Вот фотокарточка");
+
             // скачиваем (или берём с диска) картинку и отправляем
             File cachedFile = FileUtils.getCachedFile(song.getPoster());
+
             if (cachedFile == null) {
                 cachedFile = FileUtils.writeResponseBodyToDisk(resourcesService.downloadFile(song.getPoster()), song.getPoster());
             }
@@ -50,27 +50,34 @@ public abstract class BaseMuzisController extends Controller {
             sendAction(request.getChatId().toString(), ActionType.UPLOADPHOTO);
             SendPhoto sendPhoto = new SendPhoto();
             sendPhoto.setChatId(request.getChatId().toString());
+
             if (cachedFile == null) {
                 sendMessage(request.getChatId().toString(), "Что-то пошло не так со скачиванием картинки");
                 return;
             }
+
             sendPhoto.setNewPhoto(cachedFile);
             bot.sendPhoto(sendPhoto);
             sendMessage(request.getChatId().toString(), "Сейчас и песню пришлю");
+
         } else {
             sendMessage(request.getChatId().toString(), "Сейчас пришлю");
         }
 
         // скачиваем музло (или берём с диска) и отправляем
         File cachedMusicFile = FileUtils.getCachedFile(song.getFileMp3());
+
         if (cachedMusicFile == null) {
             cachedMusicFile = FileUtils.writeResponseBodyToDisk(resourcesService.downloadFile(song.getFileMp3()), song.getFileMp3());
         }
 
         sendAction(request.getChatId().toString(), ActionType.UPLOADAUDIO);
         SendAudio audio = new SendAudio();
+
         if (cachedMusicFile == null) {
-            sendMessage(request.getChatId().toString(), "Что-то пошло не так со скачиванием музыки");
+            sendMessage(
+                    request.getChatId().toString(),
+                    "Что-то пошло не так со скачиванием музыки");
             return;
         }
         audio.setNewAudio(cachedMusicFile);
@@ -80,5 +87,4 @@ public abstract class BaseMuzisController extends Controller {
         audio.setChatId(request.getChatId().toString());
         bot.sendAudio(audio);
     }
-
 }

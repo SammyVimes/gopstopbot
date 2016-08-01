@@ -23,13 +23,12 @@ import java.util.*;
 
 /**
  * Created by Semyon on 30.07.2016.
- *
+ * <p>
  * Телеграм бот
- *
  */
 public class TGBot extends TelegramLongPollingBot {
 
-    private final Logger LOGGER = LogManager.getLogger(TGBot.class);
+    private static final Logger LOGGER = LogManager.getLogger(TGBot.class);
 
     private Map<TGSessionKey, TGSession> sessionMap = new HashMap<>();
 
@@ -40,12 +39,15 @@ public class TGBot extends TelegramLongPollingBot {
     private String token = "";
 
     public TGBot() {
+
         final RhymingController rhymingController = new RhymingController(this);
         controllerMap.put(rhymingController.getKey(), rhymingController);
         mainControllers.add(rhymingController);
+
         final SongSearchController songSearchController = new SongSearchController(this);
         controllerMap.put(songSearchController.getKey(), songSearchController);
         mainControllers.add(songSearchController);
+
         final SettingsController settingsController = new SettingsController(this);
         controllerMap.put(settingsController.getKey(), settingsController);
         mainControllers.add(settingsController);
@@ -106,8 +108,10 @@ public class TGBot extends TelegramLongPollingBot {
     }
 
     public void showMainMenu(final Message request, final TGSession session) throws TelegramApiException {
-        ReplyKeyboardMarkup replyKeyboardMarkup = getMainMenuKeyboard();
+
+        final ReplyKeyboardMarkup replyKeyboardMarkup = getMainMenuKeyboard();
         final SendMessage msg = createMessageWithKeyboard(request.getChatId().toString(), request.getMessageId(), replyKeyboardMarkup);
+
         if (session.isNew()) {
             session.setNew(false);
             msg.setText("Привет, ты здесь первый раз, но не последний");
@@ -118,7 +122,8 @@ public class TGBot extends TelegramLongPollingBot {
     }
 
     private ReplyKeyboardMarkup getMainMenuKeyboard() {
-        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
+
+        final ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
         replyKeyboardMarkup.setSelective(true);
         replyKeyboardMarkup.setResizeKeyboard(true);
         replyKeyboardMarkup.setOneTimeKeyboad(false);
@@ -141,13 +146,16 @@ public class TGBot extends TelegramLongPollingBot {
     }
 
     private SendMessage createMessageWithKeyboard(final String chatId, final Integer messageId, final ReplyKeyboardMarkup replyKeyboardMarkup) {
-        SendMessage sendMessage = new SendMessage();
+
+        final SendMessage sendMessage = new SendMessage();
         sendMessage.enableMarkdown(true);
         sendMessage.setChatId(chatId);
         sendMessage.setReplyToMessageId(messageId);
+
         if (replyKeyboardMarkup != null) {
             sendMessage.setReplyMarkup(replyKeyboardMarkup);
         }
+
         return sendMessage;
     }
 
@@ -157,20 +165,24 @@ public class TGBot extends TelegramLongPollingBot {
 
     @Override
     public String getBotToken() {
+
         if (TextUtils.isEmpty(token)) {
-            Properties properties = new Properties();
+            final Properties properties = new Properties();
+
             try {
                 properties.load(properties.getClass().getResourceAsStream("/secret.properties"));
             } catch (IOException e) {
                 throw new RuntimeException("No secret.properties with telegram token found in resources/");
             }
+
             token = properties.getProperty("token");
+
             if (TextUtils.isEmpty(token)) {
                 throw new RuntimeException("No telegram token found in resources/secret.properties");
             }
+
             return token;
         }
         return token;
     }
-
 }

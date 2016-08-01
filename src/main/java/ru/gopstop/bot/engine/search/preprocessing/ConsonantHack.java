@@ -25,6 +25,7 @@ public class ConsonantHack implements LastWordProcessor {
 
     @Override
     public String process(final String lastWord) {
+
         String processed = lastWord;
 
         for (int i = 0; i < processed.length(); i++) {
@@ -51,20 +52,6 @@ public class ConsonantHack implements LastWordProcessor {
                 }
             }
         }
-
-//        только последняя буква
-//        if (length > 1) {
-//            // проверим, что хотя бы 2 буквы в слове
-//            final char lastChar = processed.charAt(length - 1);
-//            if (vowels.indexOf(lastChar) == -1) {
-//                // последняя буква не гласная
-//                final Character character = CONSONANTS_PAIRS.get(lastChar);
-//                if (character != null) {
-//                    // она парная согласная
-//                    processed = processed.substring(0, length - 1) + character;
-//                }
-//            }
-//        }
         return processed;
     }
 }

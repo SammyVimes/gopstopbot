@@ -19,7 +19,7 @@ import java.util.stream.Stream;
  */
 public class SongsUtils {
 
-    private final static Logger LOGGER = LogManager.getLogger(LinesIndexer.class);
+    private static final Logger LOGGER = LogManager.getLogger(LinesIndexer.class);
 
     public static Stream<GopSong> listSongsByDir(final String dir) throws IOException {
 
@@ -44,7 +44,8 @@ public class SongsUtils {
     }
 
 
-    public static GopSong readSongFromFile(final File file) throws IOException {
+    private static GopSong readSongFromFile(final File file) throws IOException {
+
         final List<String> lines = Files.readLines(file, Charset.forName("utf-8"));
         return new GopSong(
                 lines.get(1).trim(),

@@ -11,43 +11,39 @@ import java.util.HashMap;
 /**
  * Created by n.pritykovskaya on 30.07.16.
  */
-public class EmphasisMap {
+public class WordStressMap {
 
-    private final static Logger LOGGER = LogManager.getLogger(EmphasisMap.class);
+    private static final Logger LOGGER = LogManager.getLogger(WordStressMap.class);
 
-    public static String[] VOWELS = new String[]{"а", "ы", "о", "э", "е", "я", "и", "ю", "ё", "у"};
+    private static final String STRESS_DICT_PATH = "./data/emphasis.txt";
 
-    public static void setPath(String path) {
-        EmphasisMap.path = path;
-    }
+    private static HashMap<String, ArrayList<int[]>> stressDict = new HashMap<>(1600000);
 
-    public static String path = "./data/emphasis.txt";
-    public static HashMap<String, ArrayList<int[]>> emphasisDict =
-            new HashMap<String, ArrayList<int[]>>(1600000);
+    private static final String SERIALIZED_DICT_PATH = "stress_map.bin";
 
-    public static final String SER_PATH = "stress_map.bin";
+    private static WordStressMap INSTANCE;
 
-    private static EmphasisMap INSTANCE;
-
-    public static EmphasisMap getInstance() {
+    public static WordStressMap getInstance() {
         return INSTANCE;
     }
 
     static {
         try {
-            INSTANCE = new EmphasisMap();
-        } catch (IOException ioe) {
+            INSTANCE = new WordStressMap();
+        } catch (final IOException ioe) {
             LOGGER.error("emp map down", ioe);
             throw new RuntimeException(ioe);
         }
     }
 
-    private int countVowels(String word) {
+    private int countVowels(final String word) {
         return word.length() - word.replaceAll("а|ы|е|ё|и|у|о|э|я|ю", "").length();
     }
 
     private int emphasisPosition(String word) {
+
         word = word.replaceAll("й|ц|к|н|г|ш|щ|з|х|ъ|ф|в|п|р|л|д|ж|ч|с|м|т|ь|б|-", "");
+
         if (word.contains("'")) {
             return word.indexOf("'") - 1;
         } else if (word.contains("ё")) {
@@ -57,75 +53,72 @@ public class EmphasisMap {
         }
     }
 
-    private boolean alreadyIn(int[] curRhythmicPattern, ArrayList<int[]> prevRhythmicPatterns) {
-        for (int i = 0; i < prevRhythmicPatterns.size(); i++) {
-            if (Arrays.equals(curRhythmicPattern, prevRhythmicPatterns.get(i))) {
+    private boolean alreadyIn(final int[] curRhythmicPattern, final ArrayList<int[]> prevRhythmicPatterns) {
+
+        for (int[] pattern : prevRhythmicPatterns) {
+            if (Arrays.equals(curRhythmicPattern, pattern)) {
                 return true;
             }
         }
         return false;
     }
 
-    private void parseLine(String line) {
-        String[] parts = line.split("#");
-        String[] words = parts[1].split(",");
+    private void parseLine(final String line) {
+
+        final String[] parts = line.split("#");
+        final String[] words = parts[1].split(",");
 
         for (int i = 0; i < words.length; i++) {
-            String wordNoEmphasis = words[i].replace("'", "").replace("`", "");
-            int vowelsNumb = countVowels(wordNoEmphasis);
+
+            final String wordNoEmphasis =
+                    words[i].replace("'", "").replace("`", "");
+            final int vowelsNumb = countVowels(wordNoEmphasis);
+
             if (vowelsNumb > 0) {
                 int emphasisPos = emphasisPosition(words[i].replace("`", ""));
                 int[] rhythmicPattern = new int[2];
+
                 rhythmicPattern[0] = vowelsNumb;
                 rhythmicPattern[1] = emphasisPos;
 
-                if (emphasisDict.get(wordNoEmphasis) == null) {
-                    ArrayList<int[]> newArr = new ArrayList<int[]>(1);
+                if (stressDict.get(wordNoEmphasis) == null) {
+                    final ArrayList<int[]> newArr = new ArrayList<int[]>(1);
                     newArr.add(rhythmicPattern);
-                    emphasisDict.put(wordNoEmphasis, newArr);
+                    stressDict.put(wordNoEmphasis, newArr);
                 } else {
-                    if (!alreadyIn(rhythmicPattern, emphasisDict.get(wordNoEmphasis)))
-                        emphasisDict.get(wordNoEmphasis).add(rhythmicPattern);
+                    if (!alreadyIn(rhythmicPattern, stressDict.get(wordNoEmphasis))) {
+                        stressDict
+                                .get(wordNoEmphasis)
+                                .add(rhythmicPattern);
+                    }
                 }
             }
         }
     }
 
-    private String arrToStr(Object arrObj) {
-        ArrayList<int[]> arr = (ArrayList<int[]>) arrObj;
-        String strs = "";
-        for (int i = 0; i < arr.size(); i++) {
-            int[] curArr = arr.get(i);
-            String str = "";
-            for (int j = 0; j < curArr.length; j++) {
-                str += curArr[j];
-            }
-            strs = strs + "|" + str;
-        }
-        return strs;
-    }
+    private WordStressMap() throws IOException {
 
-    private EmphasisMap() throws IOException {
-
-        HashMap<String, ArrayList<int[]>> map = null;
+        final HashMap<String, ArrayList<int[]>> map;
 
         try {
-            FileInputStream fis = new FileInputStream(SER_PATH);
+            FileInputStream fis = new FileInputStream(SERIALIZED_DICT_PATH);
             ObjectInputStream ois = new ObjectInputStream(fis);
             map = (HashMap) ois.readObject();
-            emphasisDict = map;
+            stressDict = map;
             ois.close();
             fis.close();
         } catch (Exception e) {
 
             LOGGER.warn("COULD NOT DESER MAP");
 
-            try (BufferedReader br = new BufferedReader(new FileReader(path))) {
+            try (BufferedReader br = new BufferedReader(new FileReader(STRESS_DICT_PATH))) {
                 String line = br.readLine();
                 int cntLine = 0;
+
                 while (line != null) {
                     parseLine(line);
                     cntLine++;
+
                     if (cntLine % 10000 == 0) {
                         LOGGER.info("Lines of wod stress dict indexed: " + cntLine);
                     }
@@ -135,17 +128,16 @@ public class EmphasisMap {
                 LOGGER.info("Serialization...");
 
                 try {
-                    FileOutputStream fos =
-                            new FileOutputStream(SER_PATH);
+                    FileOutputStream fos = new FileOutputStream(SERIALIZED_DICT_PATH);
                     ObjectOutputStream oos = new ObjectOutputStream(fos);
-                    oos.writeObject(emphasisDict);
+                    oos.writeObject(stressDict);
                     oos.close();
                     fos.close();
-                    LOGGER.info("Serialized HashMap data is saved in " + SER_PATH);
-                } catch (IOException ioe) {
-                    ioe.printStackTrace();
+                    LOGGER.info("Serialized HashMap data is saved in " + SERIALIZED_DICT_PATH);
+                } catch (final IOException ioe) {
+                    LOGGER.error("Stress dict dumping failure", ioe);
                 }
-                LOGGER.info("Serizalization done");
+                LOGGER.info("Stress dict serizalization done");
 
             } catch (IOException ie) {
                 ie.printStackTrace();
@@ -156,12 +148,16 @@ public class EmphasisMap {
     }
 
     public int getSize() {
-        return emphasisDict.size();
+        return stressDict.size();
     }
 
-    private String[] processPoemLine(String poemLine) {
-        return poemLine.trim().replaceAll("[^a-zA-Zа-яА-я ]", "").toLowerCase().split(" ");
+    private String[] processPoemLine(final String poemLine) {
 
+        return poemLine
+                .trim()
+                .replaceAll("[^a-zA-Zа-яА-я ]", "")
+                .toLowerCase()
+                .split(" ");
     }
 
     private String formRhythmicPattern(int[] rhythmicPattern) {
@@ -178,13 +174,15 @@ public class EmphasisMap {
     }
 
     public String findRhythmicPattern(String poemLine) {
-        String[] words = processPoemLine(poemLine);
+        final String[] words = processPoemLine(poemLine);
         String rhythmicPattern = "";
 
         for (int i = 0; i < words.length; i++) {
+
             int[] curWordRhythmicPattern;
-            if (emphasisDict.get(words[i]) != null) {
-                curWordRhythmicPattern = emphasisDict.get(words[i]).get(0);
+
+            if (stressDict.get(words[i]) != null) {
+                curWordRhythmicPattern = stressDict.get(words[i]).get(0);
             } else {
                 // нет такого слова в словаре
                 // забиваем нулями
@@ -192,8 +190,8 @@ public class EmphasisMap {
                 curWordRhythmicPattern[0] = countVowels(words[i]);
                 curWordRhythmicPattern[1] = -1; // это значит, что не знаем ударение
             }
-            rhythmicPattern = rhythmicPattern + formRhythmicPattern(curWordRhythmicPattern);
 
+            rhythmicPattern = rhythmicPattern + formRhythmicPattern(curWordRhythmicPattern);
         }
         return rhythmicPattern;
     }

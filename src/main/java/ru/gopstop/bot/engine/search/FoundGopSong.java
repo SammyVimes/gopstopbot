@@ -15,7 +15,9 @@ public class FoundGopSong {
 
     private double score;
 
-    public FoundGopSong(final GopSong gs, final String rh, final double score) {
+    public FoundGopSong(final GopSong gs,
+                        final String rh,
+                        final double score) {
         rhyme = rh;
         gopSong = gs;
         this.score = score;

@@ -20,7 +20,8 @@ public class CleverEngine {
 
         //  тупой поиск без учёта ударения
         final List<FoundGopSong> foundGopSongList =
-                LinesIndexer.getInstance()
+                LinesIndexer
+                        .getInstance()
                         .search(userInput)
                         .stream()
                         .filter(g -> SameLineFilter.filter(userInput, g))

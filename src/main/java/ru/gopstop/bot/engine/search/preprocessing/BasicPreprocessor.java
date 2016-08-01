@@ -12,18 +12,18 @@ import java.util.List;
  */
 public class BasicPreprocessor {
 
-    private static List<LastWordProcessor> processors = new ArrayList<>();
+    private static final List<LastWordProcessor> PROCESSORS = new ArrayList<>();
 
     static {
-        processors.add(new SubstringCollapsingReducer());
-        processors.add(new ConsonantHack());
+        PROCESSORS.add(new SubstringCollapsingReducer());
+        PROCESSORS.add(new ConsonantHack());
     }
 
-    public static String postfix(String line) {
+    public static String postfix(final String line) {
 
-        String normalLine = line.trim().replaceAll("[^a-zA-Zа-яА-я ]", " ").toLowerCase();
+        final String normalLine = line.trim().replaceAll("[^a-zA-Zа-яА-я ]", " ").toLowerCase();
 
-        String[] splitted = normalLine.replaceAll("\\s+", " ").split(" ");
+        final String[] splitted = normalLine.replaceAll("\\s+", " ").split(" ");
 
         final int len = splitted.length - 1;
 
@@ -36,7 +36,7 @@ public class BasicPreprocessor {
                 ExtraWordStressTool.upperCaseStress(splitted[len]);
 
         // применяем всякие эвристики
-        for (LastWordProcessor processor : processors) {
+        for (LastWordProcessor processor : PROCESSORS) {
             lastStressed = processor.process(lastStressed);
         }
 

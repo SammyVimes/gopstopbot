@@ -16,7 +16,7 @@ import java.util.Arrays;
  */
 public class SettingsController extends Controller {
 
-    public static final String ABOUT = Constants.ABOUT + " " + Emoji.INFORMATION_SOURCE.toString();
+    private static final String ABOUT = Constants.ABOUT + " " + Emoji.INFORMATION_SOURCE.toString();
     public static final String TEST = "TEST " + Emoji.AIRPLANE.toString();
 
     public SettingsController(final TGBot bot) {

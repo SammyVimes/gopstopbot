@@ -5,8 +5,6 @@ package ru.gopstop.bot.telegram;
  */
 public class Constants {
 
-    public static final String SETTINGS = "Настройки";
-
     public static final String RHYMES = "Рифмы";
 
     public static final String SONGS = "Песни";
@@ -16,7 +14,7 @@ public class Constants {
     public static final String ABOUT = "О боте";
 
     public static final String BOT_SELF_DESCRIPTION =
-            "\"Мне говорят, что Окна ТАСС моих стихов полезнее...\"\n" +
-                    "Like, share, re-post - and stay with us -\n" +
-                    "Ведь и шансон - поэзия.";
+            "\"Мне говорят, что Окна ТАСС моих стихов полезнее...\"\n"
+                    + "Like, share, re-post or stay with us -\n"
+                    + "Ведь и шансон - поэзия.";
 }

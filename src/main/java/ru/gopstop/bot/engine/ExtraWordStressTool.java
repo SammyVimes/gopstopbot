@@ -43,7 +43,7 @@ public class ExtraWordStressTool {
     public static String upperCaseStress(String word) {
 
         final String rhPattern =
-                EmphasisMap.getInstance().findRhythmicPattern(word);
+                WordStressMap.getInstance().findRhythmicPattern(word);
         return upperCaseByPattern(word, rhPattern);
     }
 }

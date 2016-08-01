@@ -3,6 +3,7 @@ package ru.gopstop.bot.engine.search;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.Tokenizer;
 import org.apache.lucene.analysis.core.LetterTokenizer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
@@ -48,11 +49,7 @@ public class LinesIndexer {
 
     private IndexWriter writer;
 
-    private Directory directory;
-
     private Analyzer analyzer;
-
-    private LetterTokenizer tokenizer;
 
     private String dataPath;
 
@@ -65,32 +62,30 @@ public class LinesIndexer {
     private LinesIndexer(final String songsPath, final String indexPath) {
 
         try {
-            directory = new SimpleFSDirectory(Paths.get(indexPath));
-            tokenizer = new LetterTokenizer();
-//            analyzer = new CustomAnalyzer(tokenizer, 2, 3);
+            final Directory directory = new SimpleFSDirectory(Paths.get(indexPath));
             dataPath = songsPath;
             analyzer = new StandardAnalyzer();
             final IndexWriterConfig conf = rebuildConfig();
             writer = new IndexWriter(directory, conf);
+
             // ребилдим каждый раз, всё равно сейчас это быстро
             writer.deleteAll();
             rebuild();
-            searcher = new LinesIndexSearcher(directory, analyzer);
-
+            searcher = new LinesIndexSearcher(directory);
         } catch (final IOException ioe) {
 
-            LOGGER.warn("Need index rebuild");
+            LOGGER.warn("Need index rebuilding");
 
             try {
                 rebuild();
             } catch (final IOException ioee) {
-                LOGGER.error("Index dead");
+                LOGGER.error("Index dead", ioee);
                 throw new RuntimeException("Всему конец, индекс не поднялся", ioee);
             }
         }
     }
 
-    private void withWriter(Consumer<IndexWriter> t) throws IOException {
+    private void withWriter(final Consumer<IndexWriter> t) throws IOException {
         try {
             t.accept(writer);
         } finally {
@@ -102,7 +97,7 @@ public class LinesIndexer {
     public List<FoundGopSong> search(final String request) {
         try {
             return searcher.search(request);
-        } catch (IOException ioe) {
+        } catch (final IOException ioe) {
             LOGGER.error("ERRORE WHILE SEARCHE", ioe);
             return new ArrayList<>();
         }
@@ -110,11 +105,13 @@ public class LinesIndexer {
 
     private void rebuild() throws IOException {
 
-        int size = SongsUtils.listSongFilesByDir(DATA_PATH).collect(Collectors.toList()).size();
+        final int size = SongsUtils.listSongFilesByDir(DATA_PATH).collect(Collectors.toList()).size();
         final Iterator<GopSong> gopSongIterator = SongsUtils.listSongsByDir(dataPath).iterator();
 
         withWriter(wr -> {
+
             int counter = 1;
+
             while (gopSongIterator.hasNext()) {
 
                 final GopSong song = gopSongIterator.next();
@@ -140,16 +137,16 @@ public class LinesIndexer {
                                     .substring(0,
                                             Math.min(ANALYZED_POSTFIX_SIZE, processedLine.length())),
                             Field.Store.YES));
+
                     doc.add(new StringField("fulltext", line, Field.Store.YES));
                     doc.add(new StringField("title", song.getName(), Field.Store.YES));
                     doc.add(new StringField("author", song.getAuthor(), Field.Store.YES));
 
                     try {
                         wr.addDocument(doc);
-                    } catch (IOException e) {
+                    } catch (final IOException e) {
                         LOGGER.error("Bullshit while adding docs to index", e);
-                        e.printStackTrace();
-                        throw new RuntimeException("ppc", e);
+                        throw new RuntimeException("Bullshit while adding docs to index", e);
                     }
                 }
             }

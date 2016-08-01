@@ -61,13 +61,15 @@ public abstract class Controller {
      * @return
      */
     public ReplyKeyboardMarkup buildKeyboard(final List<String> messages) {
-        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
+
+        final ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
         replyKeyboardMarkup.setSelective(true);
         replyKeyboardMarkup.setResizeKeyboard(true);
         replyKeyboardMarkup.setOneTimeKeyboad(false);
 
         List<KeyboardRow> keyboard = new ArrayList<>();
         KeyboardRow row = null;
+
         for (int i = 0; i < messages.size(); i++) {
             // группируем кнопки по две
             if (i % 2 == 0 || row == null) {

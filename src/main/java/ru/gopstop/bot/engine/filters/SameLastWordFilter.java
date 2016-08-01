@@ -16,7 +16,7 @@ public class SameLastWordFilter {
         return Arrays.asList(request.replaceAll("[^A-Za-zА-Яа-я ]", " ").toLowerCase().split("\\s+"));
     }
 
-    public static boolean filter(String request, FoundGopSong gopSong) {
+    public static boolean filter(final String request,final FoundGopSong gopSong) {
 
         final List<String> reqLL = buildLexemList(request);
         final List<String> reqR = buildLexemList(gopSong.getRhyme());

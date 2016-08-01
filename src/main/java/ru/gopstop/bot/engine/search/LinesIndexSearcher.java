@@ -26,16 +26,14 @@ public class LinesIndexSearcher {
     private final static Logger LOGGER = LogManager.getLogger(LinesIndexSearcher.class);
 
     private final static int COUNT_RETURNED = 200;
+    private final static int ANALYZED_POSTFIX_LENGTH = 6;
 
     private final IndexSearcher is;
 
-    private final Analyzer analyzer;
-
-    public LinesIndexSearcher(final Directory dir, final Analyzer analyzer) throws IOException {
+    LinesIndexSearcher(final Directory dir) throws IOException {
 
         final IndexReader ir = DirectoryReader.open(dir);
         is = new IndexSearcher(ir);
-        this.analyzer = analyzer;
     }
 
     public List<FoundGopSong> search(final String request) throws IOException {
@@ -45,11 +43,12 @@ public class LinesIndexSearcher {
             final String processedRequest = BasicPreprocessor.postfix(request);
 
             // тупая комбинация префиксных запросов
-            for (int i = 5; i > 0; i--) {
+            for (int i = ANALYZED_POSTFIX_LENGTH; i > 0; i--) {
                 q.add(new PrefixQuery(
                                 new Term("text", processedRequest.substring(0, Math.min(i, processedRequest.length())))),
                         BooleanClause.Occur.SHOULD);
             }
+
             final TopDocs docs = is.search(q, COUNT_RETURNED);
             final List<FoundGopSong> foundSongs = new ArrayList<>();
 

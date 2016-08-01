@@ -7,6 +7,8 @@ import org.telegram.telegrambots.api.objects.User;
  */
 public class TGSessionKey {
 
+    private final static int OFFSET_HEX = 31;
+
     private final Long chatId;
 
     private final User user;
@@ -18,12 +20,21 @@ public class TGSessionKey {
 
     @Override
     public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         final TGSessionKey that = (TGSessionKey) o;
 
-        if (!chatId.equals(that.chatId)) return false;
+        if (!chatId.equals(that.chatId)) {
+            return false;
+        }
+
         return user.getId().equals(that.user.getId());
 
     }
@@ -31,7 +42,7 @@ public class TGSessionKey {
     @Override
     public int hashCode() {
         int result = chatId.hashCode();
-        result = 31 * result + user.getId().hashCode();
+        result = OFFSET_HEX * result + user.getId().hashCode();
         return result;
     }
 }

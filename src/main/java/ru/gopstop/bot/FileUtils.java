@@ -1,7 +1,6 @@
 package ru.gopstop.bot;
 
 import okhttp3.ResponseBody;
-import org.apache.http.util.TextUtils;
 
 import java.io.*;
 import java.util.Properties;
@@ -11,7 +10,7 @@ import java.util.Properties;
  */
 public class FileUtils {
 
-    public static String FILE_PATH = null;
+    private static String filePath = null;
 
     static {
         Properties properties = new Properties();
@@ -20,11 +19,13 @@ public class FileUtils {
         } catch (IOException e) {
             throw new RuntimeException("No secret.properties with telegram token found in resources/");
         }
-        FILE_PATH = properties.getProperty("filespath");
+        filePath = properties.getProperty("filespath");
     }
 
     public static File getCachedFile(final String fileName) {
-        File file = new File(FILE_PATH + fileName);
+
+        File file = new File(filePath + fileName);
+
         if (file.exists()) {
             return file;
         }
@@ -33,7 +34,7 @@ public class FileUtils {
 
     public static File writeResponseBodyToDisk(final ResponseBody body, final String fileName) {
         try {
-            File loadingFile = new File(FILE_PATH + fileName);
+            File loadingFile = new File(filePath + fileName);
 
             InputStream inputStream = null;
             OutputStream outputStream = null;
