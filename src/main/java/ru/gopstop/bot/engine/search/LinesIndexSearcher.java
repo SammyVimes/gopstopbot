@@ -24,11 +24,11 @@ class LinesIndexSearcher {
 
     private static final Logger LOGGER = LogManager.getLogger(LinesIndexSearcher.class);
 
-    private static final int COUNT_RETURNED = 200;
+    private static final int COUNT_RETURNED = 400;
 
-    private static final int ANALYZED_POSTFIX_LENGTH = 6;
+    private static final int ANALYZED_POSTFIX_LENGTH = 7;
 
-    private static final int LOGGED_TOP = 10;
+    private static final int LOGGED_TOP = 5;
 
     private final IndexSearcher is;
 
