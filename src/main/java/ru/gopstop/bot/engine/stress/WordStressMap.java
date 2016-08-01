@@ -19,7 +19,7 @@ public final class WordStressMap {
 
     private static final Logger LOGGER = LogManager.getLogger(WordStressMap.class);
 
-    private static final String STRESS_DICT_PATH = "./data/stress.txt";
+    private static final String STRESS_DICT_PATH = "./data/emphasis.txt";
 
     private static final String SERIALIZED_DICT_PATH = "stress_map.bin";
 
