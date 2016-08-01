@@ -10,13 +10,13 @@
         <RollingFile name="SimpleRollingFile"
                      fileName="all_logs.log"
                      immediateFlush="true"
-                     filePattern="all_logs.%d{yyyy-MM-dd.mm}.%i.log">
+                     filePattern="all_logs.%d{yyyy-MM-dd.HH}.%i.log">
             <PatternLayout>
                 <pattern>%d{ISO8601} [%t] %p %c{3} - %m%n</pattern>
             </PatternLayout>
             <Policies>
-                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
-                <SizeBasedTriggeringPolicy size="0.5 MB" />
+                <TimeBasedTriggeringPolicy interval="12" modulate="true" />
+                <SizeBasedTriggeringPolicy size="10 MB" />
             </Policies>
         </RollingFile>
     </Appenders>
