@@ -191,6 +191,11 @@ public final class WordStressMap {
         // rhythmicPatter[1] -- на каком слоге ударение
         final int stressIndex = rhythmicPattern.getRight();
 
+        if (stressIndex >= str.length) {
+            LOGGER.warn("WEIRD BUG " + new String(str) + " - " + stressIndex);
+            return new String(str);
+        }
+
         if (stressIndex != -1) {
             str[stressIndex] = '1';
         }
