@@ -4,6 +4,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Ой а давайте считать, что кроме
@@ -29,7 +30,7 @@ public final class FuzzyWordStressDeterminer {
 
     public static String getStressedWords(final String text) {
 
-        final Map<String, ArrayList<Pair<Integer, Integer>>> dict =
+        final Map<String, Pair<Integer, Set<Integer>>> dict =
                 WordStressMap.getInstance().getCoreWordDict();
 
         for (final String word : processPoemLine(text)) {

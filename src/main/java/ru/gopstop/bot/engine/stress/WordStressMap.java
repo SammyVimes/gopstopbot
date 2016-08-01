@@ -7,10 +7,7 @@ import org.apache.logging.log4j.Logger;
 import ru.gopstop.bot.engine.tools.PhoneticsKnowledgeTools;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by n.pritykovskaya on 30.07.16.
@@ -23,7 +20,7 @@ public final class WordStressMap {
 
     private static final String SERIALIZED_DICT_PATH = "stress_map.bin";
 
-    private static final int DICT_SIZE_HINT = 1600000;
+    private static final int DICT_SIZE_HINT = 90000;
 
     private static final int BUILDING_REPORTING_FREQUENCY = 10000;
 
@@ -31,9 +28,9 @@ public final class WordStressMap {
 
     /**
      * Варианты ударений для данного слова
-     * слово -> (число гласных, порядковый номер ОДНОГО ударного слога, начиная с нуля)
+     * слово -> (число гласных, [порядковые номера ОДНОГО ударного слога, начиная с нуля])
      */
-    private static HashMap<String, ArrayList<Pair<Integer, Integer>>> stressDict = new HashMap<>(DICT_SIZE_HINT);
+    private static HashMap<String, Pair<Integer, Set<Integer>>> stressDict = new HashMap<>(DICT_SIZE_HINT);
 
     private static final WordStressMap INSTANCE;
 
@@ -45,7 +42,7 @@ public final class WordStressMap {
         try {
             INSTANCE = new WordStressMap();
         } catch (final IOException ioe) {
-            LOGGER.error("emp map down", ioe);
+            LOGGER.error("Stress map is dead, no use in continuations", ioe);
             throw new RuntimeException(ioe);
         }
     }
@@ -57,7 +54,7 @@ public final class WordStressMap {
     /**
      * Определяем положение ударения в полном слове
      */
-    private int stressPosition(final String word) {
+    int stressPosition(final String word) {
 
         final String fixedWord = word.replaceAll("-", "");
 
@@ -67,19 +64,8 @@ public final class WordStressMap {
         } else if (fixedWord.contains("ё")) {
             return fixedWord.indexOf("ё");
         } else {
-            return 0;
+            return -1;
         }
-    }
-
-    private boolean alreadyIn(final Pair<Integer, Integer> curRhythmicPattern,
-                              final ArrayList<Pair<Integer, Integer>> prevRhythmicPatterns) {
-
-        for (final Pair<Integer, Integer> pattern : prevRhythmicPatterns) {
-            if (curRhythmicPattern.equals(pattern)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     private void parseLine(final String line) {
@@ -91,26 +77,25 @@ public final class WordStressMap {
 
             // строим просто слово
             final String wordNoStress = words[i].replace("'", "").replace("`", "");
-            final int vowelsNumb = countVowels(wordNoStress);
+            final int vowelsCount = countVowels(wordNoStress);
 
-            if (vowelsNumb > 0) {
+            if (vowelsCount > 0) {
 
                 final int stressPos = stressPosition(words[i].replace("`", ""));
 
-                final Pair<Integer, Integer> rhythmicPattern = Pair.of(vowelsNumb, stressPos);
-
                 if (stressDict.get(wordNoStress) == null) {
 
-                    final ArrayList<Pair<Integer, Integer>> newArr = new ArrayList<>(1);
-                    newArr.add(rhythmicPattern);
-                    stressDict.put(wordNoStress, newArr);
+                    final Set<Integer> newArr = new HashSet<>(1);
+                    newArr.add(stressPos);
+                    stressDict.put(wordNoStress, Pair.of(vowelsCount, newArr));
 
                 } else {
 
-                    if (!alreadyIn(rhythmicPattern, stressDict.get(wordNoStress))) {
+                    if (!stressDict.get(wordNoStress).getRight().contains(stressPos)) {
                         stressDict
                                 .get(wordNoStress)
-                                .add(rhythmicPattern);
+                                .getRight()
+                                .add(stressPos);
                     }
                 }
             }
@@ -119,7 +104,7 @@ public final class WordStressMap {
 
     private WordStressMap() throws IOException {
 
-        final HashMap<String, ArrayList<Pair<Integer, Integer>>> map;
+        final HashMap<String, Pair<Integer, Set<Integer>>> map;
 
         try {
             final FileInputStream fis = new FileInputStream(SERIALIZED_DICT_PATH);
@@ -182,14 +167,19 @@ public final class WordStressMap {
                 .split(" ");
     }
 
-    private String formRhythmicPattern(final Pair<Integer, Integer> rhythmicPattern) {
+    private String formRhythmicPattern(final String word, final Pair<Integer, Integer> rhythmicPattern) {
         // комменты расставил как догадался
         // rhythmicPatter[0] -- кол-во слогов
         char[] str = new char[rhythmicPattern.getLeft()];
         Arrays.fill(str, '0');
 
-        // rhythmicPatter[1] -- на каком слоге ударение
-        final int stressIndex = rhythmicPattern.getRight();
+        int stressIndex = -1;
+
+        for (int i = 0; i <= rhythmicPattern.getRight(); i++) {
+            if (PhoneticsKnowledgeTools.VOWELS_SET.contains(word.charAt(i))) {
+                stressIndex += 1;
+            }
+        }
 
         if (stressIndex >= str.length) {
             LOGGER.warn("WEIRD BUG " + new String(str) + " - " + stressIndex);
@@ -213,19 +203,23 @@ public final class WordStressMap {
             Pair<Integer, Integer> curWordRhythmicPattern;
 
             if (stressDict.get(words[i]) != null) {
-                curWordRhythmicPattern = stressDict.get(words[i]).get(0);
+                final Pair<Integer, Set<Integer>> p = stressDict.get(words[i]);
+
+                // todo: make a smarter solution
+                final Integer randomStress = p.getRight().iterator().next();
+                curWordRhythmicPattern = Pair.of(p.getLeft(), randomStress);
             } else {
                 // нет такого слова в словаре
                 // забиваем нулями
                 curWordRhythmicPattern = Pair.of(countVowels(words[i]), -1); // это значит, что не знаем ударение
             }
 
-            rhythmicPattern = rhythmicPattern + formRhythmicPattern(curWordRhythmicPattern);
+            rhythmicPattern = rhythmicPattern + formRhythmicPattern(words[i], curWordRhythmicPattern);
         }
         return rhythmicPattern;
     }
 
-    public Map<String, ArrayList<Pair<Integer, Integer>>> getCoreWordDict() {
+    public Map<String, Pair<Integer, Set<Integer>>> getCoreWordDict() {
         return stressDict;
     }
 }
