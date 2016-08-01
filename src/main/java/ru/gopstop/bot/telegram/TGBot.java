@@ -121,7 +121,7 @@ public class TGBot extends TelegramLongPollingBot {
                     + "либо мы _берега попутали_.\n"
                     + "Скорей жми на кнопку \"Рифмуй\".");
         } else {
-            msg.setText("Меню");
+            msg.setText("Меню; нажми на кнопку - получишь результат");
         }
         sendMessage(msg);
     }
