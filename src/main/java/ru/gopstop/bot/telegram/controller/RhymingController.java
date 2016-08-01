@@ -73,9 +73,9 @@ public class RhymingController extends BaseMuzisController {
                 + session.getUser().getFirstName() + "\t"
                 + session.getUser().getLastName() + "\t"
                 + text.replaceAll("\t", " ") + "\t"
-                + (rhyme.getRhyme() == null ? "NO_RHYME" : rhyme.getRhyme()) + "\t"
-                + rhyme.getGopSong().getName() + "\t"
-                + rhyme.getGopSong().getAuthor());
+                + (rhyme == null ? "NO_RHYME" : rhyme.getRhyme()) + "\t"
+                + (rhyme == null ? "NO_SONG" : rhyme.getGopSong().getName()) + "\t"
+                + (rhyme == null ? "NO_SONG" : rhyme.getGopSong().getAuthor()));
 
         if (rhyme != null) {
             onRhymeFound(request, session, rhyme);
