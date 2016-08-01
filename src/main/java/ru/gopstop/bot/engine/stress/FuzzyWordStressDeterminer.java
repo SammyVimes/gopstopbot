@@ -90,7 +90,12 @@ public final class FuzzyWordStressDeterminer {
                 bestPattern = footGenPattern;
             }
         }
-        return Pair.of(Pair.of(bestFoot, bestEditDistance), bestPattern);
+
+        if (bestPattern != null) {
+            return Pair.of(Pair.of(bestFoot, bestEditDistance), bestPattern);
+        } else {
+            return Pair.of(Pair.of(null, 0), pattern);
+        }
     }
 
     public static Pair<Foot, String> getPatternFittedToSomeSimpleFoot(final String text) {
