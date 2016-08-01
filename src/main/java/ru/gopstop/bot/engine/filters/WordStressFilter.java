@@ -10,7 +10,7 @@ import ru.gopstop.bot.engine.search.FoundGopSong;
  */
 public final class WordStressFilter {
 
-    private static final int STRESS_POSTFIX_LENGTH = 3;
+    private static final int STRESS_POSTFIX_LENGTH = 2;
 
     public static boolean filter(final String request, final FoundGopSong gopSong) {
 
@@ -19,6 +19,10 @@ public final class WordStressFilter {
         final String songPattern =
                 WordStressMap.getInstance().findRhythmicPattern(gopSong.getRhyme());
 
+        if (reqPattern.length() < STRESS_POSTFIX_LENGTH) {
+            return true;
+        }
+
         for (int i = 1; i < STRESS_POSTFIX_LENGTH; i++) {
             if (reqPattern.length() < STRESS_POSTFIX_LENGTH
                     || songPattern.length() < STRESS_POSTFIX_LENGTH
@@ -26,6 +30,7 @@ public final class WordStressFilter {
                 return false;
             }
         }
+
         return true;
     }
 

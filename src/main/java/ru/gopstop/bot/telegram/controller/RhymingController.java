@@ -132,8 +132,8 @@ public class RhymingController extends BaseMuzisController {
                 reply = String.format("Но мы не нашли репертуар автора (%s) на Muzis. Можешь искать рифмы дальше.", gopSong.getAuthor());
             } else {
                 reply = "Эту песню мы не нашли, но вот другие песни автора";
-                // перекидываем на поиск по песням
-                session.setLastController(Constants.SONGS);
+                // НЕ перекидываем на поиск по песням, оставляем режим рифмовки
+                session.setLastController(Constants.RHYMES);
             }
 
             keyboard.add(BACK);

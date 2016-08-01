@@ -9,3 +9,5 @@
 Всё это забирайте [в Telegram-е](https://telegram.me/gop_stop_bot)  
 И приходите к пацанам на третий хакатон.  
 
+![А это что за невиданное чудовище? - Это не чудовище. Это коза.]
+(https://raw.githubusercontent.com/SammyVimes/gopstopbot/master/leonov_morgaly.md)
