@@ -183,7 +183,7 @@ public class RhymingController extends BaseMuzisController {
                 createMessageWithKeyboard(
                         request.getChatId().toString(),
                         request.getMessageId(),
-                        "Сегодня мы с тобой рифмуем",
+                        "Сегодня мы с тобой рифмуем... Напиши что-нибудь, по-братски прошу",
                         replyKeyboardMarkup);
         getBot().sendMessage(msg);
     }
