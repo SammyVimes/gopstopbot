@@ -117,7 +117,9 @@ public class TGBot extends TelegramLongPollingBot {
 
         if (session.isNew()) {
             session.setNew(false);
-            msg.setText("Привет, ты здесь первый раз, но не последний");
+            msg.setText("Привет, либо ты тут в первый раз (но не в последний, надеюсь), "
+                    + "либо мы _берега попутали_.\n"
+                    + "Скорей жми на кнопку \"Рифмуй\".");
         } else {
             msg.setText("Меню");
         }
