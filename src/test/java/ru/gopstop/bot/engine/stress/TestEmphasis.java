@@ -16,7 +16,7 @@ public class TestEmphasis {
     public void testEmphasisDict() throws IOException {
         WordStressMap.getInstance();
         String rhythmicPattern =
-                WordStressMap.getInstance().findRhythmicPattern("Буря мглою небо кроет,");
+                WordStressMap.getInstance().findRhythmicPattern("Идёт дождь");
         System.out.println(rhythmicPattern);
     }
 }

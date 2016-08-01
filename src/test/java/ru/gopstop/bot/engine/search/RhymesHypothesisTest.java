@@ -44,7 +44,7 @@ public class RhymesHypothesisTest extends TestCase {
 
         for (String line : testLines) {
 
-            String processedLine = BasicPreprocessor.postfix(line);
+            String processedLine = BasicPreprocessor.postfix(line, true);
 
             System.out.println(processedLine);
 
@@ -61,7 +61,8 @@ public class RhymesHypothesisTest extends TestCase {
         final IndexSearcher is = new IndexSearcher(ir);
 
         final BooleanQuery q = new BooleanQuery();
-        final String request = BasicPreprocessor.postfix("мы подошли из-за угла");
+        final String request =
+                BasicPreprocessor.postfix("мы подошли из-за угла", true);
 
         for (String token : customAnalyzer.handle(request)) {
             System.out.print(token + " ");
@@ -74,7 +75,7 @@ public class RhymesHypothesisTest extends TestCase {
 
         final TopDocs docs = is.search(q, pageSize);
 
-        System.out.println("REQUEST: [" + BasicPreprocessor.postfix(request) + "]");
+        System.out.println("REQUEST: [" + BasicPreprocessor.postfix(request, true) + "]");
 
         for (int i = 0; i < Math.min(pageSize, docs.totalHits); i++) {
             System.out.println();

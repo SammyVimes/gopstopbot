@@ -1,7 +1,10 @@
 package ru.gopstop.bot.engine.search.preprocessing;
 
 import com.google.common.base.Joiner;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ru.gopstop.bot.engine.stress.ExtraWordStressTool;
+import ru.gopstop.bot.util.SymbolsUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,6 +15,8 @@ import java.util.List;
  */
 public final class BasicPreprocessor {
 
+    private static final Logger LOGGER = LogManager.getLogger(BasicPreprocessor.class);
+
     private static final List<LastWordProcessor> PROCESSORS = new ArrayList<>();
 
     static {
@@ -19,9 +24,14 @@ public final class BasicPreprocessor {
         PROCESSORS.add(new ConsonantHack());
     }
 
-    public static String postfix(final String line) {
+    public static String postfix(final String line, final boolean logStuff) {
 
-        final String normalLine = line.trim().replaceAll("[^a-zA-Zа-яА-я ]", " ").toLowerCase();
+        final String normalLine =
+                SymbolsUtils.replaceUseless(line.trim(), " ").toLowerCase();
+
+        if (logStuff) {
+            LOGGER.info("REQ2NORM\t" + line.replaceAll("\\t", " ") + "\t" + normalLine);
+        }
 
         final String[] splitted = normalLine.replaceAll("\\s+", " ").split(" ");
 
@@ -35,9 +45,20 @@ public final class BasicPreprocessor {
         String lastStressed =
                 ExtraWordStressTool.upperCaseStress(splitted[len]);
 
+        if (logStuff) {
+            LOGGER.info("WORD2STRESSED\t" + splitted[len] + "\t" + lastStressed);
+        }
+
         // применяем всякие эвристики
-        for (LastWordProcessor processor : PROCESSORS) {
+        for (final LastWordProcessor processor : PROCESSORS) {
+
             lastStressed = processor.process(lastStressed);
+
+            if (logStuff) {
+                LOGGER.info("PROCESSED\t" + processor.getClass()
+                        + "\t" + splitted[len]
+                        + "\t" + lastStressed);
+            }
         }
 
         // приклеиваем последнее слово
@@ -46,6 +67,10 @@ public final class BasicPreprocessor {
         res.add(lastStressed);
 
         final String fixedline = Joiner.on("").join(res);
+
+        if (logStuff) {
+            LOGGER.info("FIXEDLINE\t" + res + "\t" + fixedline);
+        }
 
         return new StringBuilder(fixedline).reverse().toString();
     }

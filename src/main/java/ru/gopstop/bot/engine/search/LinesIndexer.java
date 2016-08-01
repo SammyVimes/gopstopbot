@@ -127,7 +127,7 @@ public final class LinesIndexer {
 
                 for (final String line : song.getLyrics()) {
 
-                    final String processedLine = BasicPreprocessor.postfix(line);
+                    final String processedLine = BasicPreprocessor.postfix(line, false);
 
                     if (processedLine == null) {
                         // в строке какая-нибудь ерунда, например * * * (как в стихах без названия)

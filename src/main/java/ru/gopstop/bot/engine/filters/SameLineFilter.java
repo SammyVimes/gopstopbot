@@ -2,6 +2,7 @@ package ru.gopstop.bot.engine.filters;
 
 import com.google.common.collect.Sets;
 import ru.gopstop.bot.engine.search.FoundGopSong;
+import ru.gopstop.bot.util.SymbolsUtils;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -17,7 +18,11 @@ public final class SameLineFilter {
     private static final double MAX_OVERLAP = 0.8;
 
     private static Set<String> buildSet(final String request) {
-        return new HashSet<String>(Arrays.asList(request.replaceAll("[^A-Za-zА-Яа-я ]", " ").split("\\s+")));
+        return new HashSet<String>(
+                Arrays.asList(
+                        SymbolsUtils
+                                .replaceUseless(request, " ")
+                                .split("\\s+")));
     }
 
     public static boolean filter(final String request, final FoundGopSong gopSong) {

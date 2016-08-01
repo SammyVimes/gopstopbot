@@ -42,7 +42,9 @@ class LinesIndexSearcher {
 
         try {
             final BooleanQuery q = new BooleanQuery();
-            final String processedRequest = BasicPreprocessor.postfix(request);
+            final String processedRequest = BasicPreprocessor.postfix(request, true);
+
+            LOGGER.info("REQ2POSTFIX\t" + request.replaceAll("\t", " ") + "\t" + processedRequest);
 
             if (processedRequest == null || processedRequest.isEmpty()) {
                 LOGGER.warn("Processed request is empty all of a sudden: [" + processedRequest + "]");

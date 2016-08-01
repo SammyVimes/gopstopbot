@@ -4,22 +4,22 @@
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
         </Console>
-        <RollingFile name="RollingFile"
-                     fileName="all.log"
-                     filePattern="all.%d{yyyy-MM-dd}.%i.log"
-                     append="true">
-            <PatternLayout pattern="%d{yyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        <RollingFile name="RouterRollingFile"
+                     fileName="all_logs.log"
+                     immediateFlush="false"
+                     filePattern="all_logs.%d{yyyy-MM-dd-HH}-%i.log">
+            <PatternLayout>
+                <pattern>%d{yyyy-MM-dd HH:mm:ss} %5p [%t] (%F:%L) - %m%n</pattern>
+            </PatternLayout>
             <Policies>
-                <TimeBasedTriggeringPolicy/>
-                <SizeBasedTriggeringPolicy size="0.5 MB"/>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
             </Policies>
-            <DefaultRolloverStrategy max="15"/>
         </RollingFile>
     </Appenders>
     <Loggers>
         <Root level="trace">
             <AppenderRef ref="Console"/>
-            <AppenderRef ref="RollingFile"/>
+            <AppenderRef ref="RouterRollingFile"/>
         </Root>
     </Loggers>
 </Configuration>

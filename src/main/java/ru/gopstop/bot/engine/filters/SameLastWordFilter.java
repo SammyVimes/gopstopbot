@@ -1,6 +1,7 @@
 package ru.gopstop.bot.engine.filters;
 
 import ru.gopstop.bot.engine.search.FoundGopSong;
+import ru.gopstop.bot.util.SymbolsUtils;
 
 import java.util.Arrays;
 import java.util.List;
@@ -12,8 +13,17 @@ import java.util.List;
  */
 public final class SameLastWordFilter {
 
+    /**
+     * Дело в том, что это обычно то же слово с приставкой
+     */
+    private static final int UNACC_POSTFIX = 5;
+
     private static List<String> buildLexemList(final String request) {
-        return Arrays.asList(request.replaceAll("[^A-Za-zА-Яа-я ]", " ").toLowerCase().split("\\s+"));
+        return Arrays.asList(
+                SymbolsUtils
+                        .replaceUseless(request, " ")
+                        .toLowerCase()
+                        .split("\\s+"));
     }
 
     public static boolean filter(final String request, final FoundGopSong gopSong) {
@@ -21,7 +31,17 @@ public final class SameLastWordFilter {
         final List<String> reqLL = buildLexemList(request);
         final List<String> reqR = buildLexemList(gopSong.getRhyme());
 
-        return !reqLL.get(reqLL.size() - 1).equals(reqR.get(reqR.size() - 1));
+        final String lastGop = reqR.get(reqR.size() - 1);
+        final String lastUser = reqLL.get(reqLL.size() - 1);
+
+        if (lastGop.length() > UNACC_POSTFIX
+                && lastUser.length() > UNACC_POSTFIX
+                && lastGop.substring(lastGop.length() - UNACC_POSTFIX, lastGop.length())
+                .equals(lastUser.substring(lastUser.length() - UNACC_POSTFIX, lastUser.length()))) {
+            return false;
+        }
+
+        return !lastGop.equals(lastUser);
     }
 
     private SameLastWordFilter() {

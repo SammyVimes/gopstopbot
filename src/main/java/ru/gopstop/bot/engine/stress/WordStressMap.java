@@ -5,6 +5,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.gopstop.bot.engine.tools.PhoneticsKnowledgeTools;
+import ru.gopstop.bot.util.SymbolsUtils;
 
 import java.io.*;
 import java.util.*;
@@ -54,7 +55,7 @@ public final class WordStressMap {
     /**
      * Определяем положение ударения в полном слове
      */
-    int stressPosition(final String word) {
+    private int stressPosition(final String word) {
 
         final String fixedWord = word.replaceAll("-", "");
 
@@ -160,9 +161,8 @@ public final class WordStressMap {
 
     private String[] processPoemLine(final String poemLine) {
 
-        return poemLine
-                .trim()
-                .replaceAll("[^a-zA-Zа-яА-я ]", "")
+        return SymbolsUtils
+                .replaceUseless(poemLine.trim(), "")
                 .toLowerCase()
                 .split(" ");
     }
