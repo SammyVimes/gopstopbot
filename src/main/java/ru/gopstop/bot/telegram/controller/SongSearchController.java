@@ -24,11 +24,9 @@ import java.util.stream.Collectors;
  */
 public class SongSearchController extends BaseMuzisController {
 
-    private final static int TOP_SONGS_COUNT = 6;
+    private static final int TOP_SONGS_COUNT = 6;
 
     private MuzisService muzisService = MuzisServiceBuilder.getMuzisService();
-
-    private ResourcesService resourcesService = MuzisServiceBuilder.getResourcesService();
 
     public SongSearchController(final TGBot bot) {
         super(bot);
@@ -144,7 +142,7 @@ public class SongSearchController extends BaseMuzisController {
                         request.getMessageId(),
                         reply,
                         replyKeyboardMarkup);
-        bot.sendMessage(msg);
+        getBot().sendMessage(msg);
     }
 
     private void onMain(final Message request, final TGSession session) throws TelegramApiException {
@@ -156,6 +154,6 @@ public class SongSearchController extends BaseMuzisController {
                         request.getMessageId(),
                         "Введи название песни",
                         replyKeyboardMarkup);
-        bot.sendMessage(msg);
+        getBot().sendMessage(msg);
     }
 }

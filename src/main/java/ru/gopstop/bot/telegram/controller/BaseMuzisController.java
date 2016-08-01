@@ -22,9 +22,9 @@ import java.io.File;
  */
 abstract class BaseMuzisController extends Controller {
 
-    MuzisSearchHelper muzisSearchHelper = new MuzisSearchHelper();
+    private MuzisSearchHelper muzisSearchHelper = new MuzisSearchHelper();
 
-    MuzisService muzisService = MuzisServiceBuilder.getMuzisService();
+    private MuzisService muzisService = MuzisServiceBuilder.getMuzisService();
 
     private ResourcesService resourcesService = MuzisServiceBuilder.getResourcesService();
 
@@ -57,7 +57,7 @@ abstract class BaseMuzisController extends Controller {
             }
 
             sendPhoto.setNewPhoto(cachedFile);
-            bot.sendPhoto(sendPhoto);
+            getBot().sendPhoto(sendPhoto);
             sendMessage(request.getChatId().toString(), "Сейчас и песню пришлю");
 
         } else {
@@ -85,6 +85,14 @@ abstract class BaseMuzisController extends Controller {
         audio.setPerformer(Translit.cyr2lat(song.getPerformer()));
         audio.setTitle(Translit.cyr2lat(song.getTrackName()));
         audio.setChatId(request.getChatId().toString());
-        bot.sendAudio(audio);
+        getBot().sendAudio(audio);
+    }
+
+    public MuzisSearchHelper getMuzisSearchHelper() {
+        return muzisSearchHelper;
+    }
+
+    public MuzisService getMuzisService() {
+        return muzisService;
     }
 }

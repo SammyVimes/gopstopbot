@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
  * Поиск и отбор рифм перед итоговой отправкой в мессенджер
  * Created by aam on 31.07.16.
  */
-public class CleverEngine {
+public final class CleverEngine {
 
     public static Rhyme getRhyme(final String userInput) {
 
@@ -35,5 +35,9 @@ public class CleverEngine {
         } else {
             return null;
         }
+    }
+
+    private CleverEngine() {
+
     }
 }

@@ -2,7 +2,6 @@ package ru.gopstop.bot.engine.search;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
@@ -21,12 +20,13 @@ import java.util.List;
  * Поиск рифм
  * Created by aam on 31.07.16.
  */
-public class LinesIndexSearcher {
+class LinesIndexSearcher {
 
-    private final static Logger LOGGER = LogManager.getLogger(LinesIndexSearcher.class);
+    private static final Logger LOGGER = LogManager.getLogger(LinesIndexSearcher.class);
 
-    private final static int COUNT_RETURNED = 200;
-    private final static int ANALYZED_POSTFIX_LENGTH = 6;
+    private static final int COUNT_RETURNED = 200;
+
+    private static final int ANALYZED_POSTFIX_LENGTH = 6;
 
     private final IndexSearcher is;
 
@@ -56,8 +56,10 @@ public class LinesIndexSearcher {
             LOGGER.info("QUERY: [" + q.toString() + "]");
 
             for (int i = 0; i < Math.min(COUNT_RETURNED, docs.totalHits); i++) {
+
                 final Document doc = is.doc(docs.scoreDocs[i].doc);
                 LOGGER.info(docs.scoreDocs[i].score + "\t|\t" + doc.get("text") + "\t|\t" + doc.get("fulltext"));
+
                 foundSongs.add(
                         new FoundGopSong(
                                 new GopSong(
@@ -67,6 +69,7 @@ public class LinesIndexSearcher {
                                 docs.scoreDocs[i].score));
 
             }
+
             return foundSongs;
         } catch (Exception e) {
             LOGGER.error("Weird search error", e);

@@ -32,7 +32,7 @@ public class GopSong {
     }
 
     public String toString() {
-        return "GopSong{title=" + name + ", author=" + author + ", " +
-                (lyrics == null ? "no" : lyrics.size()) + " lines}";
+        return "GopSong{title=" + name + ", author=" + author + ", "
+                + (lyrics == null ? "no" : lyrics.size()) + " lines}";
     }
 }

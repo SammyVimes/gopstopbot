@@ -15,9 +15,9 @@ import java.util.List;
 
 class CustomAnalyzer extends Analyzer {
 
-    final private Tokenizer wordTokenizer;
-    final private int from;
-    final private int to;
+    private final Tokenizer wordTokenizer;
+    private final int from;
+    private final int to;
 
     CustomAnalyzer(final Tokenizer tokenizer, final int from, final int to) {
         this.wordTokenizer = tokenizer;
@@ -53,7 +53,7 @@ class CustomAnalyzer extends Analyzer {
             }
             stream.end();
             stream.close();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new RuntimeException(e);
         }
         return result;

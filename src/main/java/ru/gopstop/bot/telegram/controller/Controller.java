@@ -16,23 +16,23 @@ import java.util.List;
 
 /**
  * Created by Semyon on 30.07.2016.
- *
- *
+ * <p>
+ * <p>
  * Базовый класс контроллера пользовательских запросов
- *
  */
 public abstract class Controller {
 
-    protected TGBot bot;
+    private TGBot bot;
 
-    public static final String BACK = "Назад " + Emoji.BACK_WITH_LEFTWARDS_ARROW_ABOVE.toString();
+    static final String BACK = "Назад " + Emoji.BACK_WITH_LEFTWARDS_ARROW_ABOVE.toString();
 
-    public Controller(final TGBot bot) {
+    Controller(final TGBot bot) {
         this.bot = bot;
     }
 
     /**
      * Ключ контроллера в мапе (кладётся в сессию как lastController)
+     *
      * @return
      */
     public abstract String getKey();
@@ -43,12 +43,14 @@ public abstract class Controller {
 
     /**
      * Сообщение для входа в этот контроллер (e.g. "Настройки")
+     *
      * @return
      */
     public abstract String getEntry();
 
     /**
      * Обработка входящего сообщения
+     *
      * @param request
      * @throws TelegramApiException
      */
@@ -57,17 +59,18 @@ public abstract class Controller {
     /**
      * Создание клавиатуры
      * клавиатура группируется по два сообщения в строке
+     *
      * @param messages
      * @return
      */
-    public ReplyKeyboardMarkup buildKeyboard(final List<String> messages) {
+    ReplyKeyboardMarkup buildKeyboard(final List<String> messages) {
 
         final ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
         replyKeyboardMarkup.setSelective(true);
         replyKeyboardMarkup.setResizeKeyboard(true);
         replyKeyboardMarkup.setOneTimeKeyboad(false);
 
-        List<KeyboardRow> keyboard = new ArrayList<>();
+        final List<KeyboardRow> keyboard = new ArrayList<>();
         KeyboardRow row = null;
 
         for (int i = 0; i < messages.size(); i++) {
@@ -87,17 +90,18 @@ public abstract class Controller {
     /**
      * Отправка сообщения с клавиатурой и текстом
      * сообщение отправляется с прикреплённым запросом пользователя
+     *
      * @param chatId
      * @param messageId
      * @param text
      * @param replyKeyboardMarkup
      * @return
      */
-    public SendMessage createMessageWithKeyboard(final String chatId,
-                                                  final Integer messageId,
-                                                  final String text,
-                                                  final ReplyKeyboardMarkup replyKeyboardMarkup) {
-        SendMessage sendMessage = new SendMessage();
+    SendMessage createMessageWithKeyboard(final String chatId,
+                                          final Integer messageId,
+                                          final String text,
+                                          final ReplyKeyboardMarkup replyKeyboardMarkup) {
+        final SendMessage sendMessage = new SendMessage();
         sendMessage.enableMarkdown(true);
         sendMessage.setChatId(chatId);
         sendMessage.setReplyToMessageId(messageId);
@@ -111,16 +115,17 @@ public abstract class Controller {
     /**
      * Обработка нажатия на кнопку "назад"
      * Возвращение в главное меню
+     *
      * @param request
      * @param session
      * @throws TelegramApiException
      */
-    protected void back(final Message request, final TGSession session) throws TelegramApiException {
+    void back(final Message request, final TGSession session) throws TelegramApiException {
         session.setLastController(null);
         bot.showMainMenu(request, session);
     }
 
-    protected void sendMessage(final String chatId, final String reply) throws TelegramApiException {
+    void sendMessage(final String chatId, final String reply) throws TelegramApiException {
         SendMessage msg = new SendMessage();
         msg.setChatId(chatId);
         msg.setText(reply);
@@ -128,7 +133,7 @@ public abstract class Controller {
         bot.sendMessage(msg);
     }
 
-    protected void sendHtmlMessage(final String chatId, final String reply) throws TelegramApiException {
+    void sendHtmlMessage(final String chatId, final String reply) throws TelegramApiException {
         SendMessage msg = new SendMessage();
         msg.setChatId(chatId);
         msg.setText(reply);
@@ -136,11 +141,14 @@ public abstract class Controller {
         bot.sendMessage(msg);
     }
 
-    protected void sendAction(final String chatId, final ActionType actionType) throws TelegramApiException {
+    void sendAction(final String chatId, final ActionType actionType) throws TelegramApiException {
         SendChatAction action = new SendChatAction();
         action.setChatId(chatId);
         action.setAction(actionType);
         bot.sendChatAction(action);
     }
 
+    protected TGBot getBot() {
+        return bot;
+    }
 }

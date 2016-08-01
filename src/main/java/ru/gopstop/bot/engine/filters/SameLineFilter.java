@@ -12,7 +12,7 @@ import java.util.Set;
  * <p>
  * Created by aam on 31.07.16.
  */
-public class SameLineFilter {
+public final class SameLineFilter {
 
     private static final double MAX_OVERLAP = 0.8;
 
@@ -29,5 +29,9 @@ public class SameLineFilter {
         int sizeInter = Sets.intersection(a, b).size();
 
         return (sizeInter + 0.0) / size0 < MAX_OVERLAP && (sizeInter + 0.0) / size1 < MAX_OVERLAP;
+    }
+
+    private SameLineFilter() {
+
     }
 }

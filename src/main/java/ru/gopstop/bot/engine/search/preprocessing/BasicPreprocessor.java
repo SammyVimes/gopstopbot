@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Created by aam on 31.07.16.
  */
-public class BasicPreprocessor {
+public final class BasicPreprocessor {
 
     private static final List<LastWordProcessor> PROCESSORS = new ArrayList<>();
 
@@ -48,5 +48,9 @@ public class BasicPreprocessor {
         final String fixedline = Joiner.on("").join(res);
 
         return new StringBuilder(fixedline).reverse().toString();
+    }
+
+    private BasicPreprocessor() {
+
     }
 }

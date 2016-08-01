@@ -1,6 +1,8 @@
 package ru.gopstop.bot;
 
 import okhttp3.ResponseBody;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.util.Properties;
@@ -8,9 +10,13 @@ import java.util.Properties;
 /**
  * Created by Semyon on 30.07.2016.
  */
-public class FileUtils {
+public final class FileUtils {
 
-    private static String filePath = null;
+    private static final int FILE_BUFFER_SIZE = 4096;
+
+    private static final Logger LOGGER = LogManager.getLogger(FileUtils.class);
+
+    private static final String FILE_PATH;
 
     static {
         Properties properties = new Properties();
@@ -19,12 +25,12 @@ public class FileUtils {
         } catch (IOException e) {
             throw new RuntimeException("No secret.properties with telegram token found in resources/");
         }
-        filePath = properties.getProperty("filespath");
+        FILE_PATH = properties.getProperty("filespath");
     }
 
     public static File getCachedFile(final String fileName) {
 
-        File file = new File(filePath + fileName);
+        File file = new File(FILE_PATH + fileName);
 
         if (file.exists()) {
             return file;
@@ -34,16 +40,13 @@ public class FileUtils {
 
     public static File writeResponseBodyToDisk(final ResponseBody body, final String fileName) {
         try {
-            File loadingFile = new File(filePath + fileName);
+            File loadingFile = new File(FILE_PATH + fileName);
 
             InputStream inputStream = null;
             OutputStream outputStream = null;
 
             try {
-                byte[] fileReader = new byte[4096];
-
-                long fileSize = body.contentLength();
-                long fileSizeDownloaded = 0;
+                byte[] fileReader = new byte[FILE_BUFFER_SIZE];
 
                 inputStream = body.byteStream();
                 outputStream = new FileOutputStream(loadingFile);
@@ -56,16 +59,17 @@ public class FileUtils {
                     }
 
                     outputStream.write(fileReader, 0, read);
-
-                    fileSizeDownloaded += read;
                 }
 
                 outputStream.flush();
-
                 return loadingFile;
-            } catch (IOException e) {
+
+            } catch (final IOException e) {
+
+                LOGGER.error("Can't read file", e);
                 return null;
             } finally {
+
                 if (inputStream != null) {
                     inputStream.close();
                 }
@@ -74,11 +78,13 @@ public class FileUtils {
                     outputStream.close();
                 }
             }
-        } catch (IOException e) {
+        } catch (final IOException e) {
+            LOGGER.error("zi shit happenned, file utils bullshot", e);
             return null;
         }
     }
 
+    private FileUtils() {
 
-
+    }
 }

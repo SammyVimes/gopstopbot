@@ -11,17 +11,21 @@ import java.util.HashMap;
 /**
  * Created by n.pritykovskaya on 30.07.16.
  */
-public class WordStressMap {
+public final class WordStressMap {
 
     private static final Logger LOGGER = LogManager.getLogger(WordStressMap.class);
 
     private static final String STRESS_DICT_PATH = "./data/emphasis.txt";
 
-    private static HashMap<String, ArrayList<int[]>> stressDict = new HashMap<>(1600000);
-
     private static final String SERIALIZED_DICT_PATH = "stress_map.bin";
 
-    private static WordStressMap INSTANCE;
+    private static final int DICT_SIZE_HINT = 1600000;
+
+    private static final int BUILDING_REPORTING_FREQUENCY = 10000;
+
+    private static HashMap<String, ArrayList<int[]>> stressDict = new HashMap<>(DICT_SIZE_HINT);
+
+    private static final WordStressMap INSTANCE;
 
     public static WordStressMap getInstance() {
         return INSTANCE;
@@ -40,14 +44,15 @@ public class WordStressMap {
         return word.length() - word.replaceAll("а|ы|е|ё|и|у|о|э|я|ю", "").length();
     }
 
-    private int emphasisPosition(String word) {
+    private int emphasisPosition(final String word) {
 
-        word = word.replaceAll("й|ц|к|н|г|ш|щ|з|х|ъ|ф|в|п|р|л|д|ж|ч|с|м|т|ь|б|-", "");
+        final String fixedWord = word.replaceAll("й|ц|к|н|г|ш|щ|з|х|ъ|ф|в|п|р|л|д|ж|ч|с|м|т|ь|б|-", "");
 
-        if (word.contains("'")) {
-            return word.indexOf("'") - 1;
-        } else if (word.contains("ё")) {
-            return word.indexOf("ё");
+        if (fixedWord.contains("'")) {
+            return fixedWord.indexOf("'") - 1;
+            // у ё не проставлены ударения
+        } else if (fixedWord.contains("ё")) {
+            return fixedWord.indexOf("ё");
         } else {
             return 0;
         }
@@ -55,7 +60,7 @@ public class WordStressMap {
 
     private boolean alreadyIn(final int[] curRhythmicPattern, final ArrayList<int[]> prevRhythmicPatterns) {
 
-        for (int[] pattern : prevRhythmicPatterns) {
+        for (final int[] pattern : prevRhythmicPatterns) {
             if (Arrays.equals(curRhythmicPattern, pattern)) {
                 return true;
             }
@@ -70,13 +75,12 @@ public class WordStressMap {
 
         for (int i = 0; i < words.length; i++) {
 
-            final String wordNoEmphasis =
-                    words[i].replace("'", "").replace("`", "");
+            final String wordNoEmphasis = words[i].replace("'", "").replace("`", "");
             final int vowelsNumb = countVowels(wordNoEmphasis);
 
             if (vowelsNumb > 0) {
-                int emphasisPos = emphasisPosition(words[i].replace("`", ""));
-                int[] rhythmicPattern = new int[2];
+                final int emphasisPos = emphasisPosition(words[i].replace("`", ""));
+                final int[] rhythmicPattern = new int[2];
 
                 rhythmicPattern[0] = vowelsNumb;
                 rhythmicPattern[1] = emphasisPos;
@@ -101,8 +105,8 @@ public class WordStressMap {
         final HashMap<String, ArrayList<int[]>> map;
 
         try {
-            FileInputStream fis = new FileInputStream(SERIALIZED_DICT_PATH);
-            ObjectInputStream ois = new ObjectInputStream(fis);
+            final FileInputStream fis = new FileInputStream(SERIALIZED_DICT_PATH);
+            final ObjectInputStream ois = new ObjectInputStream(fis);
             map = (HashMap) ois.readObject();
             stressDict = map;
             ois.close();
@@ -111,7 +115,9 @@ public class WordStressMap {
 
             LOGGER.warn("COULD NOT DESER MAP");
 
-            try (BufferedReader br = new BufferedReader(new FileReader(STRESS_DICT_PATH))) {
+            //todo: читать нормально, например, заюзать StreamAPI
+            try (final BufferedReader br = new BufferedReader(new FileReader(STRESS_DICT_PATH))) {
+
                 String line = br.readLine();
                 int cntLine = 0;
 
@@ -119,7 +125,7 @@ public class WordStressMap {
                     parseLine(line);
                     cntLine++;
 
-                    if (cntLine % 10000 == 0) {
+                    if (cntLine % BUILDING_REPORTING_FREQUENCY == 0) {
                         LOGGER.info("Lines of wod stress dict indexed: " + cntLine);
                     }
                     line = br.readLine();
@@ -128,8 +134,8 @@ public class WordStressMap {
                 LOGGER.info("Serialization...");
 
                 try {
-                    FileOutputStream fos = new FileOutputStream(SERIALIZED_DICT_PATH);
-                    ObjectOutputStream oos = new ObjectOutputStream(fos);
+                    final FileOutputStream fos = new FileOutputStream(SERIALIZED_DICT_PATH);
+                    final ObjectOutputStream oos = new ObjectOutputStream(fos);
                     oos.writeObject(stressDict);
                     oos.close();
                     fos.close();
@@ -137,14 +143,13 @@ public class WordStressMap {
                 } catch (final IOException ioe) {
                     LOGGER.error("Stress dict dumping failure", ioe);
                 }
-                LOGGER.info("Stress dict serizalization done");
+                LOGGER.info("Stress dict serialization done");
 
-            } catch (IOException ie) {
-                ie.printStackTrace();
+            } catch (final IOException ie) {
+                LOGGER.error("Мапа ударений не зачитана", ie);
+                throw new RuntimeException(ie);
             }
-
         }
-
     }
 
     public int getSize() {
@@ -160,20 +165,24 @@ public class WordStressMap {
                 .split(" ");
     }
 
-    private String formRhythmicPattern(int[] rhythmicPattern) {
+    private String formRhythmicPattern(final int[] rhythmicPattern) {
         // комменты расставил как догадался
         // rhythmicPatter[0] -- кол-во слогов
         char[] str = new char[rhythmicPattern[0]];
         Arrays.fill(str, '0');
+
         // rhythmicPatter[1] -- на каком слоге ударение
         final int emphasisIndex = rhythmicPattern[1];
+
         if (emphasisIndex != -1) {
             str[emphasisIndex] = '1';
         }
+
         return new String(str);
     }
 
-    public String findRhythmicPattern(String poemLine) {
+    public String findRhythmicPattern(final String poemLine) {
+
         final String[] words = processPoemLine(poemLine);
         String rhythmicPattern = "";
 

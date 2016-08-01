@@ -8,18 +8,17 @@ import java.util.stream.Collectors;
  * Получение ударений в слове по паттерну, полученному с помощью словаря
  * Created by aam on 31.07.16.
  */
-public class ExtraWordStressTool {
+public final class ExtraWordStressTool {
 
-    public static String[] VOWELS = new String[]{"а", "ы", "о", "э", "е", "я", "и", "ю", "ё", "у"};
+    private static final String[] VOWELS = new String[]{"а", "ы", "о", "э", "е", "я", "и", "ю", "ё", "у"};
 
-    private final static
-    Set<Character> VOWELS_SET =
+    private static final Set<Character> VOWELS_SET =
             Arrays
                     .stream(VOWELS)
                     .map(s -> s.charAt(0))
                     .collect(Collectors.toSet());
 
-    public static String upperCaseByPattern(String word, String pattern) {
+    public static String upperCaseByPattern(final String word, final String pattern) {
 
         int vowIndex = 0;
         final StringBuilder sb = new StringBuilder();
@@ -40,10 +39,13 @@ public class ExtraWordStressTool {
         return sb.toString();
     }
 
-    public static String upperCaseStress(String word) {
+    public static String upperCaseStress(final String word) {
 
-        final String rhPattern =
-                WordStressMap.getInstance().findRhythmicPattern(word);
+        final String rhPattern = WordStressMap.getInstance().findRhythmicPattern(word);
         return upperCaseByPattern(word, rhPattern);
+    }
+
+    private ExtraWordStressTool() {
+
     }
 }

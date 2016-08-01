@@ -5,17 +5,15 @@ package ru.gopstop.bot.muzis.entity;
  */
 public class Performer {
 
-    public static final int TYPE = 3;
-
     private Long id;
 
-    //	тип обьекта (для performer всегда 3)
+    // тип обьекта (для performer всегда 3)
     private Long type;
 
-    //	название исполнителя
+    // название исполнителя
     private String title;
 
-    //	постер
+    // постер
     private String poster;
 
     public Performer() {

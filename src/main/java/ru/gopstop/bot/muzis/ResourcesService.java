@@ -10,7 +10,6 @@ import retrofit2.http.Path;
  */
 public interface ResourcesService {
 
-
     @GET("/{file}")
     ResponseBody downloadFile(@Path("file") final String file);
 

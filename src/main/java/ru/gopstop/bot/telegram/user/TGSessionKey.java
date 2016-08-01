@@ -7,7 +7,7 @@ import org.telegram.telegrambots.api.objects.User;
  */
 public class TGSessionKey {
 
-    private final static int OFFSET_HEX = 31;
+    private static final int OFFSET_HEX = 31;
 
     private final Long chatId;
 
@@ -41,8 +41,6 @@ public class TGSessionKey {
 
     @Override
     public int hashCode() {
-        int result = chatId.hashCode();
-        result = OFFSET_HEX * result + user.getId().hashCode();
-        return result;
+        return OFFSET_HEX * chatId.hashCode() + user.getId().hashCode();
     }
 }

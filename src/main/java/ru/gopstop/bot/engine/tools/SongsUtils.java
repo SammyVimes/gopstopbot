@@ -5,6 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.gopstop.bot.engine.entities.GopSong;
 import ru.gopstop.bot.engine.search.LinesIndexer;
+import ru.gopstop.bot.muzis.entity.Song;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,7 +18,7 @@ import java.util.stream.Stream;
  * Чтение корпуса
  * Created by aam on 30.07.16.
  */
-public class SongsUtils {
+public final class SongsUtils {
 
     private static final Logger LOGGER = LogManager.getLogger(LinesIndexer.class);
 
@@ -43,13 +44,16 @@ public class SongsUtils {
                 .map(Path::toFile);
     }
 
-
-    private static GopSong readSongFromFile(final File file) throws IOException {
+    static GopSong readSongFromFile(final File file) throws IOException {
 
         final List<String> lines = Files.readLines(file, Charset.forName("utf-8"));
         return new GopSong(
                 lines.get(1).trim(),
                 lines.get(0).trim(),
                 lines.subList(2, lines.size()));
+    }
+
+    private SongsUtils() {
+
     }
 }

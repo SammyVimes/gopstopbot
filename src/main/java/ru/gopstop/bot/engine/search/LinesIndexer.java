@@ -3,8 +3,6 @@ package ru.gopstop.bot.engine.search;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.Tokenizer;
-import org.apache.lucene.analysis.core.LetterTokenizer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -29,23 +27,25 @@ import java.util.stream.Collectors;
  * Индексатор строчек песен
  * Created by aam on 30.07.16.
  */
-public class LinesIndexer {
+public final class LinesIndexer {
 
-    private final static int ANALYZED_POSTFIX_SIZE = 5;
+    private static final int ANALYZED_POSTFIX_SIZE = 5;
 
-    private static LinesIndexer INSTANCE;
+    private static final int INDEXING_REPORT_STEP = 500;
+
+    private static final String DATA_PATH = "data/songs/";
+
+    private static final LinesIndexer INSTANCE;
 
     public static LinesIndexer getInstance() {
         return INSTANCE;
     }
 
-    private final static String DATA_PATH = "data/songs/";
-
     static {
         INSTANCE = new LinesIndexer(DATA_PATH, "index/");
     }
 
-    private final Logger LOGGER = LogManager.getLogger(LinesIndexer.class);
+    private static final Logger LOGGER = LogManager.getLogger(LinesIndexer.class);
 
     private IndexWriter writer;
 
@@ -116,7 +116,7 @@ public class LinesIndexer {
 
                 final GopSong song = gopSongIterator.next();
 
-                if (counter % 100 == 0) {
+                if (counter % INDEXING_REPORT_STEP == 0) {
                     LOGGER.info("Indexed songs: " + counter + " / " + size);
                 }
                 counter += 1;
@@ -150,6 +150,7 @@ public class LinesIndexer {
                     }
                 }
             }
+
         });
     }
 }

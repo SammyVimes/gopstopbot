@@ -8,11 +8,11 @@ import ru.gopstop.bot.engine.search.FoundGopSong;
  * <p>
  * Created by aam on 31.07.16.
  */
-public class WordStressFilter {
+public final class WordStressFilter {
 
     private static final int STRESS_POSTFIX_LENGTH = 3;
 
-    public static boolean filter(String request, FoundGopSong gopSong) {
+    public static boolean filter(final String request, final FoundGopSong gopSong) {
 
         final String reqPattern =
                 WordStressMap.getInstance().findRhythmicPattern(request);
@@ -27,5 +27,9 @@ public class WordStressFilter {
             }
         }
         return true;
+    }
+
+    private WordStressFilter() {
+
     }
 }
