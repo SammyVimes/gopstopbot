@@ -66,11 +66,11 @@ public class TGBot extends TelegramLongPollingBot {
         final Long chatId = message.getChatId();
         final User fromUser = message.getFrom();
 
-        LOGGER.trace("Message from "
+        LOGGER.info("Message from "
                 + fromUser.getLastName()
                 + fromUser.getFirstName()
-                + "(" + fromUser.getUserName() + ")"
-                + " : " + message.getText());
+                + " (" + fromUser.getUserName() + ")"
+                + ": " + message.getText());
 
         TGSessionKey key = new TGSessionKey(fromUser, chatId);
         TGSession session = sessionMap.get(key);
@@ -84,10 +84,13 @@ public class TGBot extends TelegramLongPollingBot {
 
         try {
             final String lastController = session.getLastController();
+
             if (TextUtils.isEmpty(lastController)) {
                 // у юзера не проставлен контроллер, выберем из меню
                 for (Controller controller : mainControllers) {
+
                     if (controller.getEntry().equals(message.getText())) {
+
                         controller.handleMessage(message, session);
                         if (controller.rememberMe()) {
                             session.setLastController(controller.getKey());

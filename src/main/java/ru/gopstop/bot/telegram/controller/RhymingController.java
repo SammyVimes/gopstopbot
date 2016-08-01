@@ -1,5 +1,7 @@
 package ru.gopstop.bot.telegram.controller;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.telegram.telegrambots.TelegramApiException;
 import org.telegram.telegrambots.api.methods.ActionType;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
@@ -28,6 +30,8 @@ import java.util.stream.Collectors;
 public class RhymingController extends BaseMuzisController {
 
     private static final int TOP_SONGS_COUNT = 6;
+
+    private static final Logger LOGGER = LogManager.getLogger(RhymingController.class);
 
     public RhymingController(final TGBot bot) {
         super(bot);
@@ -61,6 +65,17 @@ public class RhymingController extends BaseMuzisController {
         sendAction(request.getChatId().toString(), ActionType.TYPING);
 
         final Rhyme rhyme = CleverEngine.getRhyme(text);
+
+        LOGGER.info("RHYME_REPORT\t"
+                + session.getChatId() + "\t"
+                + session.getUser().getId() + "\t"
+                + session.getUser().getUserName() + "\t"
+                + session.getUser().getFirstName() + "\t"
+                + session.getUser().getLastName() + "\t"
+                + text.replaceAll("\t", " ") + "\t"
+                + (rhyme.getRhyme() == null ? "NO_RHYME" : rhyme.getRhyme()) + "\t"
+                + rhyme.getGopSong().getName() + "\t"
+                + rhyme.getGopSong().getAuthor());
 
         if (rhyme != null) {
             onRhymeFound(request, session, rhyme);

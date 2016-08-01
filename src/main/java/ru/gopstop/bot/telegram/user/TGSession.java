@@ -63,4 +63,7 @@ public class TGSession {
         return sessionParams.remove(key);
     }
 
+    public User getUser() {
+        return user;
+    }
 }
