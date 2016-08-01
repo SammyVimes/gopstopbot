@@ -41,11 +41,13 @@ public final class LinesIndexer {
         return INSTANCE;
     }
 
+    private static final Logger LOGGER;
+
     static {
+        LOGGER = LogManager.getLogger(LinesIndexer.class);
         INSTANCE = new LinesIndexer(DATA_PATH, "index/");
     }
 
-    private static final Logger LOGGER = LogManager.getLogger(LinesIndexer.class);
 
     private IndexWriter writer;
 
