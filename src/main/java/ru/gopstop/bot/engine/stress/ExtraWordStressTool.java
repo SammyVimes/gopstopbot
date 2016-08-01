@@ -1,4 +1,4 @@
-package ru.gopstop.bot.engine;
+package ru.gopstop.bot.engine.stress;
 
 import java.util.Arrays;
 import java.util.Set;

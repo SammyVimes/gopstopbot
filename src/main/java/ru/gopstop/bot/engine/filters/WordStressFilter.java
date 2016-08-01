@@ -1,6 +1,6 @@
 package ru.gopstop.bot.engine.filters;
 
-import ru.gopstop.bot.engine.WordStressMap;
+import ru.gopstop.bot.engine.stress.WordStressMap;
 import ru.gopstop.bot.engine.search.FoundGopSong;
 
 /**

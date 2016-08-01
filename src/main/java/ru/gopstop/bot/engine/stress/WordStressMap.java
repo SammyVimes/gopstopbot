@@ -1,4 +1,4 @@
-package ru.gopstop.bot.engine;
+package ru.gopstop.bot.engine.stress;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

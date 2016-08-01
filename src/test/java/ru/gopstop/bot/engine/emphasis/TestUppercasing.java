@@ -1,7 +1,7 @@
 package ru.gopstop.bot.engine.emphasis;
 
 import junit.framework.TestCase;
-import ru.gopstop.bot.engine.ExtraWordStressTool;
+import ru.gopstop.bot.engine.stress.ExtraWordStressTool;
 
 /**
  * Created by aam on 31.07.16.

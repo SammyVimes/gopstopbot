@@ -1,7 +1,7 @@
 package ru.gopstop.bot.engine.search.preprocessing;
 
 import com.google.common.base.Joiner;
-import ru.gopstop.bot.engine.ExtraWordStressTool;
+import ru.gopstop.bot.engine.stress.ExtraWordStressTool;
 
 import java.util.ArrayList;
 import java.util.Arrays;
