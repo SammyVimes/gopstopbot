@@ -6,10 +6,11 @@
         </Console>
         <RollingFile name="RollingFile"
                      fileName="all.log"
-                     filePattern="all.%d{yyyy-MM-dd}.%i.log">
+                     filePattern="all.%d{yyyy-MM-dd}.%i.log"
+                     append="true">
             <PatternLayout pattern="%d{yyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
             <Policies>
-                <TimeBasedTriggeringPolicy />
+                <TimeBasedTriggeringPolicy/>
                 <SizeBasedTriggeringPolicy size="1 MB"/>
             </Policies>
             <DefaultRolloverStrategy max="15"/>

@@ -17,7 +17,7 @@ public final class TweetGen {
 
         final String tweet = "— " + userInpuit + "\n"
                 + "— " + botAnswer + "\n"
-                + "gop_stop_bot@telegram ";
+                + "@gop_stop_bot";
 
         final String tweetLink =
                 "http://twitter.com/share?text=" + URLEncoder.encode(tweet)

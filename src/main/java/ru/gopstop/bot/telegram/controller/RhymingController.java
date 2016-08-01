@@ -90,7 +90,7 @@ public class RhymingController extends BaseMuzisController {
         sendHtmlMessage(
                 request.getChatId().toString(),
                 String.format(
-                        "Рифмы подъехали\n<b>%s</b>\n(%s - %s)",
+                        "<b>%s</b>\n(%s - %s)",
                         rhyme.getRhyme(), gopSong.getAuthor(), gopSong.getName()));
 
         String gopSongName = gopSong.getName().replace("-", " "); // иначе не ищет!

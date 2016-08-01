@@ -1,22 +1,12 @@
 package ru.gopstop.bot.engine.stress;
 
-import java.util.Arrays;
-import java.util.Set;
-import java.util.stream.Collectors;
+import static ru.gopstop.bot.engine.tools.PhoneticsKnowledgeTools.*;
 
 /**
  * Получение ударений в слове по паттерну, полученному с помощью словаря
  * Created by aam on 31.07.16.
  */
 public final class ExtraWordStressTool {
-
-    private static final String[] VOWELS = new String[]{"а", "ы", "о", "э", "е", "я", "и", "ю", "ё", "у"};
-
-    private static final Set<Character> VOWELS_SET =
-            Arrays
-                    .stream(VOWELS)
-                    .map(s -> s.charAt(0))
-                    .collect(Collectors.toSet());
 
     public static String upperCaseByPattern(final String word, final String pattern) {
 

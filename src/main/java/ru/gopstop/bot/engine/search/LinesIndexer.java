@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
  */
 public final class LinesIndexer {
 
-    private static final int ANALYZED_POSTFIX_SIZE = 5;
+    private static final int ANALYZED_POSTFIX_SIZE = 7;
 
     private static final int INDEXING_REPORT_STEP = 500;
 
