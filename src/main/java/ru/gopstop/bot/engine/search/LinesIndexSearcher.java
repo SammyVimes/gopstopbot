@@ -44,6 +44,11 @@ class LinesIndexSearcher {
             final BooleanQuery q = new BooleanQuery();
             final String processedRequest = BasicPreprocessor.postfix(request);
 
+            if (processedRequest == null || processedRequest.isEmpty()) {
+                LOGGER.warn("Processed request is empty all of a sudden: [" + processedRequest + "]");
+                return Collections.emptyList();
+            }
+
             // тупая комбинация префиксных запросов
             for (int i = ANALYZED_POSTFIX_LENGTH; i > 0; i--) {
                 q.add(new PrefixQuery(
