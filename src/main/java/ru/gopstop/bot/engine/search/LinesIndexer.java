@@ -120,8 +120,6 @@ public final class LinesIndexer {
 
                 final GopSong song = gopSongIterator.next();
 
-                LOGGER.info(song.getAuthor());
-
                 if (counter % INDEXING_REPORT_STEP == 0) {
                     LOGGER.info("Indexed songs: " + counter + " / " + size);
                 }
