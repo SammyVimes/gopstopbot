@@ -38,7 +38,7 @@ abstract class BaseMuzisController extends Controller {
     void sendSongAndCover(final Message request, final Song song) throws TelegramApiException {
 
         if (!TextUtils.isEmpty(song.getPoster())) {
-            sendMessage(request.getChatId().toString(), "Вот фотокарточка");
+            // sendMessage(request.getChatId().toString(), "Вот фотокарточка");
 
             // скачиваем (или берём с диска) картинку и отправляем
             File cachedFile = FileUtils.getCachedFile(song.getPoster());
@@ -58,7 +58,7 @@ abstract class BaseMuzisController extends Controller {
 
             sendPhoto.setNewPhoto(cachedFile);
             getBot().sendPhoto(sendPhoto);
-            sendMessage(request.getChatId().toString(), "Сейчас и песню пришлю");
+            // sendMessage(request.getChatId().toString(), "Сейчас и песню пришлю");
 
         } else {
             sendMessage(request.getChatId().toString(), "Сейчас пришлю");

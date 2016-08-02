@@ -93,6 +93,15 @@ public class RhymingController extends BaseMuzisController {
                         "<b>%s</b>\n(%s - %s)",
                         rhyme.getRhyme(), gopSong.getAuthor(), gopSong.getName()));
 
+        sendMessage(
+                request.getChatId().toString(),
+                "[Рассказать пацанам из твиттера]("
+                        + TweetGen.generate(
+                        request.getText(),
+                        rhyme.getRhyme(),
+                        rhyme.getGopSong().getName())
+                        + ")");
+
         String gopSongName = gopSong.getName().replace("-", " "); // иначе не ищет!
 
         final SearchResult res = getMuzisService().search(gopSongName + " " + gopSong.getAuthor(), null, null, null, null, null, null);
@@ -148,34 +157,16 @@ public class RhymingController extends BaseMuzisController {
                             reply,
                             replyKeyboardMarkup);
             getBot().sendMessage(msg);
-
-            sendMessage(
-                    request.getChatId().toString(),
-                    "[Рассказать пацанам из твиттера]("
-                            + TweetGen.generate(
-                            request.getText(),
-                            rhyme.getRhyme(),
-                            rhyme.getGopSong().getName())
-                            + ")");
-
             return;
         }
 
         final Song song = foundSong.get();
         sendSongAndCover(request, song);
-
-        sendMessage(
-                request.getChatId().toString(),
-                "[Рассказать пацанам из твиттера]("
-                        + TweetGen.generate(
-                        request.getText(),
-                        rhyme.getRhyme(),
-                        rhyme.getGopSong().getName())
-                        + ")");
-        sendMessage(request.getChatId().toString(), "Послушай, а потом можешь искать новые рифмы и песни");
+        // sendMessage(request.getChatId().toString(), "Послушай, а потом можешь искать новые рифмы и песни");
     }
 
     private void onMain(final Message request, final TGSession session) throws TelegramApiException {
+
         final ReplyKeyboardMarkup replyKeyboardMarkup =
                 buildKeyboard(Collections.singletonList(BACK));
 
@@ -183,7 +174,7 @@ public class RhymingController extends BaseMuzisController {
                 createMessageWithKeyboard(
                         request.getChatId().toString(),
                         request.getMessageId(),
-                        "Сегодня мы с тобой рифмуем... Напиши что-нибудь, по-братски прошу",
+                        "Сегодня мы с тобой рифмуем... \nНапиши что-нибудь, по-братски прошу.",
                         replyKeyboardMarkup);
         getBot().sendMessage(msg);
     }
