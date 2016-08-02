@@ -46,7 +46,7 @@ public class TGBot extends TelegramLongPollingBot {
 
         final SongSearchController songSearchController = new SongSearchController(this);
         controllerMap.put(songSearchController.getKey(), songSearchController);
-        mainControllers.add(songSearchController);
+//        mainControllers.add(songSearchController);
 
         final SettingsController settingsController = new SettingsController(this);
         controllerMap.put(settingsController.getKey(), settingsController);
