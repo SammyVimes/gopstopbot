@@ -11,7 +11,7 @@ import java.net.URLEncoder;
  */
 public final class TweetGen {
 
-    private static final Logger LOGGER = LogManager.getLogger(FileUtils.class);
+    private static final Logger LOGGER = LogManager.getLogger(TweetGen.class);
 
     public static String generate(final String userInpuit, final String botAnswer, final String songTitle) {
 

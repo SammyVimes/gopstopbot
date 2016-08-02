@@ -18,6 +18,7 @@ import ru.gopstop.bot.telegram.TGBot;
 import ru.gopstop.bot.telegram.internal.Emoji;
 import ru.gopstop.bot.telegram.user.TGSession;
 import ru.gopstop.bot.util.TweetGen;
+import ru.gopstop.bot.util.VKGen;
 
 import java.util.Collections;
 import java.util.List;
@@ -95,12 +96,19 @@ public class RhymingController extends BaseMuzisController {
 
         sendMessage(
                 request.getChatId().toString(),
-                "[Рассказать пацанам из твиттера]("
+                "<b>Рассказать пацанам из "
+                        + "[VK]("
+                        + VKGen.generate(
+                        request.getText(),
+                        rhyme.getRhyme(),
+                        rhyme.getGopSong().getName())
+                        + ") | [TWITTER]("
                         + TweetGen.generate(
                         request.getText(),
                         rhyme.getRhyme(),
                         rhyme.getGopSong().getName())
-                        + ")");
+                        + ")"
+                        + "</b>");
 
         String gopSongName = gopSong.getName().replace("-", " "); // иначе не ищет!
 
