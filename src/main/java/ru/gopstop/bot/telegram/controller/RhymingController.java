@@ -96,19 +96,18 @@ public class RhymingController extends BaseMuzisController {
 
         sendMessage(
                 request.getChatId().toString(),
-                "<b>Рассказать пацанам из "
+                "Рассказать пацанам из "
                         + "[VK]("
                         + VKGen.generate(
                         request.getText(),
                         rhyme.getRhyme(),
                         rhyme.getGopSong().getName())
-                        + ") | [TWITTER]("
+                        + ") или [TWITTER]("
                         + TweetGen.generate(
                         request.getText(),
                         rhyme.getRhyme(),
                         rhyme.getGopSong().getName())
-                        + ")"
-                        + "</b>");
+                        + ")");
 
         String gopSongName = gopSong.getName().replace("-", " "); // иначе не ищет!
 
