@@ -44,7 +44,9 @@ abstract class BaseMuzisController extends Controller {
             File cachedFile = FileUtils.getCachedFile(song.getPoster());
 
             if (cachedFile == null) {
-                cachedFile = FileUtils.writeResponseBodyToDisk(resourcesService.downloadFile(song.getPoster()), song.getPoster());
+                cachedFile =
+                        FileUtils.writeResponseBodyToDisk(
+                                resourcesService.downloadFile(song.getPoster()), song.getPoster());
             }
 
             sendAction(request.getChatId().toString(), ActionType.UPLOADPHOTO);

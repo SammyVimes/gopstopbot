@@ -88,28 +88,20 @@ public class RhymingController extends BaseMuzisController {
     private void onRhymeFound(final Message request, final TGSession session, final Rhyme rhyme) throws TelegramApiException {
 
         final GopSong gopSong = rhyme.getGopSong();
+
+        final String sharingText =
+                String.format(
+                        "Рассказать пацанам из [вконтача](%s) или [твиттерка](%s)",
+                        VKGen.generate(request.getText(), rhyme.getRhyme(), rhyme.getGopSong().getName()),
+                        TweetGen.generate(request.getText(), rhyme.getRhyme(), rhyme.getGopSong().getName()));
+
         sendHtmlMessage(
                 request.getChatId().toString(),
                 String.format(
-                        "<b>%s</b>\n(%s - %s)",
-                        rhyme.getRhyme(), gopSong.getAuthor(), gopSong.getName()));
+                        "<b>%s</b>\n(%s - %s)\n%s",
+                        rhyme.getRhyme(), gopSong.getAuthor(), gopSong.getName(), sharingText));
 
-        sendMessage(
-                request.getChatId().toString(),
-                "Рассказать пацанам из "
-                        + "[VK]("
-                        + VKGen.generate(
-                        request.getText(),
-                        rhyme.getRhyme(),
-                        rhyme.getGopSong().getName())
-                        + ") или [TWITTER]("
-                        + TweetGen.generate(
-                        request.getText(),
-                        rhyme.getRhyme(),
-                        rhyme.getGopSong().getName())
-                        + ")");
-
-        String gopSongName = gopSong.getName().replace("-", " "); // иначе не ищет!
+        final String gopSongName = gopSong.getName().replace("-", " "); // иначе не ищет!
 
         final SearchResult res = getMuzisService().search(gopSongName + " " + gopSong.getAuthor(), null, null, null, null, null, null);
 
