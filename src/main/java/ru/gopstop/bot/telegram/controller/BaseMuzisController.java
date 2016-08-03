@@ -61,7 +61,10 @@ abstract class BaseMuzisController extends Controller {
                 if (cachedFile != null) {
                     try {
                         BufferedImage srcImage = ImageIO.read(cachedFile);
-                        Scalr.resize(srcImage, IMAGE_PARAM);
+                        ImageIO.write(
+                                Scalr.resize(srcImage, IMAGE_PARAM),
+                                "jpg",
+                                cachedFile);
                     } catch (final IOException ioe) {
                         LOGGER.error("Can't read and resize image " + cachedFile, ioe);
                     }
