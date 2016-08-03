@@ -58,17 +58,17 @@ abstract class BaseMuzisController extends Controller {
                         FileUtils.writeResponseBodyToDisk(
                                 resourcesService.downloadFile(song.getPoster()),
                                 song.getPoster());
-                if (cachedFile != null) {
-                    try {
-                        BufferedImage srcImage = ImageIO.read(cachedFile);
-                        ImageIO.write(
-                                Scalr.resize(srcImage, IMAGE_PARAM),
-                                "jpg",
-                                cachedFile);
-                    } catch (final IOException ioe) {
-                        LOGGER.error("Can't read and resize image " + cachedFile, ioe);
-                    }
-                }
+//                if (cachedFile != null) {
+//                    try {
+//                        BufferedImage srcImage = ImageIO.read(cachedFile);
+//                        ImageIO.write(
+//                                Scalr.resize(srcImage, IMAGE_PARAM),
+//                                "jpg",
+//                                cachedFile);
+//                    } catch (final IOException ioe) {
+//                        LOGGER.error("Can't read and resize image " + cachedFile, ioe);
+//                    }
+//                }
             }
 
             sendAction(request.getChatId().toString(), ActionType.UPLOADPHOTO);
