@@ -30,7 +30,7 @@ abstract class BaseMuzisController extends Controller {
 
     private static final Logger LOGGER = LogManager.getLogger(BaseMuzisController.class);
 
-    private static final int IMAGE_PARAM = 10;
+    private static final int IMAGE_PARAM = 200;
 
     private MuzisSearchHelper muzisSearchHelper = new MuzisSearchHelper();
 
