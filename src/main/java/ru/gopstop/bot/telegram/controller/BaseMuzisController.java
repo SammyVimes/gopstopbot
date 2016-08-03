@@ -46,7 +46,8 @@ abstract class BaseMuzisController extends Controller {
             if (cachedFile == null) {
                 cachedFile =
                         FileUtils.writeResponseBodyToDisk(
-                                resourcesService.downloadFile(song.getPoster()), song.getPoster());
+                                resourcesService.downloadFile(song.getPoster()),
+                                song.getPoster());
             }
 
             sendAction(request.getChatId().toString(), ActionType.UPLOADPHOTO);
@@ -54,7 +55,9 @@ abstract class BaseMuzisController extends Controller {
             sendPhoto.setChatId(request.getChatId().toString());
 
             if (cachedFile == null) {
-                sendMessage(request.getChatId().toString(), "Что-то пошло не так со скачиванием картинки");
+                sendMessage(
+                        request.getChatId().toString(),
+                        "Что-то пошло не так со скачиванием картинки");
                 return;
             }
 

@@ -98,8 +98,11 @@ public class RhymingController extends BaseMuzisController {
         sendHtmlMessage(
                 request.getChatId().toString(),
                 String.format(
-                        "<b>%s</b>\n(%s - %s)\n%s",
-                        rhyme.getRhyme(), gopSong.getAuthor(), gopSong.getName(), sharingText));
+                        "<b>%s</b>\n(%s - %s)",
+                        rhyme.getRhyme(), gopSong.getAuthor(), gopSong.getName()));
+        sendMessage(
+                request.getChatId().toString(),
+                sharingText);
 
         final String gopSongName = gopSong.getName().replace("-", " "); // иначе не ищет!
 
