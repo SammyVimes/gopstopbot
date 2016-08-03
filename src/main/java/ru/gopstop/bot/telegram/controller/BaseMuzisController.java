@@ -30,6 +30,8 @@ abstract class BaseMuzisController extends Controller {
 
     private static final Logger LOGGER = LogManager.getLogger(BaseMuzisController.class);
 
+    private static final int IMAGE_PARAM = 100;
+
     private MuzisSearchHelper muzisSearchHelper = new MuzisSearchHelper();
 
     private MuzisService muzisService = MuzisServiceBuilder.getMuzisService();
@@ -59,7 +61,7 @@ abstract class BaseMuzisController extends Controller {
                 if (cachedFile != null) {
                     try {
                         BufferedImage srcImage = ImageIO.read(cachedFile);
-                        Scalr.resize(srcImage, 100);
+                        Scalr.resize(srcImage, IMAGE_PARAM);
                     } catch (final IOException ioe) {
                         LOGGER.error("Can't read and resize image " + cachedFile, ioe);
                     }
