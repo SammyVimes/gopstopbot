@@ -1,6 +1,9 @@
 package ru.gopstop.bot.telegram.controller;
 
 import org.apache.http.util.TextUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.imgscalr.Scalr;
 import org.telegram.telegrambots.TelegramApiException;
 import org.telegram.telegrambots.api.methods.ActionType;
 import org.telegram.telegrambots.api.methods.send.SendAudio;
@@ -15,12 +18,17 @@ import ru.gopstop.bot.muzis.entity.Song;
 import ru.gopstop.bot.telegram.TGBot;
 import ru.gopstop.bot.util.Translit;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 
 /**
  * Created by Semyon on 30.07.2016.
  */
 abstract class BaseMuzisController extends Controller {
+
+    private static final Logger LOGGER = LogManager.getLogger(BaseMuzisController.class);
 
     private MuzisSearchHelper muzisSearchHelper = new MuzisSearchHelper();
 
@@ -48,6 +56,14 @@ abstract class BaseMuzisController extends Controller {
                         FileUtils.writeResponseBodyToDisk(
                                 resourcesService.downloadFile(song.getPoster()),
                                 song.getPoster());
+                if (cachedFile != null) {
+                    try {
+                        BufferedImage srcImage = ImageIO.read(cachedFile);
+                        Scalr.resize(srcImage, 100);
+                    } catch (final IOException ioe) {
+                        LOGGER.error("Can't read and resize image " + cachedFile, ioe);
+                    }
+                }
             }
 
             sendAction(request.getChatId().toString(), ActionType.UPLOADPHOTO);
