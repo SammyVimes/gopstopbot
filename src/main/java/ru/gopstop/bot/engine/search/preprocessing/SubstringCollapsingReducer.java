@@ -30,6 +30,7 @@ class SubstringCollapsingReducer implements LastWordProcessor {
         // боремся с парными гласными и мягким знаком
 
         for (final Character jotVChar : VOWELS_PAIRS.keySet()) {
+
             final String jotV = jotVChar + "";
             final String jotVPair = VOWELS_PAIRS.get(jotVChar) + "";
 
@@ -43,10 +44,17 @@ class SubstringCollapsingReducer implements LastWordProcessor {
             replacements.put("ь" + jotVPair, "й" + jotVPair);
             replacements.put("ь" + jotV.toUpperCase(), "й" + jotVPair.toUpperCase());
             replacements.put("ь" + jotVPair.toUpperCase(), "й" + jotVPair.toUpperCase());
+
+            // ударные йотированные можно заменить на парные
+            // (иногда могут быть странные спецэффекты, посмотрим, как оно будет жить в продакшене)
+            replacements.put(jotV.toUpperCase(), jotVPair.toUpperCase());
         }
+
         replacements.put("ьИ", "йИ");
         replacements.put("ьи", "йи");
 
+        // после того как заменили, где надо, ё на йо, можно вообще всё
+        replacements.put("ё", "О");
     }
 
     @Override

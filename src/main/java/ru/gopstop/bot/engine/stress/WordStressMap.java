@@ -229,6 +229,11 @@ public final class WordStressMap {
 
         if (words.length > 0) {
             words[words.length - 1] = fixYo(words[words.length - 1]);
+
+            // фиксим и второе с конца, может быть полезно для коротких слов
+            if (words[words.length - 1].length() < 4 && words.length > 1) {
+                words[words.length - 2] = fixYo(words[words.length - 2]);
+            }
         }
 
         String rhythmicPattern = "";
