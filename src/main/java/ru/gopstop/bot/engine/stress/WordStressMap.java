@@ -167,20 +167,31 @@ public final class WordStressMap {
                 .split(" ");
     }
 
+    /**
+     * Ищем в словаре слово, если подозреваем, что просто требуется Ё-фикация
+     */
     private static String fixYo(final String word) {
+
+        //todo: write effective code
 
         if (!stressDict.containsKey(word) && word.contains("е")) {
 
-            final String attempt0 = word.replaceFirst("е", "ё");
-            if (stressDict.containsKey(attempt0)) {
-                LOGGER.debug("yofication0 " + attempt0 + " <= " + word);
-                return attempt0;
-            }
+            final StringBuilder sb = new StringBuilder(word);
 
-            final String attempt1 = word.replaceAll("е", "ё");
-            if (stressDict.containsKey(attempt1)) {
-                LOGGER.debug("yofication0 " + attempt1);
-                return attempt1;
+            // чаще всего всё-таки одна буква 'ё'
+            for (int i = 0; i < word.length(); i++) {
+
+                if (word.charAt(i) == 'е') {
+
+                    sb.setCharAt(i, 'ё');
+                    final String attempt = sb.toString();
+
+                    if (stressDict.containsKey(attempt)) {
+                        return attempt;
+                    }
+
+                    sb.setCharAt(i, 'е');
+                }
             }
         }
         return word;
@@ -229,7 +240,7 @@ public final class WordStressMap {
             if (stressDict.get(words[i]) != null) {
                 final Pair<Integer, Set<Integer>> p = stressDict.get(words[i]);
 
-                // todo: make a smarter solution
+                // todo: find a smarter solution
                 final Integer randomStress = p.getRight().iterator().next();
                 curWordRhythmicPattern = Pair.of(p.getLeft(), randomStress);
             } else {

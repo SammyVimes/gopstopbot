@@ -24,6 +24,9 @@ public final class BasicPreprocessor {
         PROCESSORS.add(new ConsonantHack());
     }
 
+    /**
+     * Нехитрое преобразование постфикса (вместо нормальной фонетической транскрипции)
+     */
     public static String postfix(final String line, final boolean logStuff) {
 
         final String normalLine =
