@@ -41,5 +41,6 @@ public final class Transliteration {
         return result;
     }
 
-    private Transliteration() {}
+    private Transliteration() {
+    }
 }

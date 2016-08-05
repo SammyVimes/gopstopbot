@@ -1,7 +1,7 @@
 package ru.gopstop.bot.engine.filters;
 
-import ru.gopstop.bot.engine.stress.WordStressMap;
 import ru.gopstop.bot.engine.search.FoundGopSong;
+import ru.gopstop.bot.engine.stress.WordStressMap;
 
 /**
  * Отбрасываем сильно отличающиеся по ударениям на хвосте строки
