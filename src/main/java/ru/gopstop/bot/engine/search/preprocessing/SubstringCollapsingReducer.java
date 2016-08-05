@@ -1,5 +1,7 @@
 package ru.gopstop.bot.engine.search.preprocessing;
 
+import ru.gopstop.bot.util.Transliteration;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -44,6 +46,7 @@ class SubstringCollapsingReducer implements LastWordProcessor {
         }
         replacements.put("ьИ", "йИ");
         replacements.put("ьи", "йи");
+
     }
 
     @Override
@@ -55,6 +58,6 @@ class SubstringCollapsingReducer implements LastWordProcessor {
             result = result.replaceAll(substring.getKey(), substring.getValue());
         }
 
-        return result;
+        return Transliteration.fixEnglishWord(result);
     }
 }
