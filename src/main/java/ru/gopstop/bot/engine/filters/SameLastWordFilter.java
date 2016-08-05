@@ -34,11 +34,12 @@ public final class SameLastWordFilter {
         final String lastGop = reqR.get(reqR.size() - 1);
         final String lastUser = reqLL.get(reqLL.size() - 1);
 
-        if (lastGop.length() > UNACC_POSTFIX
-                && lastUser.length() > UNACC_POSTFIX
-                && lastGop.substring(lastGop.length() - UNACC_POSTFIX, lastGop.length())
-                .equals(lastUser.substring(lastUser.length() - UNACC_POSTFIX, lastUser.length()))) {
-            return false;
+        if (lastGop.length() >= UNACC_POSTFIX && lastUser.length() >= UNACC_POSTFIX) {
+            final String gopPosttfix =
+                    lastGop.substring(lastGop.length() - UNACC_POSTFIX, lastGop.length());
+            final String inputPostfix =
+                    lastUser.substring(lastUser.length() - UNACC_POSTFIX, lastUser.length());
+            return !gopPosttfix.equals(inputPostfix);
         }
 
         return !lastGop.equals(lastUser);

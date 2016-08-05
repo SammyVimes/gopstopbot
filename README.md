@@ -11,3 +11,4 @@
 
 ![А это что за невиданное чудовище? -- Это не чудовище. Это коза.]
 (https://raw.githubusercontent.com/SammyVimes/gopstopbot/master/leonov_morgaly.png)
+
