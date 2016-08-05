@@ -16,7 +16,7 @@ public final class SameLastWordFilter {
     /**
      * Дело в том, что это обычно то же слово с приставкой
      */
-    private static final int UNACC_POSTFIX = 5;
+    private static final int UNACC_POSTFIX = 4;
 
     private static List<String> buildLexemList(final String request) {
         return Arrays.asList(
