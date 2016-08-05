@@ -24,7 +24,7 @@ class LinesIndexSearcher {
 
     private static final Logger LOGGER = LogManager.getLogger(LinesIndexSearcher.class);
 
-    private static final int COUNT_RETURNED = 400;
+    private static final int COUNT_RETURNED = 1500;
 
     private static final int ANALYZED_POSTFIX_LENGTH = 7;
 
