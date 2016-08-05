@@ -20,7 +20,7 @@ public final class PhoneticsKnowledgeTools {
     public static final Map<Character, Character> VOWELS_PAIRS =
             Arrays
                     .stream("яа,ёо,юу,еэ".split(","))
-                    .collect(Collectors.toMap(s -> s.charAt(1), s -> s.charAt(0)));
+                    .collect(Collectors.toMap(s -> s.charAt(0), s -> s.charAt(1)));
 
     public static final Set<Character> VOWELS_SET =
             Arrays

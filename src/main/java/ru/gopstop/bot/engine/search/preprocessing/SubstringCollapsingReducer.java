@@ -26,7 +26,7 @@ class SubstringCollapsingReducer implements LastWordProcessor {
         replacements.put("тт", "т");
 
         // боремся с парными гласными и мягким знаком
-        
+
         for (final Character jotVChar : VOWELS_PAIRS.keySet()) {
             final String jotV = jotVChar + "";
             final String jotVPair = VOWELS_PAIRS.get(jotVChar) + "";
