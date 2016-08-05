@@ -159,12 +159,31 @@ public final class WordStressMap {
         return stressDict.size();
     }
 
-    private String[] processPoemLine(final String poemLine) {
+    private static String[] processPoemLine(final String poemLine) {
 
         return SymbolsUtils
                 .replaceUseless(poemLine.trim(), "")
                 .toLowerCase()
                 .split(" ");
+    }
+
+    private static String fixYo(final String word) {
+
+        if (!stressDict.containsKey(word) && word.contains("е")) {
+
+            final String attempt0 = word.replaceFirst("е", "ё");
+            if (stressDict.containsKey(attempt0)) {
+                LOGGER.debug("yofication0 " + attempt0 + " <= " + word);
+                return attempt0;
+            }
+
+            final String attempt1 = word.replaceAll("е", "ё");
+            if (stressDict.containsKey(attempt1)) {
+                LOGGER.debug("yofication0 " + attempt1);
+                return attempt1;
+            }
+        }
+        return word;
     }
 
     private String formRhythmicPattern(final String word, final Pair<Integer, Integer> rhythmicPattern) {
@@ -196,6 +215,11 @@ public final class WordStressMap {
     public String findRhythmicPattern(final String poemLine) {
 
         final String[] words = processPoemLine(poemLine);
+
+        if (words.length > 0) {
+            words[words.length - 1] = fixYo(words[words.length - 1]);
+        }
+
         String rhythmicPattern = "";
 
         for (int i = 0; i < words.length; i++) {
