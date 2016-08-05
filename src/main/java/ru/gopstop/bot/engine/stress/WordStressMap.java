@@ -25,6 +25,8 @@ public final class WordStressMap {
 
     private static final int BUILDING_REPORTING_FREQUENCY = 10000;
 
+    private static final int MIN_SIZE_FOR_YOFICATION_SECOND_WORD = 4;
+
     private static final String VOWELS_JOINED_PATTERN = Joiner.on("|").join(PhoneticsKnowledgeTools.VOWELS_SET);
 
     /**
@@ -231,7 +233,7 @@ public final class WordStressMap {
             words[words.length - 1] = fixYo(words[words.length - 1]);
 
             // фиксим и второе с конца, может быть полезно для коротких слов
-            if (words[words.length - 1].length() < 4 && words.length > 1) {
+            if (words[words.length - 1].length() < MIN_SIZE_FOR_YOFICATION_SECOND_WORD && words.length > 1) {
                 words[words.length - 2] = fixYo(words[words.length - 2]);
             }
         }
