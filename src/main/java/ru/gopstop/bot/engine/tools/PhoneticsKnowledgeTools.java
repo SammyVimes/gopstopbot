@@ -17,6 +17,11 @@ public final class PhoneticsKnowledgeTools {
                     .stream("кг,шж,сз,фв,пб,тд".split(","))
                     .collect(Collectors.toMap(s -> s.charAt(1), s -> s.charAt(0)));
 
+    public static final Map<Character, Character> VOWELS_PAIRS =
+            Arrays
+                    .stream("яа,ёо,юу,еэ".split(","))
+                    .collect(Collectors.toMap(s -> s.charAt(1), s -> s.charAt(0)));
+
     public static final Set<Character> VOWELS_SET =
             Arrays
                     .stream(VOWELS)
