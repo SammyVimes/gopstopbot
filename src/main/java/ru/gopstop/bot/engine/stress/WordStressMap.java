@@ -189,6 +189,7 @@ public final class WordStressMap {
                     final String attempt = sb.toString();
 
                     if (stressDict.containsKey(attempt)) {
+                        LOGGER.info("Yofication: " + word + " -> " + attempt);
                         return attempt;
                     }
 
