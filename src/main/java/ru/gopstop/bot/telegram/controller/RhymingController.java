@@ -19,6 +19,7 @@ import ru.gopstop.bot.telegram.internal.Emoji;
 import ru.gopstop.bot.telegram.user.TGSession;
 import ru.gopstop.bot.util.TweetGen;
 import ru.gopstop.bot.util.VKGen;
+import java.util.ArrayList;
 
 import java.util.Collections;
 import java.util.List;
@@ -132,10 +133,12 @@ public class RhymingController extends BaseMuzisController {
                     .orElseGet(Collections::emptyList);
 
             // к названию приклеиваем "Слушать ", чтобы потом было понятно, что это запрос на прослушивание
-            final List<String> keyboard = songs
-                    .stream()
-                    .map(song -> "Слушать " + song.getTitle())
-                    .collect(Collectors.toList());
+            // NB! временно отрываю
+            final List<String> keyboard = new ArrayList<>();
+            // songs
+                    // .stream()
+                    // .map(song -> "Слушать " + song.getTitle())
+                    // .collect(Collectors.toList());
 
             final String reply;
 
