@@ -42,7 +42,7 @@ public final class CleverEngine {
 
             // let's add some spice and randomize the whole thing
             final FoundGopSong topFoundGopSong = foundGopSongList.get(0);
-            
+
             final List<FoundGopSong> filteredList =
                     foundGopSongList
                             .stream()
@@ -53,7 +53,7 @@ public final class CleverEngine {
             final Random random = new Random();
             final int chosenRandomRhymeId = random.nextInt(filteredList.size());
             final FoundGopSong chosenSong = filteredList.get(chosenRandomRhymeId);
-            LOGGER.info("Chosen gop song: " + chosenSong);
+            LOGGER.info("Chosen gop song number " + chosenRandomRhymeId + ": " + chosenSong);
 
             return new Rhyme(chosenSong.getRhyme(), chosenSong.getGopSong());
         } else {

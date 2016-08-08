@@ -34,4 +34,8 @@ public class FoundGopSong {
     public double getScore() {
         return score;
     }
+
+    public String toString() {
+        return "FoundGopSong{rhyme='" + rhyme + "', gopSong=" + gopSong + "}";
+    }
 }
