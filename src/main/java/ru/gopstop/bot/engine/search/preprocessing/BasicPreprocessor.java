@@ -4,6 +4,7 @@ import com.google.common.base.Joiner;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.gopstop.bot.engine.stress.ExtraWordStressTool;
+import ru.gopstop.bot.engine.stress.WordStressMap;
 import ru.gopstop.bot.util.SymbolsUtils;
 
 import java.util.ArrayList;
@@ -46,7 +47,7 @@ public final class BasicPreprocessor {
 
         // проставляем последнему слову ударения
         String lastStressed =
-                ExtraWordStressTool.upperCaseStress(splitted[len]);
+                ExtraWordStressTool.upperCaseStress(WordStressMap.fixYo(splitted[len]));
 
         if (logStuff) {
             LOGGER.info("WORD2STRESSED\t" + splitted[len] + "\t" + lastStressed);

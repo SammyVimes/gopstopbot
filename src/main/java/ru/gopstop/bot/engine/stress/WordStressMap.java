@@ -172,7 +172,7 @@ public final class WordStressMap {
     /**
      * Ищем в словаре слово, если подозреваем, что просто требуется Ё-фикация
      */
-    private static String fixYo(final String word) {
+    public static String fixYo(final String word) {
 
         //todo: write effective code
 
