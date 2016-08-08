@@ -27,6 +27,7 @@ class SubstringCollapsingReducer implements LastWordProcessor {
         replacements.put("цц", "ц");
         replacements.put("кк", "к");
         replacements.put("тт", "т");
+        replacements.put("лн", "н");
 
         // боремся с парными гласными и мягким знаком
 
