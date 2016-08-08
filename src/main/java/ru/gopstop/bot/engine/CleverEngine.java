@@ -3,6 +3,7 @@ package ru.gopstop.bot.engine;
 import ru.gopstop.bot.engine.entities.Rhyme;
 import ru.gopstop.bot.engine.filters.SameLastWordFilter;
 import ru.gopstop.bot.engine.filters.SameLineFilter;
+import ru.gopstop.bot.engine.filters.UglyDataFilter;
 import ru.gopstop.bot.engine.filters.WordStressFilter;
 import ru.gopstop.bot.engine.search.FoundGopSong;
 import ru.gopstop.bot.engine.search.LinesIndexer;
@@ -27,6 +28,7 @@ public final class CleverEngine {
                         .filter(g -> SameLineFilter.filter(userInput, g))
                         .filter(g -> WordStressFilter.filter(userInput, g))
                         .filter(g -> SameLastWordFilter.filter(userInput, g))
+                        .filter(g -> UglyDataFilter.filter(userInput, g))
                         .collect(Collectors.toList());
 
         if (!foundGopSongList.isEmpty()) {
