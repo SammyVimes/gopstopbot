@@ -99,7 +99,7 @@ public class RhymingController extends BaseMuzisController {
         sendHtmlMessage(
                 request.getChatId().toString(),
                 String.format(
-                        "«%s»\n<b>%s</b>\n(%s - %s)",
+                        "<b>%s\n%s</b>\n(%s — %s)",
                         request.getText(), rhyme.getRhyme(),
                         gopSong.getAuthor(), gopSong.getName()));
         sendMessage(
