@@ -135,6 +135,7 @@ public class RhymingController extends BaseMuzisController {
 
             // к названию приклеиваем "Слушать ", чтобы потом было понятно, что это запрос на прослушивание
             // NB! временно отрываю
+            //todo: либо убить совсем, либо вернуть, но поправить историю с кнопками
             final List<String> keyboard = new ArrayList<>();
             // songs
             // .stream()
