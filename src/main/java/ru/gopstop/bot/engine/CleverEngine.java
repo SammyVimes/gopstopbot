@@ -1,5 +1,7 @@
 package ru.gopstop.bot.engine;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ru.gopstop.bot.engine.entities.Rhyme;
 import ru.gopstop.bot.engine.filters.SameLastWordFilter;
 import ru.gopstop.bot.engine.filters.SameLineFilter;
@@ -17,6 +19,8 @@ import java.util.stream.Collectors;
  */
 public final class CleverEngine {
 
+    private static final Logger LOGGER = LogManager.getLogger(CleverEngine.class);
+
     public static Rhyme getRhyme(final String userInput) {
 
         //  тупой поиск без учёта ударения
@@ -32,6 +36,16 @@ public final class CleverEngine {
                         .collect(Collectors.toList());
 
         if (!foundGopSongList.isEmpty()) {
+            // let's add some spice
+//            final Random random = new Random();
+//            final int chosenRandomRhyme = random.nextInt(foundGopSongList.size());
+
+            for (int i = 0; i < Math.min(foundGopSongList.size(), 50); i++) {
+                LOGGER.info(userInput + "\t|\t"
+                        + foundGopSongList.get(i).getRhyme() + "\t|\t" +
+                        foundGopSongList.get(i).getScore());
+            }
+
             final FoundGopSong foundGopSong = foundGopSongList.get(0);
             return new Rhyme(foundGopSong.getRhyme(), foundGopSong.getGopSong());
         } else {

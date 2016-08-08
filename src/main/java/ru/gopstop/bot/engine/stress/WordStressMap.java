@@ -33,7 +33,8 @@ public final class WordStressMap {
      * Варианты ударений для данного слова
      * слово -> (число гласных, [порядковые номера ОДНОГО ударного слога, начиная с нуля])
      */
-    private static HashMap<String, Pair<Integer, Set<Integer>>> stressDict = new HashMap<>(DICT_SIZE_HINT);
+    private static HashMap<String, Pair<Integer, Set<Integer>>> stressDict =
+            new HashMap<>(DICT_SIZE_HINT);
 
     private static final WordStressMap INSTANCE;
 
@@ -50,14 +51,14 @@ public final class WordStressMap {
         }
     }
 
-    private int countVowels(final String word) {
+    private static int countVowels(final String word) {
         return word.length() - word.replaceAll(VOWELS_JOINED_PATTERN, "").length();
     }
 
     /**
      * Определяем положение ударения в полном слове
      */
-    private int stressPosition(final String word) {
+    private static int stressPosition(final String word) {
 
         final String fixedWord = word.replaceAll("-", "");
 
@@ -71,7 +72,7 @@ public final class WordStressMap {
         }
     }
 
-    private void parseLine(final String line) {
+    private static void parseLine(final String line) {
 
         final String[] parts = line.split("#");
         final String[] words = parts[1].split(",");
@@ -161,7 +162,7 @@ public final class WordStressMap {
         return stressDict.size();
     }
 
-    private static String[] processPoemLine(final String poemLine) {
+    static String[] processPoemLine(final String poemLine) {
 
         return SymbolsUtils
                 .replaceUseless(poemLine.trim(), "")
@@ -172,7 +173,7 @@ public final class WordStressMap {
     /**
      * Ищем в словаре слово, если подозреваем, что просто требуется Ё-фикация
      */
-    public static String fixYo(final String word) {
+    static String fixYo(final String word) {
 
         //todo: write effective code
 
@@ -199,7 +200,7 @@ public final class WordStressMap {
         return word;
     }
 
-    private String formRhythmicPattern(final String word, final Pair<Integer, Integer> rhythmicPattern) {
+    static String formRhythmicPattern(final String word, final Pair<Integer, Integer> rhythmicPattern) {
         // комменты расставил как догадался
         // rhythmicPatter[0] -- кол-во слогов
         char[] str = new char[rhythmicPattern.getLeft()];
@@ -261,7 +262,7 @@ public final class WordStressMap {
         return rhythmicPattern;
     }
 
-    public Map<String, Pair<Integer, Set<Integer>>> getCoreWordDict() {
+    public static Map<String, Pair<Integer, Set<Integer>>> getCoreWordDict() {
         return stressDict;
     }
 }

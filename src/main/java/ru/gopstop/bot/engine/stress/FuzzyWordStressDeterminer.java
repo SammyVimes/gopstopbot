@@ -25,7 +25,7 @@ public final class FuzzyWordStressDeterminer {
 
     private static final int MAX_LEVE_DIST = 4;
 
-    public enum Foot {
+    enum Foot {
         IAMB("01"),
         CHOREE("10"),
         DACTYL("100"),
@@ -41,14 +41,6 @@ public final class FuzzyWordStressDeterminer {
         public String getRepeatedStuff() {
             return repeatedStuff;
         }
-    }
-
-    private static String[] processPoemLine(final String poemLine) {
-        return
-                SymbolsUtils
-                        .replaceUseless(poemLine.trim(), " ")
-                        .toLowerCase()
-                        .split(" ");
     }
 
     private static Pair<Pair<Foot, Integer>, String> detectSimpleFoot(final String pattern) {
