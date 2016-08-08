@@ -36,6 +36,11 @@ public class FoundGopSong {
     }
 
     public String toString() {
-        return "FoundGopSong{rhyme='" + rhyme + "', gopSong=" + gopSong + "}";
+        return "FoundGopSong{rhyme='"
+                + rhyme
+                + "', score="
+                + score
+                + ", gopSong=" + gopSong
+                + "}";
     }
 }
