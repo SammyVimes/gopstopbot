@@ -113,13 +113,14 @@ public class TGBot extends TelegramLongPollingBot {
     public void showMainMenu(final Message request, final TGSession session) throws TelegramApiException {
 
         final ReplyKeyboardMarkup replyKeyboardMarkup = getMainMenuKeyboard();
-        final SendMessage msg = createMessageWithKeyboard(request.getChatId().toString(), request.getMessageId(), replyKeyboardMarkup);
+        final SendMessage msg =
+                createMessageWithKeyboard(request.getChatId().toString(), request.getMessageId(), replyKeyboardMarkup);
 
         if (session.isNew()) {
             session.setNew(false);
             msg.setText("Привет, либо ты тут в первый раз (но не в последний, надеюсь), "
                     + "либо мы _берега попутали_.\n"
-                    + "Скорей жми на кнопку \"Рифмуй\".");
+                    + "Скорей жми на кнопку «Рифмуй».");
         } else {
             msg.setText("Меню; нажми на кнопку - получишь результат");
         }

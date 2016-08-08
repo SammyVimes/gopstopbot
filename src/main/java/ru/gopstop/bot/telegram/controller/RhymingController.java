@@ -19,8 +19,8 @@ import ru.gopstop.bot.telegram.internal.Emoji;
 import ru.gopstop.bot.telegram.user.TGSession;
 import ru.gopstop.bot.util.TweetGen;
 import ru.gopstop.bot.util.VKGen;
-import java.util.ArrayList;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -99,8 +99,9 @@ public class RhymingController extends BaseMuzisController {
         sendHtmlMessage(
                 request.getChatId().toString(),
                 String.format(
-                        "<b>%s</b>\n(%s - %s)",
-                        rhyme.getRhyme(), gopSong.getAuthor(), gopSong.getName()));
+                        "«%s»\n<b>%s</b>\n(%s - %s)",
+                        request.getText(), rhyme.getRhyme(),
+                        gopSong.getAuthor(), gopSong.getName()));
         sendMessage(
                 request.getChatId().toString(),
                 sharingText);
@@ -136,9 +137,9 @@ public class RhymingController extends BaseMuzisController {
             // NB! временно отрываю
             final List<String> keyboard = new ArrayList<>();
             // songs
-                    // .stream()
-                    // .map(song -> "Слушать " + song.getTitle())
-                    // .collect(Collectors.toList());
+            // .stream()
+            // .map(song -> "Слушать " + song.getTitle())
+            // .collect(Collectors.toList());
 
             final String reply;
 
