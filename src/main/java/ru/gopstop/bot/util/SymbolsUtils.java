@@ -6,7 +6,7 @@ package ru.gopstop.bot.util;
 public final class SymbolsUtils {
 
     //todo: compiled regex
-    private static final String USELESS_SYM_PATTERN = "[^A-Za-zА-Яа-яё ]";
+    private static final String USELESS_SYM_PATTERN = "[^A-Za-zА-Яа-яё0-9 ]";
 
     public static String replaceUseless(final String what, final String replacement) {
         return what.replaceAll(USELESS_SYM_PATTERN, replacement);
