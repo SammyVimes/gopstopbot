@@ -11,6 +11,7 @@ import ru.gopstop.bot.engine.search.FoundGopSong;
 import ru.gopstop.bot.engine.search.LinesIndexer;
 
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 /**
@@ -38,18 +39,23 @@ public final class CleverEngine {
                         .collect(Collectors.toList());
 
         if (!foundGopSongList.isEmpty()) {
-            // let's add some spice
-//            final Random random = new Random();
-//            final int chosenRandomRhyme = random.nextInt(foundGopSongList.size());
 
-            for (int i = 0; i < Math.min(foundGopSongList.size(), TOP_SUGGESTIONS); i++) {
-                LOGGER.info(userInput + "\t|\t"
-                        + foundGopSongList.get(i).getRhyme()
-                        + "\t|\t" + foundGopSongList.get(i).getScore());
-            }
+            // let's add some spice and randomize the whole thing
+            final FoundGopSong topFoundGopSong = foundGopSongList.get(0);
+            
+            final List<FoundGopSong> filteredList =
+                    foundGopSongList
+                            .stream()
+                            //todo: set epsilon?
+                            .filter(fs -> fs.getScore() == topFoundGopSong.getScore())
+                            .collect(Collectors.toList());
 
-            final FoundGopSong foundGopSong = foundGopSongList.get(0);
-            return new Rhyme(foundGopSong.getRhyme(), foundGopSong.getGopSong());
+            final Random random = new Random();
+            final int chosenRandomRhymeId = random.nextInt(filteredList.size());
+            final FoundGopSong chosenSong = filteredList.get(chosenRandomRhymeId);
+            LOGGER.info("Chosen gop song: " + chosenSong);
+
+            return new Rhyme(chosenSong.getRhyme(), chosenSong.getGopSong());
         } else {
             return null;
         }
