@@ -19,6 +19,7 @@ class SubstringCollapsingReducer implements LastWordProcessor {
     private final Map<String, String> replacements = new HashMap<>();
 
     SubstringCollapsingReducer() {
+        replacements.put("знь", "сь");
         replacements.put("сс", "с");
         replacements.put("цк", "ск");
         replacements.put("тся", "ца");
