@@ -21,6 +21,8 @@ public final class CleverEngine {
 
     private static final Logger LOGGER = LogManager.getLogger(CleverEngine.class);
 
+    private static final int TOP_SUGGESTIONS = 50;
+
     public static Rhyme getRhyme(final String userInput) {
 
         //  тупой поиск без учёта ударения
@@ -40,10 +42,10 @@ public final class CleverEngine {
 //            final Random random = new Random();
 //            final int chosenRandomRhyme = random.nextInt(foundGopSongList.size());
 
-            for (int i = 0; i < Math.min(foundGopSongList.size(), 50); i++) {
+            for (int i = 0; i < Math.min(foundGopSongList.size(), TOP_SUGGESTIONS); i++) {
                 LOGGER.info(userInput + "\t|\t"
-                        + foundGopSongList.get(i).getRhyme() + "\t|\t" +
-                        foundGopSongList.get(i).getScore());
+                        + foundGopSongList.get(i).getRhyme()
+                        + "\t|\t" + foundGopSongList.get(i).getScore());
             }
 
             final FoundGopSong foundGopSong = foundGopSongList.get(0);
