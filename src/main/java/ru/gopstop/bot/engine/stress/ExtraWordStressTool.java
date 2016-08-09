@@ -8,7 +8,7 @@ import static ru.gopstop.bot.engine.tools.PhoneticsKnowledgeTools.*;
  */
 public final class ExtraWordStressTool {
 
-    public static String upperCaseByPattern(final String word, final String pattern) {
+    static String upperCaseByPattern(final String word, final String pattern) {
 
         int vowIndex = 0;
         final StringBuilder sb = new StringBuilder();
@@ -16,7 +16,7 @@ public final class ExtraWordStressTool {
         for (int i = 0; i < word.length(); i++) {
 
             if (VOWELS_SET.contains(word.charAt(i))) {
-                if (pattern.charAt(vowIndex) == '1') {
+                if (pattern.charAt(vowIndex) == '1' || pattern.length() == 1) {
                     sb.append(Character.toUpperCase(word.charAt(i)));
                 } else {
                     sb.append(word.charAt(i));
