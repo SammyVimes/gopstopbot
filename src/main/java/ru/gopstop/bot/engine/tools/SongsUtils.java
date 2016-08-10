@@ -13,6 +13,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.Stream;
+import java.util.stream.Collectors;
 
 /**
  * Чтение корпуса
@@ -50,7 +51,12 @@ public final class SongsUtils {
         return new GopSong(
                 lines.get(1).trim(),
                 lines.get(0).trim(),
-                lines.subList(2, lines.size()));
+                lines.subList(2, lines.size())
+                    .stream()
+                    // removing selected trailing punctuation
+                    .map(l -> l.replaceAll("[:,-–; ]+$", ""))
+                    .collect(Collectors.toList())
+                );
     }
 
     private SongsUtils() {
