@@ -40,7 +40,7 @@ public class TGBot extends TelegramLongPollingBot {
 
     private String token = "";
 
-    private Executor executor = Executors.newFixedThreadPool(15);
+    private Executor executor = Executors.newFixedThreadPool(Constants.THREAD_POOL_SIZE);
 
     public TGBot() {
 

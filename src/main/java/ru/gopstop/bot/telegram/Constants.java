@@ -15,6 +15,8 @@ public final class Constants {
 
     public static final String ABOUT = "О боте";
 
+    public static final int THREAD_POOL_SIZE = 15;
+
     public static final String BOT_SELF_DESCRIPTION =
             "«Мне говорят, что Окна ТАСС моих стихов полезнее...»\n"
                     + "Like, share, re-post or stay with us,\n"
