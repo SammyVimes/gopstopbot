@@ -20,6 +20,8 @@ import ru.gopstop.bot.telegram.user.TGSessionKey;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 /**
  * Created by Semyon on 30.07.2016.
@@ -37,6 +39,8 @@ public class TGBot extends TelegramLongPollingBot {
     private List<Controller> mainControllers = new ArrayList<>();
 
     private String token = "";
+
+    private Executor executor = Executors.newFixedThreadPool(15);
 
     public TGBot() {
 
@@ -57,7 +61,7 @@ public class TGBot extends TelegramLongPollingBot {
         if (update.hasMessage()) {
             Message message = update.getMessage();
             if (message.hasText() || message.hasLocation()) {
-                handleIncomingMessage(message);
+                executor.execute(() -> handleIncomingMessage(message));
             }
         }
     }

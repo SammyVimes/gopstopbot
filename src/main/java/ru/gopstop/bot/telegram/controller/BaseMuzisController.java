@@ -3,7 +3,6 @@ package ru.gopstop.bot.telegram.controller;
 import org.apache.http.util.TextUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.imgscalr.Scalr;
 import org.telegram.telegrambots.TelegramApiException;
 import org.telegram.telegrambots.api.methods.ActionType;
 import org.telegram.telegrambots.api.methods.send.SendAudio;
@@ -15,6 +14,7 @@ import ru.gopstop.bot.muzis.MuzisService;
 import ru.gopstop.bot.muzis.MuzisServiceBuilder;
 import ru.gopstop.bot.muzis.ResourcesService;
 import ru.gopstop.bot.muzis.entity.Song;
+import ru.gopstop.bot.telegram.Constants;
 import ru.gopstop.bot.telegram.TGBot;
 import ru.gopstop.bot.util.Translit;
 
@@ -87,7 +87,15 @@ abstract class BaseMuzisController extends Controller {
             // sendMessage(request.getChatId().toString(), "Сейчас и песню пришлю");
 
         } else {
+            if (Constants.SKIP_MUSIC) {
+                return;
+            }
             sendMessage(request.getChatId().toString(), "Сейчас пришлю");
+        }
+
+
+        if (Constants.SKIP_MUSIC) {
+            return;
         }
 
         // скачиваем музло (или берём с диска) и отправляем
