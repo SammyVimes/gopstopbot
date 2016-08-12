@@ -23,7 +23,7 @@ public final class Constants {
                     + "Ведь и шансон — поэзия.\n"
             + "[Что здесь происходит?](https://github.com/SammyVimes/gopstopbot/blob/master/README.md)\n"
             + "Команда:\n"
-            + "Антон @bordacount\n"
+            + "Антон @AntonAlexeyev\n"
             + "Наташа @pritykovskaya\n"
             + "Семён @SemyonDanilov\n";
 

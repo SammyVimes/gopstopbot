@@ -54,7 +54,7 @@ public final class SongsUtils {
                 lines.subList(2, lines.size())
                     .stream()
                     // removing selected trailing punctuation
-                    .map(l -> l.replaceAll("[:,-–; ]+$", ""))
+                    .map(l -> l.replaceAll("[:,\\-–; ]+$", "").replaceAll("^[:,\\-–; ]+", ""))
                     .collect(Collectors.toList())
                 );
     }
