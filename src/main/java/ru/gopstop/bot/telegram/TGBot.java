@@ -61,7 +61,14 @@ public class TGBot extends TelegramLongPollingBot {
         if (update.hasMessage()) {
             Message message = update.getMessage();
             if (message.hasText() || message.hasLocation()) {
-                executor.execute(() -> handleIncomingMessage(message));
+                executor.execute(() -> {
+                    try {
+                        handleIncomingMessage(message);
+                    } catch (Throwable t) {
+                        // чтобы не умер поток из пула ловим вообще всё
+                        LOGGER.error(t);
+                    }
+                });
             }
         }
     }
