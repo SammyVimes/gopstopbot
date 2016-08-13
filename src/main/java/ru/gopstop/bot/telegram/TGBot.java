@@ -110,6 +110,7 @@ public class TGBot extends TelegramLongPollingBot {
         try {
             final String lastController = session.getLastController();
 
+            //todo: уродливый хак, надо подумтаь, как сделать нормально
             if (TextUtils.isEmpty(lastController) || lastController.equals(Constants.ControllersTags.ABOUT.getName())) {
                 // у юзера не проставлен контроллер, выберем из меню
                 for (Controller controller : mainControllers) {
@@ -129,8 +130,6 @@ public class TGBot extends TelegramLongPollingBot {
                 return;
             }
             final Controller controller = controllerMap.get(lastController);
-
-            LOGGER.info("Hanling eith controller " + controller);
 
             // обработаем сообщение в последнем контроллере
             controller.handleMessage(message, session);
