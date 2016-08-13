@@ -2,6 +2,7 @@ package ru.gopstop.bot.engine;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import ru.gopstop.bot.engine.entities.GopSong;
 import ru.gopstop.bot.engine.entities.Rhyme;
 import ru.gopstop.bot.engine.filters.SameLastWordFilter;
 import ru.gopstop.bot.engine.filters.SameLineFilter;
@@ -25,6 +26,14 @@ public final class CleverEngine {
     private static final int TOP_SUGGESTIONS = 50;
 
     public static Rhyme getRhyme(final String userInput) {
+
+        // простите меня, святые отцы информационного поиска, я не хотел
+        if (userInput.trim().toLowerCase().matches("(.*[^A-Za-zА-Яа-яёЁ]|^)(путин(а|у|ым|е)?|putin)[^A-Za-zА-Яа-яёЁ]*")) {
+            return new Rhyme(
+                    "Lorem ipsum dolor sit amet, consectetur adipiscin...",
+                    new GopSong("Unknown track", "Various artists", null)
+            );
+        }
 
         //  тупой поиск без учёта ударения
         final List<FoundGopSong> foundGopSongList =

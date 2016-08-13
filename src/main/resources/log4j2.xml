@@ -8,9 +8,9 @@
             <!--<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>-->
         </Console>
         <RollingFile name="SimpleRollingFile"
-                     fileName="all_logs.log"
+                     fileName="logs/all_logs.log"
                      immediateFlush="true"
-                     filePattern="all_logs.%d{yyyy-MM-dd.HH}.%i.log">
+                     filePattern="logs/all_logs.%d{yyyy-MM-dd.HH}.%i.log">
             <PatternLayout>
                 <pattern>%d{ISO8601} [%t] %p %c{3} - %m%n</pattern>
             </PatternLayout>
