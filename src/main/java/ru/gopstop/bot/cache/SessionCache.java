@@ -41,7 +41,7 @@ public final class SessionCache {
     private static final Logger LOGGER;
 
     static {
-        LOGGER = LogManager.getLogger(LinesIndexer.class);
+        LOGGER = LogManager.getLogger(SessionCache.class);
         INSTANCE = new SessionCache("sessions/");
     }
 
@@ -69,6 +69,8 @@ public final class SessionCache {
                 LOGGER.error("Index dead", ioee);
                 throw new RuntimeException("Всему конец, индекс не поднялся", ioee);
             }
+        } catch (Exception e) {
+            LOGGER.error("wtf", e);
         }
     }
 

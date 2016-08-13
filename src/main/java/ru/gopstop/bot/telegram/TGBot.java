@@ -129,6 +129,9 @@ public class TGBot extends TelegramLongPollingBot {
             controller.handleMessage(message, session);
         } catch (TelegramApiException e) {
             LOGGER.error("Error while handling incoming message: " + e.getMessage(), e);
+        } catch (Exception e) {
+            LOGGER.error("UNknown err", e);
+            throw e;
         }
     }
 
