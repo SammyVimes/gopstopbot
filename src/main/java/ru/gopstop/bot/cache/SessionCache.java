@@ -61,6 +61,7 @@ public final class SessionCache {
             writer = new IndexWriter(directory, conf);
             LOGGER.info("Init searcher");
             searcher = new SessionSearcher(directory);
+            LOGGER.info("Inited searcher");
         } catch (final IOException ioe) {
 
             LOGGER.error("Need cache rebuilding, all session go to hell", ioe);
