@@ -81,24 +81,17 @@ public class TGBot extends TelegramLongPollingBot {
 
         LOGGER.info("Message from "
                 + fromUser.getLastName()
-                + fromUser.getFirstName()
+                + ' ' + fromUser.getFirstName()
                 + " (" + fromUser.getUserName() + ")"
                 + ": " + message.getText());
 
-        TGSessionKey key = new TGSessionKey(fromUser, chatId);
+        final TGSessionKey key = new TGSessionKey(fromUser, chatId);
         TGSession session = sessionMap.get(key);
 
         if (session == null) {
 
-            LOGGER.info(chatId + " " + fromUser.getId() + " " + key + " ");
-            LOGGER.info(key.hashCode() + " " + SessionCache.getInstance());
-
             session = new TGSession(chatId, fromUser);
-
-            LOGGER.info("" + session);
-            LOGGER.info("" + SessionCache.getInstance().search(key));
-
-            List<String> state = SessionCache.getInstance().search(key);
+            final List<String> state = SessionCache.getInstance().search(key);
 
             if (state.size() > 0) {
                 // восстанавливаем из кэша
@@ -138,7 +131,7 @@ public class TGBot extends TelegramLongPollingBot {
         } catch (TelegramApiException e) {
             LOGGER.error("Error while handling incoming message: " + e.getMessage(), e);
         } catch (Exception e) {
-            LOGGER.error("UNknown err", e);
+            LOGGER.error("Unknown err", e);
             throw e;
         }
     }

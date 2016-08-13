@@ -94,8 +94,9 @@ public final class SessionCache {
 
     public List<String> search(final TGSessionKey request) {
         try {
-            LOGGER.info("" + searcher);
-            return searcher.search(request);
+            final List<String> res = searcher.search(request);
+            LOGGER.info("Found sessions in cache: " + res.size());
+            return res;
         } catch (final IOException ioe) {
             LOGGER.error("ERRORE WHILE SEARCHE", ioe);
             return new ArrayList<>();
@@ -117,8 +118,8 @@ public final class SessionCache {
 
         doc.add(new StringField("controller", session.getLastController(), Field.Store.YES));
         doc.add(new StringField("session_key", session.getSessionKey().hashCode() + "", Field.Store.YES));
-        doc.add(new StringField("chat_id", session.getChatId() + "", Field.Store.YES));
-        doc.add(new StringField("user_id", session.getUser().getId() + "", Field.Store.YES));
+//        doc.add(new StringField("chat_id", session.getChatId() + "", Field.Store.YES));
+//        doc.add(new StringField("user_id", session.getUser().getId() + "", Field.Store.YES));
 
         try {
             withWriter(wr -> {
