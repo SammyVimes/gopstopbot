@@ -110,7 +110,7 @@ public class TGBot extends TelegramLongPollingBot {
         try {
             final String lastController = session.getLastController();
 
-            if (TextUtils.isEmpty(lastController)) {
+            if (TextUtils.isEmpty(lastController) || lastController.equals(Constants.ControllersTags.ABOUT.getName())) {
                 // у юзера не проставлен контроллер, выберем из меню
                 for (Controller controller : mainControllers) {
 
