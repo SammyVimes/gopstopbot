@@ -90,6 +90,8 @@ public class TGBot extends TelegramLongPollingBot {
 
         if (session == null) {
 
+            LOGGER.info("No session in map for key " + key);
+
             session = new TGSession(chatId, fromUser);
             final List<String> state = SessionCache.getInstance().search(key);
 

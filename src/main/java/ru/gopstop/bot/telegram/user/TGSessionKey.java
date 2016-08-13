@@ -43,4 +43,8 @@ public class TGSessionKey {
     public int hashCode() {
         return OFFSET_HEX * chatId.hashCode() + user.getId().hashCode();
     }
+
+    public String toString() {
+        return "SessionKey:chatId=" + chatId;
+    }
 }

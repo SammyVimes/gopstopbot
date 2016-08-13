@@ -68,9 +68,12 @@ public final class GopStop {
             final File file = new File("out.log");
             final PrintStream printStream = new PrintStream(new FileOutputStream(file));
             System.setErr(printStream);
+            LOGGER.info("Streams reset");
 
         } catch (final FileNotFoundException fnfe) {
             LOGGER.error("Can't reseet System printstreams", fnfe);
+            fnfe.printStackTrace();
+            fnfe.printStackTrace(System.err);
         }
 
         Thread.setDefaultUncaughtExceptionHandler(new WeirdExceptionHandler());
