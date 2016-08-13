@@ -15,7 +15,6 @@ import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.SimpleFSDirectory;
-import ru.gopstop.bot.engine.search.LinesIndexer;
 import ru.gopstop.bot.telegram.user.TGSession;
 import ru.gopstop.bot.telegram.user.TGSessionKey;
 
@@ -43,6 +42,7 @@ public final class SessionCache {
     static {
         LOGGER = LogManager.getLogger(SessionCache.class);
         INSTANCE = new SessionCache("sessions/");
+        LOGGER.info("Session cache set");
     }
 
     private IndexWriter writer;
@@ -53,7 +53,7 @@ public final class SessionCache {
 
     private SessionCache(final String indexPath) {
 
-        LOGGER.info("INit sessions cache");
+        LOGGER.info("Init sessions cache");
         try {
             final Directory directory = new SimpleFSDirectory(Paths.get(indexPath));
             analyzer = new StandardAnalyzer();

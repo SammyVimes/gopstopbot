@@ -22,9 +22,13 @@ public final class GopStop {
 
         final TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
 
+        LOGGER.info("Init singletons");
+
+        SessionCache.getInstance();
         LinesIndexer.getInstance();
         WordStressMap.getInstance();
-        SessionCache.getInstance();
+
+        LOGGER.info("Singletons inited");
 
         try {
             telegramBotsApi.registerBot(new TGBot());
