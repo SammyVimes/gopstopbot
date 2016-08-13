@@ -7,6 +7,7 @@ import org.telegram.telegrambots.api.methods.ActionType;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import ru.gopstop.bot.cache.SessionCache;
 import ru.gopstop.bot.engine.CleverEngine;
 import ru.gopstop.bot.engine.entities.GopSong;
 import ru.gopstop.bot.engine.entities.Rhyme;
@@ -150,6 +151,7 @@ public class RhymingController extends BaseMuzisController {
                 reply = "Эту песню мы не нашли, но вот другие песни автора";
                 // НЕ перекидываем на поиск по песням, оставляем режим рифмовки
                 session.setLastController(Constants.ControllersTags.RHYMES.getName());
+                SessionCache.getInstance().updateSession(session);
             }
 
             keyboard.add(BACK);

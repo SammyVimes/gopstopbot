@@ -9,6 +9,10 @@ import org.apache.lucene.document.Field;
 import org.apache.lucene.document.StringField;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.index.Term;
+import org.apache.lucene.search.BooleanClause;
+import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.SimpleFSDirectory;
 import ru.gopstop.bot.engine.search.LinesIndexer;
@@ -94,6 +98,12 @@ public final class SessionCache {
 
     public void updateSession(final TGSession session) {
 
+        final BooleanQuery bq = new BooleanQuery();
+        bq.add(
+                new TermQuery(
+                        new Term("session_key", session.getSessionKey().hashCode() + "")),
+                BooleanClause.Occur.MUST);
+
         final Document doc = new Document();
 
         doc.add(new StringField("controller", session.getLastController(), Field.Store.YES));
@@ -104,6 +114,7 @@ public final class SessionCache {
         try {
             withWriter(wr -> {
                         try {
+                            wr.deleteDocuments(bq);
                             wr.addDocument(doc);
                         } catch (final IOException e) {
                             LOGGER.error("Bullshit while adding docs to index", e);

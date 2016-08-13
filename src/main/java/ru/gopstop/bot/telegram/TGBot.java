@@ -75,7 +75,7 @@ public class TGBot extends TelegramLongPollingBot {
     }
 
     private void handleIncomingMessage(final Message message) {
-        
+
         final Long chatId = message.getChatId();
         final User fromUser = message.getFrom();
 
@@ -115,6 +115,7 @@ public class TGBot extends TelegramLongPollingBot {
                         controller.handleMessage(message, session);
                         if (controller.rememberMe()) {
                             session.setLastController(controller.getKey());
+                            SessionCache.getInstance().updateSession(session);
                         }
                         return;
                     }
