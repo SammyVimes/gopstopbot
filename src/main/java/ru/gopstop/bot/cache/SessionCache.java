@@ -98,6 +98,9 @@ public final class SessionCache {
         } catch (final IOException ioe) {
             LOGGER.error("ERRORE WHILE SEARCHE", ioe);
             return new ArrayList<>();
+        } catch (final Exception e) {
+            LOGGER.error("UNKNOWN ERRORE WHILE SEARCHE", e);
+            return new ArrayList<>();
         }
     }
 
