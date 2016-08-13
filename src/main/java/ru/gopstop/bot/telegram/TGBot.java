@@ -94,6 +94,10 @@ public class TGBot extends TelegramLongPollingBot {
             LOGGER.info(key.hashCode() + " " + SessionCache.getInstance());
 
             session = new TGSession(chatId, fromUser);
+
+            LOGGER.info("" + session);
+            LOGGER.info("" + SessionCache.getInstance().search(key));
+
             List<String> state = SessionCache.getInstance().search(key);
 
             if (state.size() > 0) {

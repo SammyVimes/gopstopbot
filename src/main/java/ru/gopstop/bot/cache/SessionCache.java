@@ -53,20 +53,22 @@ public final class SessionCache {
 
     private SessionCache(final String indexPath) {
 
+        LOGGER.info("INit sessions cache");
         try {
             final Directory directory = new SimpleFSDirectory(Paths.get(indexPath));
             analyzer = new StandardAnalyzer();
             final IndexWriterConfig conf = rebuildConfig();
             writer = new IndexWriter(directory, conf);
+            LOGGER.info("Init searcher");
             searcher = new SessionSearcher(directory);
         } catch (final IOException ioe) {
 
-            LOGGER.error("Need index rebuilding, all session go to hell", ioe);
+            LOGGER.error("Need cache rebuilding, all session go to hell", ioe);
 
             try {
                 writer.deleteAll();
             } catch (final IOException ioee) {
-                LOGGER.error("Index dead", ioee);
+                LOGGER.error("Cace dead", ioee);
                 throw new RuntimeException("Всему конец, индекс не поднялся", ioee);
             }
         } catch (Exception e) {
@@ -91,6 +93,7 @@ public final class SessionCache {
 
     public List<String> search(final TGSessionKey request) {
         try {
+            LOGGER.info("" + searcher);
             return searcher.search(request);
         } catch (final IOException ioe) {
             LOGGER.error("ERRORE WHILE SEARCHE", ioe);

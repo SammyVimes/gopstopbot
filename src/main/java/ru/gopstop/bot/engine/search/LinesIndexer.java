@@ -73,7 +73,9 @@ public final class LinesIndexer {
             // ребилдим каждый раз, всё равно сейчас это быстро
 //            writer.deleteAll();
 //            rebuild();
+
             searcher = new LinesIndexSearcher(directory);
+            LOGGER.info("searcher set wothout rebuilfd");
         } catch (final IOException ioe) {
 
             LOGGER.warn("Need index rebuilding");
