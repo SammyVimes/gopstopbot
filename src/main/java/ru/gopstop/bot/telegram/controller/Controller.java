@@ -8,6 +8,7 @@ import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardRow;
 import ru.gopstop.bot.cache.SessionCache;
+import ru.gopstop.bot.telegram.Constants;
 import ru.gopstop.bot.telegram.TGBot;
 import ru.gopstop.bot.telegram.internal.Emoji;
 import ru.gopstop.bot.telegram.user.TGSession;
@@ -122,7 +123,8 @@ public abstract class Controller {
      * @throws TelegramApiException
      */
     void back(final Message request, final TGSession session) throws TelegramApiException {
-        session.setLastController(null);
+        // проброс в меню
+        session.setLastController(Constants.ControllersTags.ABOUT.getName());
         SessionCache.getInstance().updateSession(session);
         bot.showMainMenu(request, session);
     }

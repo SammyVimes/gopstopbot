@@ -115,29 +115,23 @@ public final class SessionCache {
 
         final Document doc = new Document();
 
-        if (session.getLastController() != null) {
-            doc.add(new StringField("controller", session.getLastController(), Field.Store.YES));
-            doc.add(new StringField("session_key", session.getSessionKey().hashCode() + "", Field.Store.YES));
-            doc.add(new StringField("chat_id", session.getChatId() + "", Field.Store.YES));
-            doc.add(new StringField("user_id", session.getUser().getId() + "", Field.Store.YES));
-        }
+        doc.add(new StringField("controller", session.getLastController(), Field.Store.YES));
+        doc.add(new StringField("session_key", session.getSessionKey().hashCode() + "", Field.Store.YES));
+        doc.add(new StringField("chat_id", session.getChatId() + "", Field.Store.YES));
+        doc.add(new StringField("user_id", session.getUser().getId() + "", Field.Store.YES));
+
         try {
             withWriter(wr -> {
                         try {
                             wr.deleteDocuments(bq);
-
-                            if (session.getLastController() != null) {
-                                wr.addDocument(doc);
-                            }
+                            wr.addDocument(doc);
                         } catch (final IOException e) {
                             LOGGER.error("Bullshit while adding docs to index", e);
-//                            throw new RuntimeException("Bullshit while adding docs to index", e);
                         }
                     }
             );
         } catch (final IOException e) {
             LOGGER.error("Bullshit while adding docs to index", e);
-//            throw new RuntimeException("Bullshit while adding docs to index", e);
         }
     }
 }
