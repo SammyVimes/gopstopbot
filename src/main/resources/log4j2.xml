@@ -15,7 +15,7 @@
                 <pattern>%d{ISO8601} [%t] %p %c{3} - %m%n</pattern>
             </PatternLayout>
             <Policies>
-                <TimeBasedTriggeringPolicy interval="12" modulate="true" />
+                <TimeBasedTriggeringPolicy interval="6" modulate="true" />
                 <SizeBasedTriggeringPolicy size="10 MB" />
             </Policies>
         </RollingFile>
