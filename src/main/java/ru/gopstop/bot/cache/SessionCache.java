@@ -61,7 +61,7 @@ public final class SessionCache {
             searcher = new SessionSearcher(directory);
         } catch (final IOException ioe) {
 
-            LOGGER.warn("Need index rebuilding, all session go to hell");
+            LOGGER.error("Need index rebuilding, all session go to hell", ioe);
 
             try {
                 writer.deleteAll();

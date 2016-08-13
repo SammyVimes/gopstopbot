@@ -71,8 +71,8 @@ public final class LinesIndexer {
             writer = new IndexWriter(directory, conf);
 
             // ребилдим каждый раз, всё равно сейчас это быстро
-            writer.deleteAll();
-            rebuild();
+//            writer.deleteAll();
+//            rebuild();
             searcher = new LinesIndexSearcher(directory);
         } catch (final IOException ioe) {
 
