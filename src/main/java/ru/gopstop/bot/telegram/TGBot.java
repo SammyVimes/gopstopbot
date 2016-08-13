@@ -99,6 +99,7 @@ public class TGBot extends TelegramLongPollingBot {
                 // восстанавливаем из кэша
                 session.setNew(false);
                 session.setLastController(state.get(0));
+                LOGGER.info("Last controller " + state.get(0));
             } else {
                 // новый пользователь (или старый, но пишет из группового чата, неважно)
                 session.setNew(true);
@@ -128,6 +129,9 @@ public class TGBot extends TelegramLongPollingBot {
                 return;
             }
             final Controller controller = controllerMap.get(lastController);
+
+            LOGGER.info("Hanling eith controller " + controller);
+
             // обработаем сообщение в последнем контроллере
             controller.handleMessage(message, session);
         } catch (TelegramApiException e) {

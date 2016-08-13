@@ -59,24 +59,24 @@ public final class GopStop {
 
     public static void main(final String[] args) {
 
-        try {
-            final File fileErr = new File("err.log");
-            final PrintStream printStreamErr = new PrintStream(new FileOutputStream(fileErr));
-            System.setErr(printStreamErr);
-
-
-            final File file = new File("out.log");
-            final PrintStream printStream = new PrintStream(new FileOutputStream(file));
-            System.setErr(printStream);
-            LOGGER.info("Streams reset");
-
-        } catch (final FileNotFoundException fnfe) {
-            LOGGER.error("Can't reseet System printstreams", fnfe);
-            fnfe.printStackTrace();
-            fnfe.printStackTrace(System.err);
-        }
-
-        Thread.setDefaultUncaughtExceptionHandler(new WeirdExceptionHandler());
+//        try {
+//            final File fileErr = new File("err.log");
+//            final PrintStream printStreamErr = new PrintStream(new FileOutputStream(fileErr));
+//            System.setErr(printStreamErr);
+//
+//
+//            final File file = new File("out.log");
+//            final PrintStream printStream = new PrintStream(new FileOutputStream(file));
+//            System.setErr(printStream);
+//            LOGGER.info("Streams reset");
+//
+//        } catch (final FileNotFoundException fnfe) {
+//            LOGGER.error("Can't reseet System printstreams", fnfe);
+//            fnfe.printStackTrace();
+//            fnfe.printStackTrace(System.err);
+//        }
+//
+//        Thread.setDefaultUncaughtExceptionHandler(new WeirdExceptionHandler());
         new GopStop().start();
     }
 
