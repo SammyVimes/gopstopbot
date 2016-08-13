@@ -11,6 +11,7 @@ import org.telegram.telegrambots.api.objects.User;
 import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import ru.gopstop.bot.cache.SessionCache;
 import ru.gopstop.bot.telegram.controller.Controller;
 import ru.gopstop.bot.telegram.controller.RhymingController;
 import ru.gopstop.bot.telegram.controller.SettingsController;
@@ -74,6 +75,7 @@ public class TGBot extends TelegramLongPollingBot {
     }
 
     private void handleIncomingMessage(final Message message) {
+        
         final Long chatId = message.getChatId();
         final User fromUser = message.getFrom();
 
@@ -87,9 +89,17 @@ public class TGBot extends TelegramLongPollingBot {
         TGSession session = sessionMap.get(key);
 
         if (session == null) {
-            // новый пользователь (или старый, но пишет из группового чата, неважно)
             session = new TGSession(chatId, fromUser);
-            session.setNew(true);
+            List<String> state = SessionCache.getInstance().search(key);
+
+            if (state.size() > 0) {
+                // восстанавливаем из кэша
+                session.setNew(false);
+                session.setLastController(state.get(0));
+            } else {
+                // новый пользователь (или старый, но пишет из группового чата, неважно)
+                session.setNew(true);
+            }
             sessionMap.put(key, session);
         }
 

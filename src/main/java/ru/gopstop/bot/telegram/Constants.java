@@ -7,13 +7,24 @@ public final class Constants {
 
     public static final boolean SKIP_MUSIC = true;
 
-    public static final String RHYMES = "Рифмы";
+    public enum ControllersTags {
+        SONGS("Песни"),
+        RHYMES("Рифмы"),
+        ABOUT("О боте");
 
-    public static final String SONGS = "Песни";
+        private final String name;
+
+        ControllersTags(final String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
+    }
+
 
     public static final String RHYMES_PLS = "Рифмуй!";
-
-    public static final String ABOUT = "О боте";
 
     public static final int THREAD_POOL_SIZE = 15;
 

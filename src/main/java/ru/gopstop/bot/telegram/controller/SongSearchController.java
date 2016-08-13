@@ -38,12 +38,12 @@ public class SongSearchController extends BaseMuzisController {
 
     @Override
     public String getKey() {
-        return Constants.SONGS;
+        return Constants.ControllersTags.SONGS.getName();
     }
 
     @Override
     public String getEntry() {
-        return Constants.SONGS;
+        return Constants.ControllersTags.SONGS.getName();
     }
 
     @Override

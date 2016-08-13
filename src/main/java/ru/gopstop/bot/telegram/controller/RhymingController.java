@@ -41,7 +41,7 @@ public class RhymingController extends BaseMuzisController {
 
     @Override
     public String getKey() {
-        return Constants.RHYMES;
+        return Constants.ControllersTags.RHYMES.getName();
     }
 
     @Override
@@ -149,7 +149,7 @@ public class RhymingController extends BaseMuzisController {
             } else {
                 reply = "Эту песню мы не нашли, но вот другие песни автора";
                 // НЕ перекидываем на поиск по песням, оставляем режим рифмовки
-                session.setLastController(Constants.RHYMES);
+                session.setLastController(Constants.ControllersTags.RHYMES.getName());
             }
 
             keyboard.add(BACK);

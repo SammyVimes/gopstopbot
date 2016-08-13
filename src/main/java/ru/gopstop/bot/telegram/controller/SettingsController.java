@@ -12,7 +12,7 @@ import ru.gopstop.bot.telegram.user.TGSession;
  */
 public class SettingsController extends Controller {
 
-    private static final String ABOUT = Constants.ABOUT + " " + Emoji.INFORMATION_SOURCE.toString();
+    private static final String ABOUT = Constants.ControllersTags.ABOUT.getName() + " " + Emoji.INFORMATION_SOURCE.toString();
 
     public SettingsController(final TGBot bot) {
         super(bot);
@@ -20,7 +20,7 @@ public class SettingsController extends Controller {
 
     @Override
     public String getKey() {
-        return Constants.ABOUT;
+        return Constants.ControllersTags.ABOUT.getName();
     }
 
     @Override

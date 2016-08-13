@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.telegram.telegrambots.TelegramApiException;
 import org.telegram.telegrambots.TelegramBotsApi;
+import ru.gopstop.bot.cache.SessionCache;
 import ru.gopstop.bot.engine.stress.WordStressMap;
 import ru.gopstop.bot.engine.search.LinesIndexer;
 import ru.gopstop.bot.telegram.TGBot;
@@ -17,12 +18,13 @@ public final class GopStop {
 
     private GopStop() {
 
-        LOGGER.info("Стартуем! Сегодня мы с тобой стартуем.");
+        LOGGER.info("START Стартуем! Сегодня мы с тобой стартуем.");
 
         final TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
 
         LinesIndexer.getInstance();
         WordStressMap.getInstance();
+        SessionCache.getInstance();
 
         try {
             telegramBotsApi.registerBot(new TGBot());

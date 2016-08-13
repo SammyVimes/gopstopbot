@@ -66,4 +66,8 @@ public class TGSession {
     public User getUser() {
         return user;
     }
+
+    public TGSessionKey getSessionKey() {
+        return  new TGSessionKey(getUser(), getChatId());
+    }
 }
