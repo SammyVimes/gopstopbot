@@ -5,8 +5,7 @@ import ru.gopstop.bot.util.Transliteration;
 import java.util.HashMap;
 import java.util.Map;
 
-import static ru.gopstop.bot.engine.tools.PhoneticsKnowledgeTools.VOWELS;
-import static ru.gopstop.bot.engine.tools.PhoneticsKnowledgeTools.VOWELS_PAIRS;
+import static ru.gopstop.bot.engine.tools.PhoneticsKnowledgeTools.*;
 
 /**
  * Заменяем удвоенные согласные, созвучия
@@ -28,6 +27,10 @@ class SubstringCollapsingReducer implements LastWordProcessor {
         replacements.put("кк", "к");
         replacements.put("тт", "т");
         replacements.put("лн", "н");
+
+        for (final Character hSound : HUSHING) {
+            replacements.put(hSound + "(ь|ъ)$", hSound + "");
+        }
 
         // боремся с парными гласными и мягким знаком
 

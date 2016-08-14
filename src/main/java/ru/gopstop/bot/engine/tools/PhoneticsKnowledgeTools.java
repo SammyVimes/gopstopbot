@@ -12,6 +12,11 @@ public final class PhoneticsKnowledgeTools {
     public static final String[] VOWELS =
             new String[]{"а", "ы", "о", "э", "е", "я", "и", "ю", "ё", "у"};
 
+    public static final Set<Character> HUSHING =
+            Arrays.stream("ж|ш|ч|щ|ц".split("|"))
+                    .map(s -> s.charAt(0))
+                    .collect(Collectors.toSet());
+
     public static final Map<Character, Character> CONSONANTS_PAIRS =
             Arrays
                     .stream("кг,шж,сз,фв,пб,тд".split(","))
