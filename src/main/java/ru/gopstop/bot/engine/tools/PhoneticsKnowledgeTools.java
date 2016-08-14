@@ -37,7 +37,7 @@ public final class PhoneticsKnowledgeTools {
 
     public static final List<Character> CONSONANTS_LIST =
             Arrays
-                    .stream(CONSONANT_PATTERN.split("|"))
+                    .stream(CONSONANT_PATTERN.split("\\|"))
                     .map(s -> s.charAt(0))
                     .collect(Collectors.toList());
 

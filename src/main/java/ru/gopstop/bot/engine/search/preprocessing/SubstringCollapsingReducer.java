@@ -29,7 +29,6 @@ class SubstringCollapsingReducer implements LastWordProcessor {
         replacements.put("лн", "н");
 
         for (final Character hSound : HUSHING) {
-            System.out.println(hSound);
             replacements.put(hSound + "(ь|ъ)$", hSound + "");
         }
 
