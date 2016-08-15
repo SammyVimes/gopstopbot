@@ -20,7 +20,7 @@ class SubstringCollapsingReducer implements LastWordProcessor {
     SubstringCollapsingReducer() {
 
         for (final Character consonant : CONSONANTS_LIST) {
-            replacements.put(consonant + "" + consonant, consonant +"");
+            replacements.put(consonant + "" + consonant, consonant + "");
         }
 
         replacements.put("знь", "сь");
