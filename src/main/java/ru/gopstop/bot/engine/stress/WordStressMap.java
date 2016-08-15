@@ -27,13 +27,14 @@ public final class WordStressMap {
 
     private static final int MIN_SIZE_FOR_YOFICATION_SECOND_WORD = 4;
 
-    private static final String VOWELS_JOINED_PATTERN = Joiner.on("|").join(PhoneticsKnowledgeTools.VOWELS_SET);
+    private static final String VOWELS_JOINED_PATTERN =
+            Joiner.on("|").join(PhoneticsKnowledgeTools.VOWELS_SET);
 
     /**
      * Варианты ударений для данного слова
-     * слово -> (число гласных, [порядковые номера ОДНОГО ударного слога, начиная с нуля])
+     * слово -> (число гласных, порядковый номера ОДНОГО ударного слога, начиная с нуля)
      */
-    private static HashMap<String, Pair<Integer, Set<Integer>>> stressDict =
+    private static HashMap<String, Pair<Integer, Integer>> stressDict =
             new HashMap<>(DICT_SIZE_HINT);
 
     private static final WordStressMap INSTANCE;
@@ -87,20 +88,18 @@ public final class WordStressMap {
 
                 final int stressPos = stressPosition(words[i].replace("`", ""));
 
-                if (stressDict.get(wordNoStress) == null) {
-
-                    final Set<Integer> newArr = new HashSet<>(1);
-                    newArr.add(stressPos);
-                    stressDict.put(wordNoStress, Pair.of(vowelsCount, newArr));
-
+                if (!stressDict.containsKey(wordNoStress)) {
+                    stressDict.put(wordNoStress, Pair.of(vowelsCount, stressPos));
                 } else {
 
-                    if (!stressDict.get(wordNoStress).getRight().contains(stressPos)) {
-                        stressDict
-                                .get(wordNoStress)
-                                .getRight()
-                                .add(stressPos);
-                    }
+                    // кто первый -- тот и молодец
+                    // фу как грубо
+//                    if (!stressDict.get(wordNoStress).getRight().contains(stressPos)) {
+//                        stressDict
+//                                .get(wordNoStress)
+//                                .getRight()
+//                                .add(stressPos);
+//                    }
                 }
             }
         }
@@ -108,7 +107,7 @@ public final class WordStressMap {
 
     private WordStressMap() throws IOException {
 
-        final HashMap<String, Pair<Integer, Set<Integer>>> map;
+        final HashMap<String, Pair<Integer, Integer>> map;
 
         try {
             final FileInputStream fis = new FileInputStream(SERIALIZED_DICT_PATH);
@@ -246,10 +245,10 @@ public final class WordStressMap {
             Pair<Integer, Integer> curWordRhythmicPattern;
 
             if (stressDict.get(words[i]) != null) {
-                final Pair<Integer, Set<Integer>> p = stressDict.get(words[i]);
+                final Pair<Integer, Integer> p = stressDict.get(words[i]);
 
                 // todo: find a smarter solution
-                final Integer randomStress = p.getRight().iterator().next();
+                final Integer randomStress = p.getRight();
                 curWordRhythmicPattern = Pair.of(p.getLeft(), randomStress);
             } else {
                 // нет такого слова в словаре
@@ -262,7 +261,7 @@ public final class WordStressMap {
         return rhythmicPattern;
     }
 
-    public static Map<String, Pair<Integer, Set<Integer>>> getCoreWordDict() {
+    public static Map<String, Pair<Integer, Integer>> getCoreWordDict() {
         return stressDict;
     }
 }
