@@ -30,7 +30,7 @@ public class AlternativePatternsStressMap {
     public String findRhythmicPattern(final String poemLine) {
 
         final String[] words = WordStressMap.processPoemLine(poemLine);
-        final Map<String, Pair<Integer, Set<Integer>>> stressDict = WordStressMap.getCoreWordDict();
+        final Map<String, Pair<Integer, Integer>> stressDict = WordStressMap.getCoreWordDict();
 
         if (words.length > 0) {
             words[words.length - 1] = WordStressMap.fixYo(words[words.length - 1]);
