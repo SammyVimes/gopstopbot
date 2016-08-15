@@ -18,14 +18,15 @@ class SubstringCollapsingReducer implements LastWordProcessor {
     private final Map<String, String> replacements = new HashMap<>();
 
     SubstringCollapsingReducer() {
+
+        for (final Character consonant : CONSONANTS_LIST) {
+            replacements.put(consonant + "" + consonant, consonant +"");
+        }
+
         replacements.put("знь", "сь");
-        replacements.put("сс", "с");
         replacements.put("цк", "ск");
         replacements.put("тся", "ца");
         replacements.put("ться", "ца");
-        replacements.put("цц", "ц");
-        replacements.put("кк", "к");
-        replacements.put("тт", "т");
         replacements.put("лн", "н");
 
         for (final Character hSound : HUSHING) {
