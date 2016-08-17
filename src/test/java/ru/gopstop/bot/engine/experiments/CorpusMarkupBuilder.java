@@ -28,7 +28,7 @@ public class CorpusMarkupBuilder {
     // nullable
     private static Character stress(String string) {
 
-        List<Character> vowels = Lists.newArrayList();
+        final List<Character> vowels = Lists.newArrayList();
 
         for (final Character c : string.toCharArray()) {
 
@@ -43,6 +43,7 @@ public class CorpusMarkupBuilder {
 
         if (vowels.isEmpty())
             return null;
+
         return vowels.get(vowels.size() - 1);
     }
 
@@ -64,60 +65,67 @@ public class CorpusMarkupBuilder {
         // по всем строкам
         for (int i = 0; i < lines.size(); i++) {
 
-            // предобработка -- оставляем последнее
-            final String currentLine =
-                    BasicPreprocessor.postfix(lines.get(i), false, true);
+            if (!rhymed.contains(i)) {
 
-            if (currentLine == null) {
-                System.out.println("SKIPPED BECAUSE NULL");
-                continue;
-            }
+                // предобработка -- оставляем последнее
+                final String currentLine =
+                        BasicPreprocessor.postfix(lines.get(i), false, true);
 
-            final String currentPostfix = currentLine
-                    .substring(0, Math.min(POSTFIX, currentLine.length()));
+                if (currentLine == null) {
+                    continue;
+                }
 
-            int minDist = Integer.MAX_VALUE;
-            int minDistIndex = -1;
-            String bestPostfix = "";
+                // берём ограниченный постфикс
+                final String currentPostfix = currentLine
+                        .substring(0, Math.min(POSTFIX, currentLine.length()));
 
-            for (int d = 1; d < Math.min(4, lines.size() - i); d++) {
+                int minDist = Integer.MAX_VALUE;
+                int minDistIndex = -1;
+                String bestPostfix = "";
 
-                if (!rhymed.contains(i + d)) {
+                // для небольшого окна
+                for (int d = 1; d < Math.min(4, lines.size() - i); d++) {
 
-                    final String candidate =
-                            BasicPreprocessor
-                                    .postfix(lines.get(i + d), false, true);
+                    // не рассматриваем уже зарифмованное
+                    if (!rhymed.contains(i + d)) {
 
-                    if (candidate == null || lines.get(i + d).length() < 4) {
-                        continue;
-                    }
+                        // готовим кандидата
+                        final String candidate =
+                                BasicPreprocessor.postfix(lines.get(i + d), false, true);
 
-                    final String candidatePostfix = candidate
-                            .substring(0, Math.min(POSTFIX, candidate.length()));
+                        // отбрасываем подозрительно коротких, нам не нужны false positives
+                        if (candidate == null || lines.get(i + d).length() < 4) {
+                            continue;
+                        }
 
-                    final int currdist =
-                            StringUtils.getLevenshteinDistance(currentPostfix, candidatePostfix);
+                        // постфикс от кандидата
+                        final String candidatePostfix = candidate
+                                .substring(0, Math.min(POSTFIX, candidate.length()));
 
+                        // текцщее растояние Левенштейна
+                        final int currdist =
+                                StringUtils.getLevenshteinDistance(currentPostfix, candidatePostfix);
 
-                    final boolean eqOrSo = likeEq(stress(candidatePostfix), stress(currentPostfix));
+                        // проверяем, корректная ли гласная -- кандидат на ударную
+                        final boolean eqOrSo = likeEq(stress(candidatePostfix), stress(currentPostfix));
 
-                    if (currdist < minDist && eqOrSo) {
-                        minDist = currdist;
-                        minDistIndex = i + d;
-                        bestPostfix = candidatePostfix;
+                        // если похоже, что гласная та, и расстояние приемлемо, мы принимаем
+                        if (currdist < minDist && eqOrSo) {
+                            minDist = currdist;
+                            minDistIndex = i + d;
+                            bestPostfix = candidatePostfix;
+                        }
                     }
                 }
-            }
 
-            if (minDistIndex >= 0 && minDist < 4) {
-
-                rhymed.add(i);
-                rhymed.add(minDistIndex);
-                postfixes.put(currentPostfix, bestPostfix);
-                postfixes.put(bestPostfix, currentPostfix);
-                System.out.println(minDist + " " + lines.get(i) + " <=> " + lines.get(minDistIndex));
-            } else {
-                System.out.println(minDist + " " + "skip");
+                if (minDistIndex >= 0 && minDist < 4) {
+                    rhymed.add(minDistIndex);
+                    postfixes.put(currentPostfix, bestPostfix);
+                    postfixes.put(bestPostfix, currentPostfix);
+                    System.out.println(minDist + " " + lines.get(i) + " <=> " + lines.get(minDistIndex));
+                } else {
+                    System.out.println(minDist + " " + "skip");
+                }
             }
         }
     }
