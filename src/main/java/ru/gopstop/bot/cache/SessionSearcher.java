@@ -27,6 +27,9 @@ public class SessionSearcher {
         is = new IndexSearcher(ir);
     }
 
+    /**
+     * Поиск состояния пользовательской сессии в индексе
+     */
     public List<String> search(final TGSessionKey request) throws IOException {
 
         final BooleanQuery q = new BooleanQuery();

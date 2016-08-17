@@ -25,7 +25,9 @@ import java.util.List;
 import java.util.function.Consumer;
 
 /**
- * Хранилище сессий. По-хорошему, надо в базу писать, конечно
+ * Хранилище сессий. По-хорошему, надо в базу писать, конечно,
+ * в люсине держать сессии странно + неудобно переносить.
+ * Так что TODO
  * <p>
  * Created by aam on 13.08.16.
  */
@@ -56,27 +58,30 @@ public final class SessionCache {
         LOGGER.info("Init sessions cache");
         try {
             final Directory directory = new SimpleFSDirectory(Paths.get(indexPath));
+
             analyzer = new StandardAnalyzer();
+
             final IndexWriterConfig conf = rebuildConfig();
             writer = new IndexWriter(directory, conf);
+
             LOGGER.info("Init searcher");
             searcher = new SessionSearcher(directory);
+
             LOGGER.info("Inited searcher");
         } catch (final IOException ioe) {
 
-            LOGGER.error("Need cache rebuilding, all session go to hell", ioe);
+            LOGGER.error("Need sessions cache rebuilding, all sessions go to hell", ioe);
 
             try {
                 writer.deleteAll();
             } catch (final IOException ioee) {
-                LOGGER.error("Cace dead", ioee);
+                LOGGER.error("Cache  cleaning impossibru, dying", ioee);
                 throw new RuntimeException("Всему конец, индекс не поднялся", ioee);
             }
         } catch (Exception e) {
             LOGGER.error("wtf", e);
         }
     }
-
 
     private IndexWriterConfig rebuildConfig() {
         return new IndexWriterConfig(analyzer);
@@ -91,21 +96,27 @@ public final class SessionCache {
         }
     }
 
-
+    /**
+     * Поиск в индексе по ключу сессии
+     */
     public List<String> search(final TGSessionKey request) {
+
         try {
             final List<String> res = searcher.search(request);
             LOGGER.info("Found sessions in cache: " + res.size());
             return res;
         } catch (final IOException ioe) {
-            LOGGER.error("ERRORE WHILE SEARCHE", ioe);
+            LOGGER.error("IO ERROR WHILE SEARCHING", ioe);
             return new ArrayList<>();
         } catch (final Exception e) {
-            LOGGER.error("UNKNOWN ERRORE WHILE SEARCHE", e);
+            LOGGER.error("UNKNOWN ERROR WHILE SEARCHING", e);
             return new ArrayList<>();
         }
     }
 
+    /**
+     * Обновление состояния пользовательской сессии в индексе
+     */
     public void updateSession(final TGSession session) {
 
         final BooleanQuery bq = new BooleanQuery();
@@ -118,8 +129,6 @@ public final class SessionCache {
 
         doc.add(new StringField("controller", session.getLastController(), Field.Store.YES));
         doc.add(new StringField("session_key", session.getSessionKey().hashCode() + "", Field.Store.YES));
-//        doc.add(new StringField("chat_id", session.getChatId() + "", Field.Store.YES));
-//        doc.add(new StringField("user_id", session.getUser().getId() + "", Field.Store.YES));
 
         try {
             withWriter(wr -> {
