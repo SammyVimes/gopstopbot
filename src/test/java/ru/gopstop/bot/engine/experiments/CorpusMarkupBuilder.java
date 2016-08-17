@@ -2,7 +2,9 @@ package ru.gopstop.bot.engine.experiments;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import jersey.repackaged.com.google.common.collect.HashMultimap;
+import edu.uci.ics.jung.algorithms.cluster.BicomponentClusterer;
+import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 import org.apache.commons.lang3.StringUtils;
 import ru.gopstop.bot.engine.search.preprocessing.BasicPreprocessor;
 import ru.gopstop.bot.engine.tools.SongsUtils;
@@ -58,7 +60,8 @@ public class CorpusMarkupBuilder {
                 || VOWELS_PAIRS.containsKey(second) && VOWELS_PAIRS.get(second).equals(first);
     }
 
-    private static void markup(final List<String> lines, final HashMultimap<String, String> postfixes) {
+    private static void markup(final List<String> lines,
+                               final Graph<String, Integer> postfixes) {
 
         Set<Integer> rhymed = Sets.newHashSet();
 
@@ -119,9 +122,16 @@ public class CorpusMarkupBuilder {
                 }
 
                 if (minDistIndex >= 0 && minDist < 4) {
+
                     rhymed.add(minDistIndex);
-                    postfixes.put(currentPostfix, bestPostfix);
-                    postfixes.put(bestPostfix, currentPostfix);
+
+                    if (postfixes.findEdge(currentPostfix, bestPostfix) == null) {
+                        postfixes.addEdge(
+                                postfixes.getEdgeCount(),
+                                currentPostfix,
+                                bestPostfix);
+                    }
+
                     System.out.println(minDist + " " + lines.get(i) + " <=> " + lines.get(minDistIndex));
                 } else {
                     System.out.println(minDist + " " + "skip");
@@ -132,20 +142,22 @@ public class CorpusMarkupBuilder {
 
     public static void main(final String[] args) throws IOException {
 
-        HashMultimap<String, String> postfixes = HashMultimap.create();
+        final UndirectedSparseGraph<String, Integer> graph =
+                new UndirectedSparseGraph<>();
 
         SongsUtils
                 .listSongsByDir("data/songs")
-                .limit(100)
+                .limit(1000)
                 .forEach(song -> {
                     System.out.println("---------------------");
-                    markup(song.getLyrics(), postfixes);
+                    markup(song.getLyrics(), graph);
                 });
 
-        for (String postf : postfixes.keySet()) {
+        final BicomponentClusterer<String, Integer> clusterer = new BicomponentClusterer<>();
+        final Set<Set<String>> connectedSets = clusterer.apply(graph);
 
-            System.out.println(postf + " -> " + postfixes.get(postf).stream().filter(v -> !v.equals(postf)).collect(Collectors.joining(" ")));
-
+        for (final Set<String> set : connectedSets) {
+            System.out.println(set);
         }
     }
 
