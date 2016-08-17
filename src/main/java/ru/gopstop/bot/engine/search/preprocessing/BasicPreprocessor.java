@@ -25,10 +25,16 @@ public final class BasicPreprocessor {
         PROCESSORS.add(new ConsonantHack());
     }
 
+    public static String postfix(final String line, final boolean logStuff) {
+        return postfix(line, logStuff, false);
+    }
+
     /**
      * Нехитрое преобразование постфикса (вместо нормальной фонетической транскрипции)
      */
-    public static String postfix(final String line, final boolean logStuff) {
+    public static String postfix(final String line,
+                                  final boolean logStuff,
+                                  final boolean onlyLastWord) {
 
         final String normalLine =
                 SymbolsUtils.replaceUseless(line.trim(), " ").toLowerCase();
@@ -70,7 +76,13 @@ public final class BasicPreprocessor {
         res.remove(len);
         res.add(lastStressed);
 
-        final String fixedline = Joiner.on("").join(res);
+        final String fixedline;
+
+        if (onlyLastWord) {
+            fixedline = lastStressed;
+        } else {
+            fixedline = Joiner.on("").join(res);
+        }
 
         if (logStuff) {
             LOGGER.info("FIXEDLINE\t" + res + "\t" + fixedline);
