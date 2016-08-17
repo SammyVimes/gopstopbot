@@ -10,7 +10,7 @@ import static ru.gopstop.bot.engine.tools.PhoneticsKnowledgeTools.*;
 /**
  * Заменяем удвоенные согласные, созвучия
  * Можно дополнять до бесконечности
- * <p>
+ * <p/>
  * Created by aam on 31.07.16.
  */
 class SubstringCollapsingReducer implements LastWordProcessor {
@@ -51,9 +51,12 @@ class SubstringCollapsingReducer implements LastWordProcessor {
             replacements.put("ь" + jotV.toUpperCase(), "й" + jotVPair.toUpperCase());
             replacements.put("ь" + jotVPair.toUpperCase(), "й" + jotVPair.toUpperCase());
 
-            // ударные йотированные можно заменить на парные
-            // (иногда могут быть странные спецэффекты, посмотрим, как оно будет жить в продакшене)
-            replacements.put(jotV.toUpperCase(), jotVPair.toUpperCase());
+            for (final Character any : ALL_SET) {
+                // ударные йотированные можно заменить на парные
+                // (иногда могут быть странные спецэффекты, посмотрим, как оно будет жить в продакшене)
+                // upd: но на конце всё-таки нельзя
+                replacements.put(jotV.toUpperCase() + any, jotVPair.toUpperCase() + any);
+            }
         }
 
         replacements.put("ьИ", "йИ");

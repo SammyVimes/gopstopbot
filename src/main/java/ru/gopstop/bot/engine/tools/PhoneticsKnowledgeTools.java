@@ -1,6 +1,8 @@
 package ru.gopstop.bot.engine.tools;
 
 
+import com.google.common.collect.Sets;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -42,6 +44,8 @@ public final class PhoneticsKnowledgeTools {
                     .collect(Collectors.toList());
 
     public static final Set<Character> CONSONANTS_SET = new HashSet<>(CONSONANTS_LIST);
+
+    public static final Set<Character> ALL_SET = Sets.union(CONSONANTS_SET, VOWELS_SET);
 
     private PhoneticsKnowledgeTools() {
 
