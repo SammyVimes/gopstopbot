@@ -35,7 +35,6 @@
             <version>2.1.0</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/com.squareup.retrofit/adapter-rxjava -->
         <dependency>
             <groupId>com.squareup.retrofit2</groupId>
             <artifactId>adapter-rxjava</artifactId>
