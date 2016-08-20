@@ -85,9 +85,9 @@ public final class SameLastWordFilter {
 
                                 final int userBaseLength = lastUser.length() - userPr.length();
                                 final boolean lengthsAcceptable =
-                                        gopBaseLength == userBaseLength ||
-                                                lastUserLength == gopBaseLength ||
-                                                lastGopLength == userBaseLength;
+                                        gopBaseLength == userBaseLength
+                                                || lastUserLength == gopBaseLength
+                                                || lastGopLength == userBaseLength;
 
                                 // если разница по длине совсем бредовая, продолжаем дальше
                                 if (!lengthsAcceptable) {
