@@ -75,28 +75,42 @@ public final class SameLastWordFilter {
 
                     if (lastGop.startsWith(gopPr) && lastGop.length() > gopPr.length()) {
 
+                        final int gopBaseLength = lastGop.length() - gopPr.length();
+
                         for (final String userPr : PREFIXES) {
 
                             // если начинается на приставку и по длине подходит
-                            if (userPr.startsWith(userPr) && lastUser.length() > userPr.length()) {
+                            if (userPr.startsWith(userPr)
+                                    && lastUser.length() > userPr.length()) {
 
-                                LOGGER.debug("Same beginning words: ["
-                                        + lastGop + "] > ["
-                                        + lastUser + "] // "
-                                        + gopSong.getGopSong().getName());
+                                final int userBaseLength = lastUser.length() - userPr.length();
+                                final boolean lengthsAcceptable =
+                                        gopBaseLength == userBaseLength ||
+                                                lastUserLength == gopBaseLength ||
+                                                lastGopLength == userBaseLength;
+
+                                // если разница по длине совсем бредовая, продолжаем дальше
+                                if (!lengthsAcceptable) {
+                                    continue;
+                                }
+
+//                                LOGGER.debug("Same beginning words: ["
+//                                        + lastGop + "] > ["
+//                                        + lastUser + "] // "
+//                                        + gopSong.getGopSong().getName());
 
                                 // основы
                                 final String subUser = lastUser.substring(userPr.length(), lastUserLength);
                                 final String subGop = lastGop.substring(gopPr.length(), lastGopLength);
 
-                                LOGGER.debug("Suspicious gop substring for prefix ["
-                                        + gopPr + "]: "
-                                        + subGop);
-                                LOGGER.debug("Suspicious user substring for prefix ["
-                                        + userPr + "]: "
-                                        + subUser);
+//                                LOGGER.debug("Suspicious gop substring for prefix ["
+//                                        + gopPr + "]: "
+//                                        + subGop);
+//                                LOGGER.debug("Suspicious user substring for prefix ["
+//                                        + userPr + "]: "
+//                                        + subUser);
 
-                                if (subGop.equals(subUser) || lastGop.equals(subUser) || lastUser.equals(subGop)) {
+                                if (lastGop.equals(subUser) || subGop.equals(subUser) || lastUser.equals(subGop)) {
 
                                     LOGGER.debug("Skipping words as однокоренные "
                                             + lastGop + " " + lastUser + " "
