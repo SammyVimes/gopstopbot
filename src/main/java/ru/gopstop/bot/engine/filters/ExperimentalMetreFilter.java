@@ -24,6 +24,7 @@ public final class ExperimentalMetreFilter {
 
         if (requestSyllablesCount < MIN_FIRE_SYLLABLES_COUNT) {
             LOGGER.debug("Not applying extra metre filter for " + requestSyllablesCount + " syllables in " + request);
+            return true;
         }
 
         final int songnlineSyllablesCount = WordStressHelper.countVowels(gopSong.getRhyme());
