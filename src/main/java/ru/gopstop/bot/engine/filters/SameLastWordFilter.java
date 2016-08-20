@@ -28,7 +28,7 @@ public final class SameLastWordFilter {
                     // longer go first
                     "сверх", "пере", "анти", "разъ", "подъ",
                     "при", "про", "над", "обо", "бес", "раз", "без", "рас",
-                    "об", "из", "ис", "за", "въ", "съ", "не", "во",
+                    "об", "из", "ис", "за", "въ", "съ", "не", "во", "со",
                     "о", "а", "c", "в", "у");
 
     private static List<String> buildLexemList(final String request) {
@@ -48,9 +48,10 @@ public final class SameLastWordFilter {
         final String lastGop = reqR.get(reqR.size() - 1);
         final String lastUser = reqLL.get(reqLL.size() - 1);
 
+        LOGGER.debug("Checking if approximately equal " + lastGop + " " + lastUser);
+
         // одинаковые не пропускаем
         if (!lastGop.equals(lastUser)) {
-
             LOGGER.debug("Same word, discarding: " + lastGop + " " + lastUser);
             return false;
         }
@@ -67,6 +68,9 @@ public final class SameLastWordFilter {
                     lastUser.substring(lastUser.length() - UNACC_POSTFIX, lastUserLength);
 
             if (gopPosttfix.equals(inputPostfix)) {
+
+                LOGGER.debug("Likely same base words: " + lastGop + " " + lastUser);
+                LOGGER.debug("Likely same base words endings: " + gopPosttfix + " " + inputPostfix);
 
                 final String longer = (lastGopLength > lastUserLength ? lastGop : lastUser);
                 final String shorter = (lastGopLength < lastUserLength ? lastGop : lastUser);
