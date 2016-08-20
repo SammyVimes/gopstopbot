@@ -48,8 +48,6 @@ public final class SameLastWordFilter {
         final String lastGop = reqR.get(reqR.size() - 1);
         final String lastUser = reqLL.get(reqLL.size() - 1);
 
-        LOGGER.debug("Checking if approximately equal " + lastGop + " " + lastUser);
-
         // одинаковые не пропускаем
         if (lastGop.equals(lastUser)) {
             LOGGER.debug("Same word, discarding: " + lastGop + " " + lastUser);
