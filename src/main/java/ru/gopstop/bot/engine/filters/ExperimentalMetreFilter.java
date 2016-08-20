@@ -13,7 +13,7 @@ public final class ExperimentalMetreFilter {
 
     private static final int MIN_FIRE_SYLLABLES_COUNT = 4;
 
-    private static final int SYLLABLES_DIFF = 3;
+    private static final int ACCEPTABLE_SYLLABLES_DIFF = 0;
 
     private static final Logger LOGGER = LogManager.getLogger(ExperimentalMetreFilter.class);
 
@@ -28,7 +28,7 @@ public final class ExperimentalMetreFilter {
         }
 
         final int songnlineSyllablesCount = WordStressHelper.countVowels(gopSong.getRhyme().toLowerCase());
-        return Math.abs(requestSyllablesCount - songnlineSyllablesCount) < SYLLABLES_DIFF;
+        return Math.abs(requestSyllablesCount - songnlineSyllablesCount) <= ACCEPTABLE_SYLLABLES_DIFF;
     }
 
     private ExperimentalMetreFilter() {
