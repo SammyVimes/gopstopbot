@@ -45,8 +45,6 @@ public final class ExperimentalSophisticatedMetreFilter {
             } else if (countSyllables > 0) {
                 sb.append(Strings.repeat(".", countSyllables));
             }
-
-//            LOGGER.info(word + " " + countSyllables + " " + info + " " + sb.toString());
         }
         sb.append(".*");
         return sb.toString();
@@ -61,7 +59,7 @@ public final class ExperimentalSophisticatedMetreFilter {
         final String reqPattern = buildFuzzyPattern(reqLexems);
         final boolean match = gopPattern.matches(reqPattern) || reqPattern.matches(gopPattern);
 
-        LOGGER.debug("PATTERNS " + match + " "
+        LOGGER.trace("PATTERNS " + match + " "
                 + reqLexems + " " + reqPattern + " "
                 + gopLexems + " " + gopPattern);
         return true;
