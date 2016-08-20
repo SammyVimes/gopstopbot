@@ -18,6 +18,15 @@ public final class SameLastWordFilter {
      */
     private static final int UNACC_POSTFIX = 6;
 
+
+    private static final List<String> PREFIXES =
+            Arrays.asList(
+                    // longer go first
+                    "сверх", "пере", "анти", "разъ", "подъ",
+                    "при", "про", "над", "обо", "бес", "раз", "без", "рас",
+                    "об", "из", "ис", "за", "въ", "съ",
+                    "о", "а",  "c", "в");
+
     private static List<String> buildLexemList(final String request) {
         return Arrays.asList(
                 SymbolsUtils
@@ -35,15 +44,39 @@ public final class SameLastWordFilter {
         final String lastGop = reqR.get(reqR.size() - 1);
         final String lastUser = reqLL.get(reqLL.size() - 1);
 
-        if (lastGop.length() >= UNACC_POSTFIX && lastUser.length() >= UNACC_POSTFIX) {
-            final String gopPosttfix =
-                    lastGop.substring(lastGop.length() - UNACC_POSTFIX, lastGop.length());
-            final String inputPostfix =
-                    lastUser.substring(lastUser.length() - UNACC_POSTFIX, lastUser.length());
-            return !gopPosttfix.equals(inputPostfix);
+        // одинаковые не пропускаем
+        if (!lastGop.equals(lastUser)) {
+            return false;
         }
 
-        return !lastGop.equals(lastUser);
+        // отличающиеся приставкой не пропускаем
+        if (lastGop.length() >= UNACC_POSTFIX && lastUser.length() >= UNACC_POSTFIX) {
+
+            final int lastGopLength = lastGop.length();
+            final int lastUserLength = lastUser.length();
+
+            final String gopPosttfix =
+                    lastGop.substring(lastGop.length() - UNACC_POSTFIX, lastGopLength);
+            final String inputPostfix =
+                    lastUser.substring(lastUser.length() - UNACC_POSTFIX, lastUserLength);
+
+            if (gopPosttfix.equals(inputPostfix)) {
+
+                final String longer = (lastGopLength > lastUserLength ? lastGop : lastUser);
+                final String shorter = (lastGopLength < lastUserLength ? lastGop : lastUser);
+
+                for (final String pr : PREFIXES) {
+
+                    if (longer.startsWith(pr)
+                            && longer.length() > pr.length()
+                            && longer.substring(pr.length(), longer.length()).equals(shorter)) {
+                        return false;
+                    }
+                }
+            }
+        }
+
+        return true;
     }
 
     private SameLastWordFilter() {
