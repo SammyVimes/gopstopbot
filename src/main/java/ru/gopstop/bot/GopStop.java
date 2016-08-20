@@ -40,7 +40,7 @@ public final class GopStop {
     }
 
     private void start() {
-        LOGGER.trace("Есть чо?");
+        LOGGER.info("Есть чо?");
     }
 
     private static class WeirdExceptionHandler implements Thread.UncaughtExceptionHandler {
