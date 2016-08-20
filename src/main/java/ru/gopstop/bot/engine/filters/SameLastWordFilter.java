@@ -96,7 +96,7 @@ public final class SameLastWordFilter {
                                         + userPr + "]: "
                                         + subUser);
 
-                                if (subGop.equals(subUser)) {
+                                if (subGop.equals(subUser) || lastGop.equals(subUser) || lastUser.equals(subGop)) {
 
                                     LOGGER.debug("Skipping words as однокоренные "
                                             + lastGop + " " + lastUser + " "
