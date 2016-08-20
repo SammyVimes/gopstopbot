@@ -11,7 +11,7 @@ import ru.gopstop.bot.engine.stress.WordStressHelper;
  */
 public final class ExperimentalMetreFilter {
 
-    public static final int MIN_FIRE_SYLLABLES_COUNT = 5;
+    private static final int MIN_FIRE_SYLLABLES_COUNT = 5;
 
     private static final int SYLLABLES_DIFF = 2;
 

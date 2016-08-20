@@ -59,6 +59,7 @@ public final class CleverEngine {
                 foundGopSongList
                         .stream()
                         .filter(g -> ExperimentalMetreFilter.filter(userInput, g))
+                        .filter(g -> ExperimentalSophisticatedMetreFilter.filter(userInput, g))
                         .collect(Collectors.toList());
 
         final List<FoundGopSong> resultingGopSongList;
