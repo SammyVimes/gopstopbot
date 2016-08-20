@@ -55,6 +55,8 @@ public final class ExperimentalSophisticatedMetreFilter {
             } else {
                 sb.append(Strings.repeat(".", countSyllables));
             }
+
+            LOGGER.info(word  + " " + countSyllables + " " + sb.toString());
         }
         sb.append(".*");
         return sb.toString();
