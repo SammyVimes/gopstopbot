@@ -71,30 +71,43 @@ public final class SameLastWordFilter {
                         + lastUser + "] // "
                         + gopSong.getGopSong().getName());
 
-                final String longer = (lastGopLength > lastUserLength ? lastGop : lastUser);
-                final String shorter = (lastGopLength > lastUserLength ? lastUser : lastGop);
+                for (final String gopPr : PREFIXES) {
 
-                for (final String pr : PREFIXES) {
+                    if (lastGop.startsWith(gopPr) && lastGop.length() > gopPr.length()) {
 
-                    if (longer.startsWith(pr) && longer.length() == shorter.length() + pr.length()) {
+                        for (final String userPr : PREFIXES) {
 
-                        LOGGER.debug("Same beginning words: ["
-                                + longer + "]\t> ["
-                                + shorter + "] // "
-                                + gopSong.getGopSong().getName());
+                            // если начинается на приставку и по длине подходит
+                            if (userPr.startsWith(userPr) && lastUser.length() > userPr.length()) {
 
-                        LOGGER.debug("Suspicious substring for prefix ["
-                                + pr + "]: "
-                                + longer.substring(pr.length(), longer.length()));
+                                LOGGER.debug("Same beginning words: ["
+                                        + lastGop + "] > ["
+                                        + lastUser + "] // "
+                                        + gopSong.getGopSong().getName());
 
-                        if (longer.length() > pr.length()
-                                && longer.substring(pr.length(), longer.length()).equals(shorter)) {
+                                // основы
+                                final String subUser = lastUser.substring(userPr.length(), lastUserLength);
+                                final String subGop = lastGop.substring(gopPr.length(), lastGopLength);
 
-                            LOGGER.debug("Skipping words as однокоренные " + longer + " " + shorter);
-                            return false;
-                        }
-                    }
-                }
+                                LOGGER.debug("Suspicious gop substring for prefix ["
+                                        + gopPr + "]: "
+                                        + subGop);
+                                LOGGER.debug("Suspicious user substring for prefix ["
+                                        + userPr + "]: "
+                                        + subUser);
+
+                                if (subGop.equals(subUser)) {
+
+                                    LOGGER.debug("Skipping words as однокоренные "
+                                            + lastGop + " " + lastUser + " "
+                                            + subGop + " " + lastUser);
+                                    return false;
+                                }
+                            }
+                        } // end for user pr
+                    } // end if gop matched
+
+                }//end for gop
             }
         }
 
