@@ -66,7 +66,7 @@ public final class SameLastWordFilter {
 
             if (gopPosttfix.equals(inputPostfix)) {
 
-                LOGGER.debug("Likely same base words:\t["
+                LOGGER.trace("Likely same base words:\t["
                         + lastGop + "]\t["
                         + lastUser + "] // "
                         + gopSong.getGopSong().getName());
@@ -78,12 +78,12 @@ public final class SameLastWordFilter {
 
                     if (longer.startsWith(pr)) {
 
-                        LOGGER.debug("Same beginning words: ["
+                        LOGGER.trace("Same beginning words: ["
                                 + longer + "]\t> ["
                                 + shorter + "] // "
                                 + gopSong.getGopSong().getName());
 
-                        LOGGER.debug("Suspicious substring: "
+                        LOGGER.trace("Suspicious substring: "
                                 + longer.substring(pr.length(), longer.length()));
 
                         if (longer.length() > pr.length()

@@ -21,6 +21,8 @@ import java.util.stream.Collectors;
  */
 public final class CleverEngine {
 
+    private static final int LOGGED_TOP = 5;
+
     private static final Logger LOGGER = LogManager.getLogger(CleverEngine.class);
 
     private static final int TOP_SUGGESTIONS = 50;
@@ -46,6 +48,12 @@ public final class CleverEngine {
                         .filter(g -> SameLastWordFilter.filter(userInput, g))
                         .filter(g -> UglyDataFilter.filter(userInput, g))
                         .collect(Collectors.toList());
+
+        foundGopSongList
+                .stream()
+                .limit(LOGGED_TOP)
+                .forEach(gopSong ->
+                        LOGGER.debug("AFTER_FILTERING\t" + gopSong.getScore() + "\t|\t" + gopSong.getRhyme()));
 
         if (!foundGopSongList.isEmpty()) {
 
