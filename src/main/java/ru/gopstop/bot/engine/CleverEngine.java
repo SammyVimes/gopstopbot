@@ -4,10 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.gopstop.bot.engine.entities.GopSong;
 import ru.gopstop.bot.engine.entities.Rhyme;
-import ru.gopstop.bot.engine.filters.SameLastWordFilter;
-import ru.gopstop.bot.engine.filters.SameLineFilter;
-import ru.gopstop.bot.engine.filters.UglyDataFilter;
-import ru.gopstop.bot.engine.filters.WordStressFilter;
+import ru.gopstop.bot.engine.filters.*;
 import ru.gopstop.bot.engine.search.FoundGopSong;
 import ru.gopstop.bot.engine.search.LinesIndexer;
 
@@ -26,6 +23,8 @@ public final class CleverEngine {
     private static final Logger LOGGER = LogManager.getLogger(CleverEngine.class);
 
     private static final int TOP_SUGGESTIONS = 50;
+
+    private static final double ACCEPTABLE_SCORE_THRESHOLD = 0.1;
 
     public static Rhyme getRhyme(final String userInput) {
 
@@ -55,14 +54,42 @@ public final class CleverEngine {
                 .forEach(gopSong ->
                         LOGGER.debug("AFTER_FILTERING\t" + gopSong.getScore() + "\t|\t" + gopSong.getRhyme()));
 
-        if (!foundGopSongList.isEmpty()) {
+        //  хитрая фильтрация на имитации метра
+        final List<FoundGopSong> experimentalGopSongList =
+                foundGopSongList
+                        .stream()
+                        .filter(g -> ExperimentalMetreFilter.filter(userInput, g))
+                        .collect(Collectors.toList());
+
+        final List<FoundGopSong> resultingGopSongList;
+
+        if (!experimentalGopSongList.isEmpty()) {
+
+            final double scoreDiff = foundGopSongList.get(0).getScore() - experimentalGopSongList.get(0).getScore();
+
+            if (scoreDiff < ACCEPTABLE_SCORE_THRESHOLD) {
+                LOGGER.info("Applying metre filter, score diff is OK: " + scoreDiff);
+                resultingGopSongList = experimentalGopSongList;
+            } else {
+                LOGGER.info("Score diff too big between EXP "
+                        + experimentalGopSongList.get(0).getRhyme() + " || "
+                        + foundGopSongList.get(0).getRhyme());
+                resultingGopSongList = foundGopSongList;
+            }
+
+        } else {
+            LOGGER.debug("Experimental metre filtering was too strict");
+            resultingGopSongList = foundGopSongList;
+        }
+
+        if (!resultingGopSongList.isEmpty()) {
 
             // let's add some spice and randomize the whole thing
-            final FoundGopSong topFoundGopSong = foundGopSongList.get(0);
+            final FoundGopSong topFoundGopSong = resultingGopSongList.get(0);
             LOGGER.info("Top song: " + topFoundGopSong);
 
             final List<FoundGopSong> filteredList =
-                    foundGopSongList
+                    resultingGopSongList
                             .stream()
                             //todo: set epsilon?
                             .filter(fs -> fs.getScore() >= topFoundGopSong.getScore())

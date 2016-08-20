@@ -1,6 +1,5 @@
 package ru.gopstop.bot.engine.stress;
 
-import com.google.common.base.Joiner;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -8,7 +7,13 @@ import ru.gopstop.bot.engine.tools.PhoneticsKnowledgeTools;
 import ru.gopstop.bot.util.SymbolsUtils;
 
 import java.io.*;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
+import static ru.gopstop.bot.engine.stress.WordStressHelper.countVowels;
+import static ru.gopstop.bot.engine.stress.WordStressHelper.processPoemLine;
+import static ru.gopstop.bot.engine.stress.WordStressHelper.stressPosition;
 
 /**
  * Created by n.pritykovskaya on 30.07.16.
@@ -27,8 +32,6 @@ public final class WordStressMap {
 
     private static final int MIN_SIZE_FOR_YOFICATION_SECOND_WORD = 4;
 
-    private static final String VOWELS_JOINED_PATTERN =
-            Joiner.on("|").join(PhoneticsKnowledgeTools.VOWELS_SET);
 
     /**
      * Варианты ударений для данного слова
@@ -52,27 +55,6 @@ public final class WordStressMap {
         }
     }
 
-    private static int countVowels(final String word) {
-        return word.length() - word.replaceAll(VOWELS_JOINED_PATTERN, "").length();
-    }
-
-    /**
-     * Определяем положение ударения в полном слове
-     */
-    private static int stressPosition(final String word) {
-
-        final String fixedWord = word.replaceAll("-", "");
-
-        if (fixedWord.contains("'")) {
-            return fixedWord.indexOf("'") - 1;
-            // у ё не проставлены ударения
-        } else if (fixedWord.contains("ё")) {
-            return fixedWord.indexOf("ё");
-        } else {
-            return -1;
-        }
-    }
-
     private static void parseLine(final String line) {
 
         final String[] parts = line.split("#");
@@ -91,15 +73,8 @@ public final class WordStressMap {
                 if (!stressDict.containsKey(wordNoStress)) {
                     stressDict.put(wordNoStress, Pair.of(vowelsCount, stressPos));
                 } else {
-
-                    // кто первый -- тот и молодец
+                    // какой вариант ударения первый -- тот и молодец
                     // фу как грубо
-//                    if (!stressDict.get(wordNoStress).getRight().contains(stressPos)) {
-//                        stressDict
-//                                .get(wordNoStress)
-//                                .getRight()
-//                                .add(stressPos);
-//                    }
                 }
             }
         }
@@ -159,14 +134,6 @@ public final class WordStressMap {
 
     public int getSize() {
         return stressDict.size();
-    }
-
-    static String[] processPoemLine(final String poemLine) {
-
-        return SymbolsUtils
-                .replaceUseless(poemLine.trim(), "")
-                .toLowerCase()
-                .split(" ");
     }
 
     /**
