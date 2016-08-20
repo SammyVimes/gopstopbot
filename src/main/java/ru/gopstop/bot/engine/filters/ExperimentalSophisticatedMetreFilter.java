@@ -42,7 +42,7 @@ public final class ExperimentalSophisticatedMetreFilter {
 
             if (info != null && info.getRight() >= 0 && countSyllables > 1) {
                 sb.append(WordStressMap.formRhythmicPattern(word, info));
-            } else {
+            } else if (countSyllables > 0) {
                 sb.append(Strings.repeat(".", countSyllables));
             }
 
