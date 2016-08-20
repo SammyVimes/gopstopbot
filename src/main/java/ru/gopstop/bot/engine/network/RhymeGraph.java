@@ -11,10 +11,7 @@ import ru.gopstop.bot.engine.search.preprocessing.BasicPreprocessor;
 import ru.gopstop.bot.engine.tools.SongsUtils;
 
 import java.io.*;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static ru.gopstop.bot.engine.tools.PhoneticsKnowledgeTools.VOWELS_PAIRS;
@@ -60,7 +57,7 @@ public final class RhymeGraph {
         }
     }
 
-    private static UndirectedSparseGraph<String, Integer> graph;
+    private UndirectedSparseGraph<String, Integer> graph;
 
     /**
      * Метод получения рифмующихся хвостов
@@ -73,14 +70,13 @@ public final class RhymeGraph {
                 postfix.substring(0, Math.min(postfix.length(), POSTFIX));
 
         if (graph.containsVertex(cutPostfix)) {
-            final Collection<String> res = graph.getNeighbors(cutPostfix);
+            final Set<String> res = new HashSet<>(graph.getNeighbors(cutPostfix));
             res.add(cutPostfix);
             return res;
         } else {
             return Collections.singletonList(cutPostfix);
         }
     }
-
 
     // nullable
     private static Character stress(final String string) {
@@ -116,10 +112,10 @@ public final class RhymeGraph {
                 || VOWELS_PAIRS.containsKey(second) && VOWELS_PAIRS.get(second).equals(first);
     }
 
-    private static void markup(final List<String> lines,
-                               final Graph<String, Integer> postfixes) {
+    private void markup(final List<String> lines,
+                        final Graph<String, Integer> postfixes) {
 
-        Set<Integer> rhymed = Sets.newHashSet();
+        final Set<Integer> rhymed = Sets.newHashSet();
 
         // по всем строкам
         for (int i = 0; i < lines.size(); i++) {
@@ -204,36 +200,31 @@ public final class RhymeGraph {
             graph = tempGraph;
             ois.close();
             fis.close();
-        } catch (Exception e) {
+        } catch (final Exception e) {
 
-            LOGGER.warn("COULD NOT DESER graph");
-
+            LOGGER.warn("COULD NOT DESER graph", e);
 
             //todo: читать нормально, например, заюзать StreamAPI
-            try (final BufferedReader br = new BufferedReader(new FileReader(SERIALIZED_DICT_PATH))) {
 
-                SongsUtils
-                        .listSongsByDir(DATA_PATH)
-                        .forEach(song -> markup(song.getLyrics(), graph));
+            graph = new UndirectedSparseGraph<>();
 
-                LOGGER.info("Serialization...");
+            SongsUtils
+                    .listSongsByDir(DATA_PATH)
+                    .forEach(song -> markup(song.getLyrics(), graph));
 
-                try {
-                    final FileOutputStream fos = new FileOutputStream(SERIALIZED_DICT_PATH);
-                    final ObjectOutputStream oos = new ObjectOutputStream(fos);
-                    oos.writeObject(graph);
-                    oos.close();
-                    fos.close();
-                    LOGGER.info("Serialized graph data is saved in " + SERIALIZED_DICT_PATH);
-                } catch (final IOException ioe) {
-                    LOGGER.error("Graph dumping failure", ioe);
-                }
-                LOGGER.info("Graph serialization done");
+            LOGGER.info("Serialization...");
 
-            } catch (final IOException ie) {
-                LOGGER.error("Graph writing  failed", ie);
-                throw new RuntimeException(ie);
+            try {
+                final FileOutputStream fos = new FileOutputStream(SERIALIZED_DICT_PATH);
+                final ObjectOutputStream oos = new ObjectOutputStream(fos);
+                oos.writeObject(graph);
+                oos.close();
+                fos.close();
+                LOGGER.info("Serialized graph data is saved in " + SERIALIZED_DICT_PATH);
+            } catch (final IOException ioe) {
+                LOGGER.error("Graph dumping failure", ioe);
             }
+            LOGGER.info("Graph serialization done");
         }
     }
 }
