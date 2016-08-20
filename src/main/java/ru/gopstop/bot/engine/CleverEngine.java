@@ -25,7 +25,7 @@ public final class CleverEngine {
 
     private static final int TOP_SUGGESTIONS = 50;
 
-    private static final double ACCEPTABLE_SCORE_THRESHOLD = 0.1;
+    private static final double ACCEPTABLE_SCORE_THRESHOLD = 0.25;
 
     public static Rhyme getRhyme(final String userInput) {
 
@@ -97,7 +97,7 @@ public final class CleverEngine {
                     resultingGopSongList
                             .stream()
                             //todo: set epsilon?
-                            .filter(fs -> fs.getScore() >= topFoundGopSong.getScore())
+                            .filter(fs -> fs.getScore() >= topFoundGopSong.getScore() - ACCEPTABLE_SCORE_THRESHOLD)
                             .collect(Collectors.toList());
 
             final Random random = new Random();
