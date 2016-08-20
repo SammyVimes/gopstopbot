@@ -20,14 +20,14 @@ public final class ExperimentalMetreFilter {
     public static boolean filter(final String request, final FoundGopSong gopSong) {
 
         // тупо смотрим на количество слогов
-        final int requestSyllablesCount = WordStressHelper.countVowels(request);
+        final int requestSyllablesCount = WordStressHelper.countVowels(request.toLowerCase());
 
         if (requestSyllablesCount < MIN_FIRE_SYLLABLES_COUNT) {
-            LOGGER.debug("Not applying extra metre filter for " + requestSyllablesCount + " syllables in " + request);
+            LOGGER.trace("Not applying extra metre filter for " + requestSyllablesCount + " syllables in " + request);
             return true;
         }
 
-        final int songnlineSyllablesCount = WordStressHelper.countVowels(gopSong.getRhyme());
+        final int songnlineSyllablesCount = WordStressHelper.countVowels(gopSong.getRhyme().toLowerCase());
         return Math.abs(requestSyllablesCount - songnlineSyllablesCount) < SYLLABLES_DIFF;
     }
 
