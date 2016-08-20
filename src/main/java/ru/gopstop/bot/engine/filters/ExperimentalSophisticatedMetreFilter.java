@@ -46,7 +46,7 @@ public final class ExperimentalSophisticatedMetreFilter {
                 sb.append(Strings.repeat(".", countSyllables));
             }
 
-            LOGGER.info(word + " " + countSyllables + " " + info + " " + sb.toString());
+//            LOGGER.info(word + " " + countSyllables + " " + info + " " + sb.toString());
         }
         sb.append(".*");
         return sb.toString();
@@ -59,9 +59,11 @@ public final class ExperimentalSophisticatedMetreFilter {
         final List<String> gopLexems = buildLexemList(gopSong.getRhyme());
         final String gopPattern = buildFuzzyPattern(gopLexems);
         final String reqPattern = buildFuzzyPattern(reqLexems);
-        LOGGER.info("PATTERNS " + reqLexems + " " + reqPattern);
-        LOGGER.info("PATTERNS " + gopLexems + " " + gopPattern);
+        final boolean match = gopPattern.matches(reqPattern) || reqPattern.matches(gopPattern);
 
+        LOGGER.debug("PATTERNS " + match + " "
+                + reqLexems + " " + reqPattern + " "
+                + gopLexems + " " + gopPattern);
         return true;
     }
 
