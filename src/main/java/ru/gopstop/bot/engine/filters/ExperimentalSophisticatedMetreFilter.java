@@ -40,7 +40,7 @@ public final class ExperimentalSophisticatedMetreFilter {
             final int countSyllables = WordStressHelper.countVowels(word);
             final Pair<Integer, Integer> info = STRESS_MAP.get(word);
 
-            if (info != null && info.getRight() >= 0) {
+            if (info != null && info.getRight() >= 0 && countSyllables > 1) {
                 sb.append(WordStressMap.formRhythmicPattern(word, info));
             } else {
                 sb.append(Strings.repeat(".", countSyllables));
