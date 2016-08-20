@@ -51,7 +51,7 @@ public final class SameLastWordFilter {
         LOGGER.debug("Checking if approximately equal " + lastGop + " " + lastUser);
 
         // одинаковые не пропускаем
-        if (!lastGop.equals(lastUser)) {
+        if (lastGop.equals(lastUser)) {
             LOGGER.debug("Same word, discarding: " + lastGop + " " + lastUser);
             return false;
         }
