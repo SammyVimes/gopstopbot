@@ -25,7 +25,7 @@ public final class CleverEngine {
 
     private static final int TOP_SUGGESTIONS = 50;
 
-    private static final double ACCEPTABLE_SCORE_THRESHOLD = 0.25;
+    private static final double ACCEPTABLE_SCORE_THRESHOLD = 0.05;
 
     public static Rhyme getRhyme(final String userInput) {
 
