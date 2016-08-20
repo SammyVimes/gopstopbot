@@ -166,7 +166,8 @@ public final class WordStressMap {
         return word;
     }
 
-    static String formRhythmicPattern(final String word, final Pair<Integer, Integer> rhythmicPattern) {
+    public static String formRhythmicPattern(final String word,
+                                      final Pair<Integer, Integer> rhythmicPattern) {
         // комменты расставил как догадался
         // rhythmicPatter[0] -- кол-во слогов
         char[] str = new char[rhythmicPattern.getLeft()];

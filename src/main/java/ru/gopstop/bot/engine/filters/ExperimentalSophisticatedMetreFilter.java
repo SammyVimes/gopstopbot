@@ -41,18 +41,7 @@ public final class ExperimentalSophisticatedMetreFilter {
             final Pair<Integer, Integer> info = STRESS_MAP.get(word);
 
             if (info != null && info.getRight() >= 0) {
-
-                final int pos = info.getRight();
-
-                if (pos > 0) {
-                    sb.append(Strings.repeat("0", pos));
-                }
-
-                sb.append("1");
-
-                if (pos < countSyllables - 1) {
-                    sb.append(Strings.repeat("0", countSyllables - pos - 1));
-                }
+                sb.append(WordStressMap.formRhythmicPattern(word, info));
             } else {
                 sb.append(Strings.repeat(".", countSyllables));
             }
