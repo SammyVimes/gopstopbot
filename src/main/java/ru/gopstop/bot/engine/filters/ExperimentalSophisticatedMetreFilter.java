@@ -38,10 +38,11 @@ public final class ExperimentalSophisticatedMetreFilter {
         for (final String word : words) {
 
             final int countSyllables = WordStressHelper.countVowels(word);
+            final Pair<Integer, Integer> info = STRESS_MAP.get(word);
 
-            if (STRESS_MAP.containsKey(word)) {
+            if (info != null) {
 
-                final int pos = STRESS_MAP.get(word).getRight();
+                final int pos = info.getRight();
 
                 if (pos > 0) {
                     sb.append(Strings.repeat("0", pos));
@@ -56,7 +57,7 @@ public final class ExperimentalSophisticatedMetreFilter {
                 sb.append(Strings.repeat(".", countSyllables));
             }
 
-            LOGGER.info(word  + " " + countSyllables + " " + sb.toString());
+            LOGGER.info(word + " " + countSyllables + " " + info + " " + sb.toString());
         }
         sb.append(".*");
         return sb.toString();

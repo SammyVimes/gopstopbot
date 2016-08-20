@@ -13,7 +13,7 @@ public final class ExperimentalMetreFilter {
 
     private static final int MIN_FIRE_SYLLABLES_COUNT = 5;
 
-    private static final int SYLLABLES_DIFF = 2;
+    private static final int SYLLABLES_DIFF = 3;
 
     private static final Logger LOGGER = LogManager.getLogger(ExperimentalMetreFilter.class);
 
