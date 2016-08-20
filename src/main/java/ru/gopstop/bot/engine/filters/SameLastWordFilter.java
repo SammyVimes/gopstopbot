@@ -73,16 +73,23 @@ public final class SameLastWordFilter {
                         + gopSong.getGopSong().getName());
 
                 final String longer = (lastGopLength > lastUserLength ? lastGop : lastUser);
-                final String shorter = (lastGopLength < lastUserLength ? lastGop : lastUser);
+                final String shorter = (lastGopLength > lastUserLength ? lastUser : lastGop);
 
                 for (final String pr : PREFIXES) {
 
-                    if (longer.startsWith(pr)
-                            && longer.length() > pr.length()
-                            && longer.substring(pr.length(), longer.length()).equals(shorter)) {
+                    if (longer.startsWith(pr)) {
 
-                        LOGGER.debug("Skipping words as однокоренные " + longer + " " + shorter);
-                        return false;
+                        LOGGER.debug("Same beggining words:\t"
+                                + longer + "\t>\t"
+                                + shorter + "\t// "
+                                + gopSong.getGopSong().getName());
+
+                        if (longer.length() > pr.length()
+                                && longer.substring(pr.length(), longer.length()).equals(shorter)) {
+
+                            LOGGER.debug("Skipping words as однокоренные " + longer + " " + shorter);
+                            return false;
+                        }
                     }
                 }
             }
