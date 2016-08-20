@@ -20,15 +20,14 @@ public final class SameLastWordFilter {
     /**
      * Дело в том, что это обычно то же слово с приставкой
      */
-    private static final int UNACC_POSTFIX = 4;
-
+    private static final int UNACC_POSTFIX = 3;
 
     private static final List<String> PREFIXES =
             Arrays.asList(
                     // longer go first
                     "сверх", "пере", "анти", "разъ", "подъ",
                     "при", "про", "над", "обо", "бес", "раз", "без", "рас",
-                    "об", "из", "ис", "за", "въ", "съ", "не", "во", "со",
+                    "об", "из", "ис", "за", "въ", "съ", "не", "во", "со", "от",
                     "о", "а", "c", "в", "у");
 
     private static List<String> buildLexemList(final String request) {
