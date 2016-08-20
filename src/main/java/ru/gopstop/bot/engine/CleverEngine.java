@@ -68,7 +68,7 @@ public final class CleverEngine {
             final double scoreDiff = foundGopSongList.get(0).getScore() - experimentalGopSongList.get(0).getScore();
 
             if (scoreDiff < ACCEPTABLE_SCORE_THRESHOLD) {
-                LOGGER.info("Applying metre filter, score diff is OK: " + scoreDiff);
+                LOGGER.info("Extra filter, score diff is OK: " + scoreDiff);
                 resultingGopSongList = experimentalGopSongList;
             } else {
                 LOGGER.info("Score diff too big between EXP "
@@ -98,6 +98,7 @@ public final class CleverEngine {
             final Random random = new Random();
             final int chosenRandomRhymeId = random.nextInt(filteredList.size());
             final FoundGopSong chosenSong = filteredList.get(chosenRandomRhymeId);
+
             LOGGER.info("Chosen gop song number "
                     + chosenRandomRhymeId + "/"
                     + filteredList.size() + ": " + chosenSong);
