@@ -211,10 +211,9 @@ public final class WordStressMap {
 
             if (stressDict.get(words[i]) != null) {
                 final Pair<Integer, Integer> p = stressDict.get(words[i]);
-
                 // todo: find a smarter solution
-                final Integer randomStress = p.getRight();
-                curWordRhythmicPattern = Pair.of(p.getLeft(), randomStress);
+                final Integer stress = p.getRight();
+                curWordRhythmicPattern = Pair.of(p.getLeft(), stress);
             } else {
                 // нет такого слова в словаре
                 // забиваем нулями

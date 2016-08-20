@@ -33,8 +33,8 @@ public final class BasicPreprocessor {
      * Нехитрое преобразование постфикса (вместо нормальной фонетической транскрипции)
      */
     public static String postfix(final String line,
-                                  final boolean logStuff,
-                                  final boolean onlyLastWord) {
+                                 final boolean logStuff,
+                                 final boolean onlyLastWord) {
 
         final String normalLine =
                 SymbolsUtils.replaceUseless(line.trim(), " ").toLowerCase();
@@ -56,6 +56,7 @@ public final class BasicPreprocessor {
                 ExtraWordStressTool.upperCaseStress(WordStressMap.fixYo(splitted[len]));
 
         if (logStuff) {
+            LOGGER.info("PRIOR\t" + WordStressMap.fixYo(splitted[len]));
             LOGGER.info("WORD2STRESSED\t" + splitted[len] + "\t" + lastStressed);
         }
 
