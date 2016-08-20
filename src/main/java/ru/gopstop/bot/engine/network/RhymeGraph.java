@@ -62,7 +62,7 @@ public final class RhymeGraph {
     /**
      * Метод получения рифмующихся хвостов
      */
-    public Collection<String> getCloseRhymes(final String postfix) {
+    public Set<String> getCloseRhymes(final String postfix) {
 
         final String cutPostfix =
                 postfix.substring(0, Math.min(postfix.length(), POSTFIX));
@@ -72,7 +72,8 @@ public final class RhymeGraph {
             res.add(cutPostfix);
             return res;
         } else {
-            return Collections.singletonList(cutPostfix);
+            LOGGER.debug("No rhymes in graph found");
+            return Collections.singleton(cutPostfix);
         }
     }
 

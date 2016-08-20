@@ -13,10 +13,7 @@ import ru.gopstop.bot.engine.network.RhymeGraph;
 import ru.gopstop.bot.engine.search.preprocessing.BasicPreprocessor;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * Поиск рифм
@@ -54,8 +51,10 @@ class LinesIndexSearcher {
             }
 
             //todo: может, сделать запросы для постфиксов разной длины
-            final Collection<String> rhymesFromGraph =
+            final Set<String> rhymesFromGraph =
                     RhymeGraph.getInstance().getCloseRhymes(processedRequest);
+
+            LOGGER.info("FROM_GRAPH: [" + rhymesFromGraph + "]");
 
             // постфиксы из графа фиксированной длины
             for (final String rhyme : rhymesFromGraph) {
