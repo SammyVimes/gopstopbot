@@ -78,12 +78,13 @@ public final class SameLastWordFilter {
 
                     if (longer.startsWith(pr)) {
 
-                        LOGGER.trace("Same beginning words: ["
+                        LOGGER.debug("Same beginning words: ["
                                 + longer + "]\t> ["
                                 + shorter + "] // "
                                 + gopSong.getGopSong().getName());
 
-                        LOGGER.trace("Suspicious substring: "
+                        LOGGER.debug("Suspicious substring for prefix ["
+                                + pr + "]: "
                                 + longer.substring(pr.length(), longer.length()));
 
                         if (longer.length() > pr.length()
