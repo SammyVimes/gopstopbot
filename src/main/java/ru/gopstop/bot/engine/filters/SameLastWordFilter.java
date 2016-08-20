@@ -76,7 +76,7 @@ public final class SameLastWordFilter {
 
                 for (final String pr : PREFIXES) {
 
-                    if (longer.startsWith(pr)) {
+                    if (longer.startsWith(pr) && longer.length() == shorter.length() + pr.length()) {
 
                         LOGGER.debug("Same beginning words: ["
                                 + longer + "]\t> ["
