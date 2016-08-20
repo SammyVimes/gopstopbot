@@ -84,8 +84,8 @@ public final class SameLastWordFilter {
                                 + shorter + "] // "
                                 + gopSong.getGopSong().getName());
 
-                        LOGGER.debug("Suspicious substring: " +
-                                longer.substring(pr.length(), longer.length()));
+                        LOGGER.debug("Suspicious substring: "
+                                + longer.substring(pr.length(), longer.length()));
 
                         if (longer.length() > pr.length()
                                 && longer.substring(pr.length(), longer.length()).equals(shorter)) {
