@@ -21,7 +21,7 @@ public final class ExperimentalSophisticatedMetreFilter {
 
     private static final Logger LOGGER = LogManager.getLogger(ExperimentalMetreFilter.class);
 
-    private static final Map<String, Pair<Integer, Integer>> stressMap = WordStressMap.getCoreWordDict();
+    private static final Map<String, Pair<Integer, Integer>> STRESS_MAP = WordStressMap.getCoreWordDict();
 
     private static List<String> buildLexemList(final String request) {
         return Arrays.asList(
@@ -39,12 +39,16 @@ public final class ExperimentalSophisticatedMetreFilter {
 
             final int countSyllables = WordStressHelper.countVowels(word);
 
-            if (stressMap.containsKey(word)) {
-                final int pos = stressMap.get(word).getRight();
+            if (STRESS_MAP.containsKey(word)) {
+
+                final int pos = STRESS_MAP.get(word).getRight();
+
                 if (pos > 0) {
                     sb.append(Strings.repeat("0", pos));
                 }
+
                 sb.append("1");
+
                 if (pos < countSyllables - 1) {
                     sb.append(Strings.repeat("0", countSyllables - pos - 1));
                 }
@@ -58,6 +62,7 @@ public final class ExperimentalSophisticatedMetreFilter {
 
     public static boolean filter(final String request, final FoundGopSong gopSong) {
 
+        //todo: очень неэффективно, конечно, строить это дело каждый раз, надо подумать
         final List<String> reqLexems = buildLexemList(request);
         final List<String> gopLexems = buildLexemList(gopSong.getRhyme());
         final String gopPattern = buildFuzzyPattern(gopLexems);
@@ -65,9 +70,7 @@ public final class ExperimentalSophisticatedMetreFilter {
         LOGGER.info("PATTERNS " + reqLexems + " " + reqPattern);
         LOGGER.info("PATTERNS " + gopLexems + " " + gopPattern);
 
-
         return true;
-
     }
 
     private ExperimentalSophisticatedMetreFilter() {
