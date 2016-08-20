@@ -33,7 +33,7 @@ public final class CleverEngine {
         if (userInput.trim().toLowerCase().matches("(.*[^A-Za-zА-Яа-яёЁ]|^)(путин(а|у|ым|е)?|putin)[^A-Za-zА-Яа-яёЁ]*")) {
             return new Rhyme(
                     "Lorem ipsum dolor sit amet, consectetur adipiscin...",
-                    new GopSong("Unknown track", "Various artists", null)
+                    new GopSong("Untitled Track", "Unknown Artist", null)
             );
         }
 
