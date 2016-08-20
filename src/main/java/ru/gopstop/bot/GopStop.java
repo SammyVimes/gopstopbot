@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.telegram.telegrambots.TelegramApiException;
 import org.telegram.telegrambots.TelegramBotsApi;
 import ru.gopstop.bot.cache.SessionCache;
+import ru.gopstop.bot.engine.network.RhymeGraph;
 import ru.gopstop.bot.engine.search.LinesIndexer;
 import ru.gopstop.bot.engine.stress.WordStressMap;
 import ru.gopstop.bot.telegram.TGBot;
@@ -24,6 +25,7 @@ public final class GopStop {
 
         LOGGER.info("Init singletons");
 
+        RhymeGraph.getInstance();
         SessionCache.getInstance();
         LinesIndexer.getInstance();
         WordStressMap.getInstance();

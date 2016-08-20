@@ -62,9 +62,7 @@ public final class RhymeGraph {
     /**
      * Метод получения рифмующихся хвостов
      */
-    public Collection<String> getCloseRhymes(final String line) {
-
-        final String postfix = BasicPreprocessor.postfix(line, true);
+    public Collection<String> getCloseRhymes(final String postfix) {
 
         final String cutPostfix =
                 postfix.substring(0, Math.min(postfix.length(), POSTFIX));
@@ -188,7 +186,6 @@ public final class RhymeGraph {
         }
     }
 
-
     private RhymeGraph() throws IOException {
 
         final UndirectedSparseGraph<String, Integer> tempGraph;
@@ -203,9 +200,6 @@ public final class RhymeGraph {
         } catch (final Exception e) {
 
             LOGGER.warn("COULD NOT DESER graph", e);
-
-            //todo: читать нормально, например, заюзать StreamAPI
-
             graph = new UndirectedSparseGraph<>();
 
             SongsUtils

@@ -9,10 +9,12 @@ import org.apache.lucene.index.Term;
 import org.apache.lucene.search.*;
 import org.apache.lucene.store.Directory;
 import ru.gopstop.bot.engine.entities.GopSong;
+import ru.gopstop.bot.engine.network.RhymeGraph;
 import ru.gopstop.bot.engine.search.preprocessing.BasicPreprocessor;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -49,6 +51,15 @@ class LinesIndexSearcher {
             if (processedRequest == null || processedRequest.isEmpty()) {
                 LOGGER.warn("Processed request is empty all of a sudden: [" + processedRequest + "]");
                 return Collections.emptyList();
+            }
+
+            //todo: может, сделать запросы для постфиксов разной длины
+            final Collection<String> rhymesFromGraph =
+                    RhymeGraph.getInstance().getCloseRhymes(processedRequest);
+
+            // постфиксы из графа фиксированной длины
+            for (final String rhyme : rhymesFromGraph) {
+                q.add(new PrefixQuery(new Term("text", rhyme)), BooleanClause.Occur.SHOULD);
             }
 
             // тупая комбинация префиксных запросов
