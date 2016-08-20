@@ -1,5 +1,7 @@
 package ru.gopstop.bot.engine.filters;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ru.gopstop.bot.engine.search.FoundGopSong;
 import ru.gopstop.bot.util.SymbolsUtils;
 
@@ -13,10 +15,12 @@ import java.util.List;
  */
 public final class SameLastWordFilter {
 
+    private static final Logger LOGGER = LogManager.getLogger(SameLastWordFilter.class);
+
     /**
      * Дело в том, что это обычно то же слово с приставкой
      */
-    private static final int UNACC_POSTFIX = 6;
+    private static final int UNACC_POSTFIX = 4;
 
 
     private static final List<String> PREFIXES =
@@ -24,8 +28,8 @@ public final class SameLastWordFilter {
                     // longer go first
                     "сверх", "пере", "анти", "разъ", "подъ",
                     "при", "про", "над", "обо", "бес", "раз", "без", "рас",
-                    "об", "из", "ис", "за", "въ", "съ",
-                    "о", "а",  "c", "в");
+                    "об", "из", "ис", "за", "въ", "съ", "не", "во",
+                    "о", "а", "c", "в", "у");
 
     private static List<String> buildLexemList(final String request) {
         return Arrays.asList(
@@ -46,6 +50,8 @@ public final class SameLastWordFilter {
 
         // одинаковые не пропускаем
         if (!lastGop.equals(lastUser)) {
+
+            LOGGER.debug("Same word, discarding: " + lastGop + " " + lastUser);
             return false;
         }
 
@@ -70,6 +76,8 @@ public final class SameLastWordFilter {
                     if (longer.startsWith(pr)
                             && longer.length() > pr.length()
                             && longer.substring(pr.length(), longer.length()).equals(shorter)) {
+
+                        LOGGER.debug("Skipping words as однокоренные " + longer + " " + shorter);
                         return false;
                     }
                 }
