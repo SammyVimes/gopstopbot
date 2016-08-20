@@ -8,6 +8,7 @@ import ru.gopstop.bot.engine.filters.*;
 import ru.gopstop.bot.engine.search.FoundGopSong;
 import ru.gopstop.bot.engine.search.LinesIndexer;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -47,6 +48,8 @@ public final class CleverEngine {
                         .filter(g -> SameLastWordFilter.filter(userInput, g))
                         .filter(g -> UglyDataFilter.filter(userInput, g))
                         .collect(Collectors.toList());
+
+        Collections.sort(foundGopSongList, (gs0, gs1) -> -Double.compare(gs0.getScore(), gs1.getScore()));
 
         foundGopSongList
                 .stream()
