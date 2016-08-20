@@ -50,7 +50,7 @@ public final class SameLastWordFilter {
 
         // одинаковые не пропускаем
         if (lastGop.equals(lastUser)) {
-            LOGGER.debug("Same word, discarding: " + lastGop + " " + lastUser);
+            LOGGER.debug("Same word, discarding:\t" + lastGop + "\t" + lastUser + "\t// " + gopSong.getGopSong().getName());
             return false;
         }
 
@@ -67,8 +67,10 @@ public final class SameLastWordFilter {
 
             if (gopPosttfix.equals(inputPostfix)) {
 
-                LOGGER.debug("Likely same base words: " + lastGop + " " + lastUser);
-                LOGGER.debug("Likely same base words endings: " + gopPosttfix + " " + inputPostfix);
+                LOGGER.debug("Likely same base words:\t"
+                        + lastGop + "\t"
+                        + lastUser + "\t// "
+                        + gopSong.getGopSong().getName());
 
                 final String longer = (lastGopLength > lastUserLength ? lastGop : lastUser);
                 final String shorter = (lastGopLength < lastUserLength ? lastGop : lastUser);
