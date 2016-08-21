@@ -92,7 +92,8 @@ public final class CleverEngine {
                         + experimentalGopSongList.size() + ", score diff is OK: " + scoreDiff);
                 resultingGopSongList = experimentalGopSongList;
             } else {
-                LOGGER.info("Score diff too big between EXP [or size is too small = "
+                LOGGER.info("Score diff too big [" + scoreDiff
+                        + "] or size is too small = [ "
                         + experimentalGopSongList.size() + " ] "
                         + experimentalGopSongList.get(0).getRhyme() + " || "
                         + foundGopSongList.get(0).getRhyme());
