@@ -23,9 +23,19 @@ public final class CleverEngine {
 
     private static final Logger LOGGER = LogManager.getLogger(CleverEngine.class);
 
-    private static final int MIN_FINAL_SUGGESTIONS_SIZE = 2;
+    private static final int MIN_FINAL_SUGGESTIONS_SIZE = 3;
 
     private static final double ACCEPTABLE_SCORE_THRESHOLD = 0.05;
+
+    private static List<FoundGopSong> getAcceptableRhymes(
+            final List<FoundGopSong> songs,
+            final double topScore) {
+        return songs
+                .stream()
+                //todo: set epsilon?
+                .filter(fs -> fs.getScore() >= topScore - ACCEPTABLE_SCORE_THRESHOLD)
+                .collect(Collectors.toList());
+    }
 
     public static Rhyme getRhyme(final String userInput) {
 
@@ -73,7 +83,10 @@ public final class CleverEngine {
             final double scoreDiff = foundGopSongList.get(0).getScore() - experimentalGopSongList.get(0).getScore();
 
             if (scoreDiff < ACCEPTABLE_SCORE_THRESHOLD
-                    && experimentalGopSongList.size() >= MIN_FINAL_SUGGESTIONS_SIZE) {
+                    && getAcceptableRhymes(
+                    experimentalGopSongList,
+                    experimentalGopSongList.get(0).getScore())
+                    .size() >= MIN_FINAL_SUGGESTIONS_SIZE) {
                 LOGGER.info("Extra filter applied, "
                         + foundGopSongList.size() + "->"
                         + experimentalGopSongList.size() + ", score diff is OK: " + scoreDiff);
@@ -98,11 +111,7 @@ public final class CleverEngine {
             LOGGER.info("Top song: " + topFoundGopSong);
 
             final List<FoundGopSong> filteredList =
-                    resultingGopSongList
-                            .stream()
-                            //todo: set epsilon?
-                            .filter(fs -> fs.getScore() >= topFoundGopSong.getScore() - ACCEPTABLE_SCORE_THRESHOLD)
-                            .collect(Collectors.toList());
+                    getAcceptableRhymes(resultingGopSongList, topFoundGopSong.getScore());
 
             final Random random = new Random();
             final int chosenRandomRhymeId = random.nextInt(filteredList.size());
