@@ -23,7 +23,7 @@ public final class CleverEngine {
 
     private static final Logger LOGGER = LogManager.getLogger(CleverEngine.class);
 
-    private static final int TOP_SUGGESTIONS = 50;
+    private static final int MIN_FINAL_SUGGESTIONS_SIZE = 2;
 
     private static final double ACCEPTABLE_SCORE_THRESHOLD = 0.05;
 
@@ -72,11 +72,15 @@ public final class CleverEngine {
 
             final double scoreDiff = foundGopSongList.get(0).getScore() - experimentalGopSongList.get(0).getScore();
 
-            if (scoreDiff < ACCEPTABLE_SCORE_THRESHOLD) {
-                LOGGER.info("Extra filter, score diff is OK: " + scoreDiff);
+            if (scoreDiff < ACCEPTABLE_SCORE_THRESHOLD
+                    && experimentalGopSongList.size() >= MIN_FINAL_SUGGESTIONS_SIZE) {
+                LOGGER.info("Extra filter applied, "
+                        + foundGopSongList.size() + "->"
+                        + experimentalGopSongList.size() + ", score diff is OK: " + scoreDiff);
                 resultingGopSongList = experimentalGopSongList;
             } else {
-                LOGGER.info("Score diff too big between EXP "
+                LOGGER.info("Score diff too big between EXP [or size is too small = "
+                        + experimentalGopSongList.size() + " ] "
                         + experimentalGopSongList.get(0).getRhyme() + " || "
                         + foundGopSongList.get(0).getRhyme());
                 resultingGopSongList = foundGopSongList;
