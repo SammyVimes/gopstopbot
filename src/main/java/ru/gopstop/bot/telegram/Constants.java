@@ -32,7 +32,7 @@ public final class Constants {
             "«Мне говорят, что Окна ТАСС моих стихов полезнее...»\n"
                     + "Like, share, re-post or stay with us,\n"
                     + "Ведь и шансон — поэзия.\n\n"
-            + "[Что здесь происходит?](https://github.com/SammyVimes/gopstopbot/blob/master/README.md)\n"
+            + "[Что здесь происходит?](https://github.com/SammyVimes/gopstopbot/blob/master/README.md)\n\n"
             + "Команда:\n"
             + "Антон @AntonAlexeyev\n"
             + "Наташа @pritykovskaya\n"
