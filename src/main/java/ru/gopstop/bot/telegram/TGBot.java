@@ -111,13 +111,15 @@ public class TGBot extends TelegramLongPollingBot {
             final String lastController = session.getLastController();
 
             //todo: уродливый хак, надо подумтаь, как сделать нормально
-            if (TextUtils.isEmpty(lastController) || lastController.equals(Constants.ControllersTags.ABOUT.getName())) {
+            if (TextUtils.isEmpty(lastController) || message.getText().equals(SettingsController.ABOUT)) {
+
                 // у юзера не проставлен контроллер, выберем из меню
                 for (final Controller controller : mainControllers) {
 
                     if (controller.getEntry().equals(message.getText())) {
 
                         controller.handleMessage(message, session);
+
                         if (controller.rememberMe()) {
                             session.setLastController(controller.getKey());
                             SessionCache.getInstance().updateSession(session);
@@ -137,13 +139,14 @@ public class TGBot extends TelegramLongPollingBot {
                 }
                 return;
             }
+
             final Controller controller = controllerMap.get(lastController);
 
             // обработаем сообщение в последнем контроллере
             controller.handleMessage(message, session);
-        } catch (TelegramApiException e) {
+        } catch (final TelegramApiException e) {
             LOGGER.error("Error while handling incoming message: " + e.getMessage(), e);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             LOGGER.error("Unknown err", e);
             throw e;
         }
@@ -189,7 +192,6 @@ public class TGBot extends TelegramLongPollingBot {
         row.add(mainControllers.get(mainControllers.size() - 1).getEntry());
         keyboard.add(row);
         replyKeyboardMarkup.setKeyboard(keyboard);
-
         return replyKeyboardMarkup;
     }
 
