@@ -12,7 +12,7 @@ import ru.gopstop.bot.telegram.user.TGSession;
  */
 public class SettingsController extends Controller {
 
-    private static final String ABOUT = Constants.ControllersTags.ABOUT.getName() + " " + Emoji.INFORMATION_SOURCE.toString();
+    public static final String ABOUT = Constants.ControllersTags.ABOUT.getName() + " " + Emoji.INFORMATION_SOURCE.toString();
 
     public SettingsController(final TGBot bot) {
         super(bot);

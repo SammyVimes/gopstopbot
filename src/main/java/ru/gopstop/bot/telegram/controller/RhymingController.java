@@ -166,7 +166,7 @@ public class RhymingController extends BaseMuzisController {
                 SessionCache.getInstance().updateSession(session);
             }
 
-            keyboard.add(BACK);
+            keyboard.add(SettingsController.ABOUT);
             final ReplyKeyboardMarkup replyKeyboardMarkup = buildKeyboard(keyboard);
 
             session.put("results", songs);
