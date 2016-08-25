@@ -7,6 +7,7 @@ import org.telegram.telegrambots.api.methods.ActionType;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import ru.gopstop.bot.FileUtils;
 import ru.gopstop.bot.cache.SessionCache;
 import ru.gopstop.bot.engine.CleverEngine;
 import ru.gopstop.bot.engine.entities.GopSong;
@@ -79,6 +80,17 @@ public class RhymingController extends BaseMuzisController {
                 + (rhyme == null ? "NO_RHYME" : rhyme.getRhyme()) + "\t"
                 + (rhyme == null ? "NO_SONG" : rhyme.getGopSong().getName()) + "\t"
                 + (rhyme == null ? "NO_SONG" : rhyme.getGopSong().getAuthor()));
+
+        LOGGER.info("REPORT_CHAT_ID " + FileUtils.REPORT_CHAT_ID);
+
+//        sendMessage(
+////                FileUtils.REPORT_CHAT_ID,
+//                request.getChatId().toString(),
+//                session.getUser().getUserName() + "\n"
+//                        + session.getUser().getFirstName() + "\n"
+//                        + session.getUser().getLastName() + "\n"
+//                        + text.replaceAll("\t", " ") + "\n"
+//                        + (rhyme == null ? "NO_RHYME" : rhyme.getRhyme()) + "\t");
 
         if (rhyme != null) {
             onRhymeFound(request, session, rhyme);

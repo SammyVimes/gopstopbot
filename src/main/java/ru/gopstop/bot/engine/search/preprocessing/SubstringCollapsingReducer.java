@@ -23,6 +23,8 @@ class SubstringCollapsingReducer implements LastWordProcessor {
             replacements.put(consonant + "" + consonant, consonant + "");
         }
 
+        replacements.put("вств", "ст");
+        replacements.put("вс", "с");
         replacements.put("знь", "сь");
         replacements.put("цк", "ск");
         replacements.put("тся", "ца");
@@ -64,6 +66,8 @@ class SubstringCollapsingReducer implements LastWordProcessor {
 
         // после того как заменили, где надо, ё на йо, можно вообще всё
         replacements.put("ё", "О");
+        replacements.put("стн", "сн");
+        replacements.put("пл$", "пал");
     }
 
     @Override

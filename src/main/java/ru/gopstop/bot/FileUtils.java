@@ -18,6 +18,9 @@ public final class FileUtils {
 
     private static final String FILE_PATH;
 
+    // should be in another place, but who cares
+    public static final String REPORT_CHAT_ID;
+
     static {
         Properties properties = new Properties();
         try {
@@ -26,6 +29,8 @@ public final class FileUtils {
             throw new RuntimeException("No secret.properties with telegram token found in resources/");
         }
         FILE_PATH = properties.getProperty("filespath");
+        REPORT_CHAT_ID = properties.getProperty("report.chat_id");
+        System.out.println("REPORT_CHAT_ID " + REPORT_CHAT_ID);
     }
 
     public static File getCachedFile(final String fileName) {

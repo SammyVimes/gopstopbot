@@ -47,6 +47,18 @@ public final class CleverEngine {
             );
         }
 
+        final List<FoundGopSong> initialSet =  LinesIndexer
+                .getInstance()
+                .search(userInput);
+
+        LOGGER.info("For [" + userInput + "] initial set: " + initialSet.size());
+
+        initialSet
+                .stream()
+                .limit(LOGGED_TOP)
+                .forEach(gopSong ->
+                        LOGGER.debug("BEFORE_FILTERING\t" + gopSong.getScore() + "\t|\t" + gopSong.getRhyme()));
+
         //  тупой поиск без учёта ударения
         final List<FoundGopSong> foundGopSongList =
                 LinesIndexer
@@ -58,6 +70,8 @@ public final class CleverEngine {
                         .filter(g -> SameLastWordFilter.filter(userInput, g))
                         .filter(g -> UglyDataFilter.filter(userInput, g))
                         .collect(Collectors.toList());
+
+        LOGGER.info("For [" + userInput + "] after first filter set found count: " + foundGopSongList.size());
 
         Collections.sort(foundGopSongList, (gs0, gs1) -> -Double.compare(gs0.getScore(), gs1.getScore()));
 
@@ -75,6 +89,9 @@ public final class CleverEngine {
                         //todo: пока работает очень неважно в плане качества, надо наделать хаков
                         // .filter(g -> ExperimentalSophisticatedMetreFilter.filter(userInput, g))
                         .collect(Collectors.toList());
+
+
+        LOGGER.info("For [" + userInput + "] after experimental filter set found count: " + experimentalGopSongList.size());
 
         final List<FoundGopSong> resultingGopSongList;
 
@@ -102,7 +119,13 @@ public final class CleverEngine {
 
         } else {
             LOGGER.debug("Experimental metre filtering was too strict");
-            resultingGopSongList = foundGopSongList;
+
+            if (foundGopSongList.isEmpty()) {
+                LOGGER.debug("Basic filters were too strict");
+                resultingGopSongList = initialSet;
+            } else {
+                resultingGopSongList = foundGopSongList;
+            }
         }
 
         if (!resultingGopSongList.isEmpty()) {

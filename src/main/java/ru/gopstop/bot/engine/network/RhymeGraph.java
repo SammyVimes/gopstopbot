@@ -32,7 +32,7 @@ public final class RhymeGraph {
 
     private static final int SHORT_WORD_LENGTH = 4;
 
-    private static final int POSTFIX = 5;
+    private static final int POSTFIX = 6;
 
     private static final int MAX_LEVE_DIST = 4;
 

@@ -13,7 +13,10 @@ import ru.gopstop.bot.engine.network.RhymeGraph;
 import ru.gopstop.bot.engine.search.preprocessing.BasicPreprocessor;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Поиск рифм
@@ -25,7 +28,9 @@ class LinesIndexSearcher {
 
     private static final int COUNT_RETURNED = 1500;
 
-    private static final int ANALYZED_POSTFIX_LENGTH = 7;
+    private static final int ANALYZED_POSTFIX_LENGTH_TO = 7;
+    private static final int ANALYZED_POSTFIX_LENGTH_FROM = 2;
+    private static final int RHYMES_FROM_GRAPH_SIZE = 3;
 
     private static final int LOGGED_TOP = 5;
 
@@ -56,15 +61,28 @@ class LinesIndexSearcher {
 
             LOGGER.info("FROM_GRAPH: [" + rhymesFromGraph + "]");
 
-            // постфиксы из графа фиксированной длины
-            for (final String rhyme : rhymesFromGraph) {
-                q.add(new PrefixQuery(new Term("text", rhyme)), BooleanClause.Occur.SHOULD);
+            if (rhymesFromGraph.size() <= RHYMES_FROM_GRAPH_SIZE) {
+
+                // постфиксы из графа фиксированной длины
+                for (final String rhyme : rhymesFromGraph) {
+
+                    for (int i = ANALYZED_POSTFIX_LENGTH_TO; i >= ANALYZED_POSTFIX_LENGTH_FROM; i--) {
+                        q.add(new PrefixQuery(
+                                new Term(
+                                        "text",
+                                        rhyme.substring(0, Math.min(i, rhyme.length())))
+                        ), BooleanClause.Occur.SHOULD);
+                    }
+                }
+            } else {
+                LOGGER.info("Not using rhymes from graph, too many: " + rhymesFromGraph.size());
             }
 
             // тупая комбинация префиксных запросов
-            for (int i = ANALYZED_POSTFIX_LENGTH; i > 0; i--) {
+            for (int i = ANALYZED_POSTFIX_LENGTH_TO; i >= ANALYZED_POSTFIX_LENGTH_FROM; i--) {
                 q.add(new PrefixQuery(
                                 new Term("text", processedRequest.substring(0, Math.min(i, processedRequest.length())))),
+//                            new Term("text", processedRequest.substring(0, Math.min(ANALYZED_POSTFIX_LENGTH, processedRequest.length())))),
                         BooleanClause.Occur.SHOULD);
             }
 
