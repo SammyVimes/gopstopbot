@@ -186,7 +186,7 @@ public class TGBot extends TelegramLongPollingBot {
 //            row.add(entry);
 //        }
         KeyboardRow row = new KeyboardRow();
-        row.add( mainControllers.get(mainControllers.size() - 1).getEntry());
+        row.add(mainControllers.get(mainControllers.size() - 1).getEntry());
         keyboard.add(row);
         replyKeyboardMarkup.setKeyboard(keyboard);
 
