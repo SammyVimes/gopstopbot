@@ -113,7 +113,7 @@ public class TGBot extends TelegramLongPollingBot {
             //todo: уродливый хак, надо подумтаь, как сделать нормально
             if (TextUtils.isEmpty(lastController) || lastController.equals(Constants.ControllersTags.ABOUT.getName())) {
                 // у юзера не проставлен контроллер, выберем из меню
-                for (Controller controller : mainControllers) {
+                for (final Controller controller : mainControllers) {
 
                     if (controller.getEntry().equals(message.getText())) {
 
@@ -126,7 +126,15 @@ public class TGBot extends TelegramLongPollingBot {
                     }
                 }
                 // это непонятное сообщение или например /start, просто покажем меню
-                showMainMenu(message, session);
+//                showMainMenu(message, session);
+                //а вот и нет, теперь перём первый контроллер
+                final Controller firstController = mainControllers.get(0);
+                firstController.handleMessage(message, session);
+                
+                if (firstController.rememberMe()) {
+                    session.setLastController(firstController.getKey());
+                    SessionCache.getInstance().updateSession(session);
+                }
                 return;
             }
             final Controller controller = controllerMap.get(lastController);
