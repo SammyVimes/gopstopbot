@@ -126,11 +126,11 @@ public class TGBot extends TelegramLongPollingBot {
                     }
                 }
                 // это непонятное сообщение или например /start, просто покажем меню
-//                showMainMenu(message, session);
+                // showMainMenu(message, session);
                 //а вот и нет, теперь перём первый контроллер
                 final Controller firstController = mainControllers.get(0);
-                firstController.handleMessage(message, session);
-                
+                showMainMenu(message, session);
+
                 if (firstController.rememberMe()) {
                     session.setLastController(firstController.getKey());
                     SessionCache.getInstance().updateSession(session);
@@ -174,17 +174,20 @@ public class TGBot extends TelegramLongPollingBot {
         replyKeyboardMarkup.setOneTimeKeyboad(false);
 
         List<KeyboardRow> keyboard = new ArrayList<>();
-        KeyboardRow row = null;
-        for (int i = 0; i < mainControllers.size(); i++) {
-            // группируем кнопки по две
-            if (i % 2 == 0 || row == null) {
-                row = new KeyboardRow();
-                keyboard.add(row);
-            }
-            final Controller controller = mainControllers.get(i);
-            final String entry = controller.getEntry();
-            row.add(entry);
-        }
+//        KeyboardRow row = null;
+//        for (int i = 0; i < mainControllers.size(); i++) {
+//            // группируем кнопки по две
+//            if (i % 2 == 0 || row == null) {
+//                row = new KeyboardRow();
+//                keyboard.add(row);
+//            }
+//            final Controller controller = mainControllers.get(i);
+//            final String entry = controller.getEntry();
+//            row.add(entry);
+//        }
+        KeyboardRow row = new KeyboardRow();
+        row.add( mainControllers.get(mainControllers.size() - 1).getEntry());
+        keyboard.add(row);
         replyKeyboardMarkup.setKeyboard(keyboard);
 
         return replyKeyboardMarkup;
