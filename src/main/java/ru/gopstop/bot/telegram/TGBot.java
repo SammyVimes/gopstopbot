@@ -160,11 +160,11 @@ public class TGBot extends TelegramLongPollingBot {
 
         if (session.isNew()) {
             session.setNew(false);
-            msg.setText("Привет, либо ты тут в первый раз (но не в последний, надеюсь), "
+            msg.setText("Привет, либо ты тут в первый раз, "
                     + "либо мы _берега попутали_.\n"
-                    + "Скорей жми на кнопку «Рифмуй».");
+                    + "Пиши -- от души.");
         } else {
-            msg.setText("Меню; нажми на кнопку — получишь результат");
+            msg.setText("Пиши -- от души.");
         }
         sendMessage(msg);
     }
