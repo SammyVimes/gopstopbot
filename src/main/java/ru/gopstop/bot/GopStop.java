@@ -25,10 +25,10 @@ public final class GopStop {
 
         LOGGER.info("Init singletons");
 
-        RhymeGraph.getInstance();
         SessionCache.getInstance();
         LinesIndexer.getInstance();
         WordStressMap.getInstance();
+        RhymeGraph.getInstance();
 
         LOGGER.info("Singletons inited");
 

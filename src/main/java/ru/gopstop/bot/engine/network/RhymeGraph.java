@@ -200,14 +200,14 @@ public final class RhymeGraph {
             fis.close();
         } catch (final Exception e) {
 
-            LOGGER.warn("COULD NOT DESER graph", e);
+            LOGGER.warn("COULD NOT DESER graph, rebuilding", e);
             graph = new UndirectedSparseGraph<>();
 
             SongsUtils
                     .listSongsByDir(DATA_PATH)
                     .forEach(song -> markup(song.getLyrics(), graph));
 
-            LOGGER.info("Serialization...");
+            LOGGER.info("Graph built, serialization...");
 
             try {
                 final FileOutputStream fos = new FileOutputStream(SERIALIZED_DICT_PATH);

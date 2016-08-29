@@ -23,6 +23,9 @@ class SubstringCollapsingReducer implements LastWordProcessor {
             replacements.put(consonant + "" + consonant, consonant + "");
         }
 
+        // плохо работает
+        replacements.put("Еверный$", "Ерено");
+        replacements.put("Ыб$", "Ыв");
         replacements.put("вств", "ст");
         replacements.put("вс", "с");
         replacements.put("знь", "сь");

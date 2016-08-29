@@ -52,6 +52,8 @@ public final class SameLastWordFilter {
         if (lastGop.equals(lastUser)) {
             LOGGER.trace("Same word, discarding:\t" + lastGop + "\t" + lastUser + "\t// " + gopSong.getGopSong().getName());
             return false;
+//        } else {
+//            LOGGER.debug("NOT Same word, NOT discarding:\t" + lastGop + "\t" + lastUser + "\t// " + gopSong.getGopSong().getName());
         }
 
         // отличающиеся приставкой не пропускаем
