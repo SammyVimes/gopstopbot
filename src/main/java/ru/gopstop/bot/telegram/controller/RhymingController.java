@@ -121,12 +121,16 @@ public class RhymingController extends BaseMuzisController {
 
         final String gopSongName = gopSong.getName().replace("-", " "); // иначе не ищет!
 
+
         final SearchResult res = getMuzisService().search(gopSongName + " " + gopSong.getAuthor(), null, null, null, null, null, null);
 
-        final Optional<Song> foundSong = res.getSongs()
-                .stream()
-                .filter(song -> song.getPerformer().contains(gopSong.getAuthor()) || gopSong.getAuthor().contains(song.getPerformer()))
-                .findFirst();
+        final Optional<Song> foundSong =
+                Optional.ofNullable(res)
+                        .flatMap(result ->
+                                result.getSongs()
+                                        .stream()
+                                        .filter(song -> song.getPerformer().contains(gopSong.getAuthor()) || gopSong.getAuthor().contains(song.getPerformer()))
+                                        .findFirst());
 
         if (!foundSong.isPresent()) {
             // ничего не нашли, пробуем исполнителя и ищем по его id 6 треков

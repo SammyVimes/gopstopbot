@@ -1,7 +1,10 @@
 package ru.gopstop.bot.muzis;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ru.gopstop.bot.muzis.entity.Performer;
 import ru.gopstop.bot.muzis.entity.SearchResult;
+import ru.gopstop.bot.telegram.controller.RhymingController;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,27 +19,35 @@ public class MuzisSearchHelper {
 
     private MuzisService muzisService = MuzisServiceBuilder.getMuzisService();
 
+    private static final Logger LOGGER = LogManager.getLogger(RhymingController.class);
+
     public List<Performer> searchByPerformer(final String performer) {
 
-        final SearchResult search = muzisService.search(null, performer, null, null, null, null, null);
+        try {
 
-        final List<String> performerAsList = Arrays.asList(performer.split(" "));
-        Collections.reverse(performerAsList);
+            final SearchResult search = muzisService.search(null, performer, null, null, null, null, null);
 
-        final String performerReversed = performerAsList.stream().collect(Collectors.joining(" "));
-        final SearchResult search1 = muzisService.search(null, performerReversed, null, null, null, null, null);
+            final List<String> performerAsList = Arrays.asList(performer.split(" "));
+            Collections.reverse(performerAsList);
 
-        List<Performer> result = new ArrayList<>();
+            final String performerReversed = performerAsList.stream().collect(Collectors.joining(" "));
+            final SearchResult search1 = muzisService.search(null, performerReversed, null, null, null, null, null);
 
-        if (search.getPerformers() != null) {
-            result.addAll(search.getPerformers());
+            List<Performer> result = new ArrayList<>();
+
+            if (search.getPerformers() != null) {
+                result.addAll(search.getPerformers());
+            }
+
+            if (search1.getPerformers() != null) {
+                result.addAll(search1.getPerformers());
+            }
+
+            return result;
+        } catch (final NullPointerException npe) {
+            LOGGER.error("NPE when calling to muzis " + npe.getMessage() + " moving on");
+            return Collections.emptyList();
         }
-
-        if (search1.getPerformers() != null) {
-            result.addAll(search1.getPerformers());
-        }
-
-        return result;
     }
 
     public boolean checkPerformer(final Performer performer, final String performerName) {
