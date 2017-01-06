@@ -181,7 +181,9 @@ public class RhymingController extends BaseMuzisController {
                             request.getMessageId(),
                             reply,
                             replyKeyboardMarkup);
-            getBot().sendMessage(msg);
+            // not sendong any messages on Muzis API failures
+            //todo: 
+//            getBot().sendMessage(msg);
             return;
         }
 
