@@ -121,74 +121,74 @@ public class RhymingController extends BaseMuzisController {
 //                request.getChatId().toString(),
 //                sharingText);
 
-        final String gopSongName = gopSong.getName().replace("-", " "); // иначе не ищет!
-        final SearchResult res = getMuzisService().search(gopSongName + " " + gopSong.getAuthor(), null, null, null, null, null, null);
+//        final String gopSongName = gopSong.getName().replace("-", " "); // иначе не ищет!
+//        final SearchResult res = getMuzisService().search(gopSongName + " " + gopSong.getAuthor(), null, null, null, null, null, null);
+//
+//        final Optional<Song> foundSong =
+//                Optional.ofNullable(res)
+//                        .flatMap(result ->
+//                                result.getSongs()
+//                                        .stream()
+//                                        .filter(song -> song.getPerformer().contains(gopSong.getAuthor()) || gopSong.getAuthor().contains(song.getPerformer()))
+//                                        .findFirst());
 
-        final Optional<Song> foundSong =
-                Optional.ofNullable(res)
-                        .flatMap(result ->
-                                result.getSongs()
-                                        .stream()
-                                        .filter(song -> song.getPerformer().contains(gopSong.getAuthor()) || gopSong.getAuthor().contains(song.getPerformer()))
-                                        .findFirst());
-
-        if (!foundSong.isPresent()) {
-            // ничего не нашли, пробуем исполнителя и ищем по его id 6 треков
-            final List<Performer> performers = getMuzisSearchHelper().searchByPerformer(gopSong.getAuthor());
-            final Optional<Performer> first = performers
-                    .stream()
-                    // возможно это надо убрать
-                    // проверка, что это точно тот автор, который нам нужен
-                    .filter(performer -> getMuzisSearchHelper().checkPerformer(performer, gopSong.getAuthor()))
-                    .findFirst();
-
-            final List<Song> songs = first
-                    .map(performer -> getMuzisService().songsByPerformer(performer.getId()))
-                    .map(byAuthorRes ->
-                            byAuthorRes.getSongs().stream()
-                                    .limit(TOP_SONGS_COUNT)
-                                    .collect(Collectors.toList()))
-                    .orElseGet(Collections::emptyList);
-
-            // к названию приклеиваем "Слушать ", чтобы потом было понятно, что это запрос на прослушивание
-            // NB! временно отрываю
-            //todo: либо убить совсем, либо вернуть, но поправить историю с кнопками
-            final List<String> keyboard = new ArrayList<>();
-            // songs
-            // .stream()
-            // .map(song -> "Слушать " + song.getTitle())
-            // .collect(Collectors.toList());
-
-            final String reply;
-
-            if (keyboard.isEmpty()) {
-                reply = String.format("Но мы не нашли репертуар автора (%s) на Muzis. Можешь искать рифмы дальше.", gopSong.getAuthor());
-            } else {
-                reply = "Эту песню мы не нашли, но вот другие песни автора";
-                // НЕ перекидываем на поиск по песням, оставляем режим рифмовки
-                session.setLastController(Constants.ControllersTags.RHYMES.getName());
-                SessionCache.getInstance().updateSession(session);
-            }
-
-            keyboard.add(SettingsController.ABOUT);
-            final ReplyKeyboardMarkup replyKeyboardMarkup = buildKeyboard(keyboard);
-
-            session.put("results", songs);
-
-            final SendMessage msg =
-                    createMessageWithKeyboard(
-                            request.getChatId().toString(),
-                            request.getMessageId(),
-                            reply,
-                            replyKeyboardMarkup);
-            // not sendong any messages on Muzis API failures
-            //todo: 
-//            getBot().sendMessage(msg);
-            return;
-        }
-
-        final Song song = foundSong.get();
-        sendSongAndCover(request, song);
+//        if (!foundSong.isPresent()) {
+//            // ничего не нашли, пробуем исполнителя и ищем по его id 6 треков
+//            final List<Performer> performers = getMuzisSearchHelper().searchByPerformer(gopSong.getAuthor());
+//            final Optional<Performer> first = performers
+//                    .stream()
+//                    // возможно это надо убрать
+//                    // проверка, что это точно тот автор, который нам нужен
+//                    .filter(performer -> getMuzisSearchHelper().checkPerformer(performer, gopSong.getAuthor()))
+//                    .findFirst();
+//
+//            final List<Song> songs = first
+//                    .map(performer -> getMuzisService().songsByPerformer(performer.getId()))
+//                    .map(byAuthorRes ->
+//                            byAuthorRes.getSongs().stream()
+//                                    .limit(TOP_SONGS_COUNT)
+//                                    .collect(Collectors.toList()))
+//                    .orElseGet(Collections::emptyList);
+//
+//            // к названию приклеиваем "Слушать ", чтобы потом было понятно, что это запрос на прослушивание
+//            // NB! временно отрываю
+//            //todo: либо убить совсем, либо вернуть, но поправить историю с кнопками
+//            final List<String> keyboard = new ArrayList<>();
+//            // songs
+//            // .stream()
+//            // .map(song -> "Слушать " + song.getTitle())
+//            // .collect(Collectors.toList());
+//
+//            final String reply;
+//
+//            if (keyboard.isEmpty()) {
+//                reply = String.format("Но мы не нашли репертуар автора (%s) на Muzis. Можешь искать рифмы дальше.", gopSong.getAuthor());
+//            } else {
+//                reply = "Эту песню мы не нашли, но вот другие песни автора";
+//                // НЕ перекидываем на поиск по песням, оставляем режим рифмовки
+//                session.setLastController(Constants.ControllersTags.RHYMES.getName());
+//                SessionCache.getInstance().updateSession(session);
+//            }
+//
+//            keyboard.add(SettingsController.ABOUT);
+//            final ReplyKeyboardMarkup replyKeyboardMarkup = buildKeyboard(keyboard);
+//
+//            session.put("results", songs);
+//
+//            final SendMessage msg =
+//                    createMessageWithKeyboard(
+//                            request.getChatId().toString(),
+//                            request.getMessageId(),
+//                            reply,
+//                            replyKeyboardMarkup);
+//            // not sendong any messages on Muzis API failures
+//            //todo:
+////            getBot().sendMessage(msg);
+//            return;
+//        }
+//
+//        final Song song = foundSong.get();
+//        sendSongAndCover(request, song);
         // sendMessage(request.getChatId().toString(), "Послушай, а потом можешь искать новые рифмы и песни");
     }
 
