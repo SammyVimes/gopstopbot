@@ -10,6 +10,7 @@ import ru.gopstop.bot.muzis.entity.Song;
 import java.util.List;
 
 /**
+ * Unfortunately, this API doesn't work anymore.
  * Created by Semyon on 30.07.2016.
  */
 public interface MuzisService {

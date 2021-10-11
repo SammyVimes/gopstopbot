@@ -103,11 +103,11 @@ public class RhymingController extends BaseMuzisController {
 
         final GopSong gopSong = rhyme.getGopSong();
 
-        final String sharingText =
-                String.format(
-                        "Рассказать пацанам из [вконтача](%s) или [твиттерка](%s)",
-                        VKGen.generate(request.getText(), rhyme.getRhyme(), rhyme.getGopSong().getName()),
-                        TweetGen.generate(request.getText(), rhyme.getRhyme(), rhyme.getGopSong().getName()));
+//        final String sharingText =
+//                String.format(
+//                        "Рассказать пацанам из [вконтача](%s) или [твиттерка](%s)",
+//                        VKGen.generate(request.getText(), rhyme.getRhyme(), rhyme.getGopSong().getName()),
+//                        TweetGen.generate(request.getText(), rhyme.getRhyme(), rhyme.getGopSong().getName()));
 
         sendHtmlMessage(
                 request.getChatId().toString(),
@@ -115,13 +115,13 @@ public class RhymingController extends BaseMuzisController {
                         "<b>%s\n%s</b>\n(%s — %s)",
                         request.getText(), rhyme.getRhyme(),
                         gopSong.getAuthor(), gopSong.getName()));
-        sendMessage(
-                request.getChatId().toString(),
-                sharingText);
+
+        // I have decided that this sucks
+//        sendMessage(
+//                request.getChatId().toString(),
+//                sharingText);
 
         final String gopSongName = gopSong.getName().replace("-", " "); // иначе не ищет!
-
-
         final SearchResult res = getMuzisService().search(gopSongName + " " + gopSong.getAuthor(), null, null, null, null, null, null);
 
         final Optional<Song> foundSong =

@@ -49,8 +49,9 @@ public class TGBot extends TelegramLongPollingBot {
         controllerMap.put(rhymingController.getKey(), rhymingController);
         mainControllers.add(rhymingController);
 
-        final SongSearchController songSearchController = new SongSearchController(this);
-        controllerMap.put(songSearchController.getKey(), songSearchController);
+        // Muzis doesn't exist anymore :(
+//        final SongSearchController songSearchController = new SongSearchController(this);
+//        controllerMap.put(songSearchController.getKey(), songSearchController);
 //        mainControllers.add(songSearchController);
 
         final SettingsController settingsController = new SettingsController(this);
